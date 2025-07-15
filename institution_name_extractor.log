@@ -1,0 +1,11 @@
+2025-07-15 13:29:42,902 - INFO - 실제기관명 추출 시작
+2025-07-15 13:29:42,902 - INFO - 데이터 로드 시작: rawdatafile\failed_data_250715.xlsx
+2025-07-15 13:29:43,537 - INFO - 총 3555개 행 로드 완료
+2025-07-15 13:29:43,545 - INFO - 데이터 로드 완료 - 컬럼: ['연번', '시도', '시군구', '읍면동', '우편번호', '주    소', '전화번호', '팩스번호_실제기관명', '팩스번호', '팩스번호_실제기관명']
+2025-07-15 13:29:43,550 - ERROR - 실제기관명 추출 실패: 'str' object has no attribute 'isna'
+2025-07-15 13:29:43,552 - ERROR - Traceback (most recent call last):
+  File "C:\Users\MyoengHo Shin\pjt\cradcrawlpython\institution_name_extractor.py", line 541, in extract_institution_names
+    (df.get('전화번호_실제기관명', '').isna() | (df.get('전화번호_실제기관명', '') == ''))) |
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isna'
+

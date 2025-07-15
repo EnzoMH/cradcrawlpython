@@ -118,6 +118,10 @@ def create_improved_worker_driver(worker_id: int):
         chrome_options.add_argument('--disable-infobars')
         chrome_options.add_argument('--disable-notifications')
         
+        # Headless 모드 설정 (전역 변수로 제어)
+        if globals().get('HEADLESS_MODE', True):
+            chrome_options.add_argument('--headless')
+        
         # 🛡️ 리소스 절약 옵션 (12개 워커 최적화)
         chrome_options.add_argument('--disable-images')  # 이미지 로딩 비활성화
         chrome_options.add_argument('--disable-plugins')
@@ -269,9 +273,24 @@ def process_improved_contact_extraction(chunk_df: pd.DataFrame, worker_id: int, 
                         phone_number = search_phone_number(driver, phone_search_query, phone_patterns)
                         
                         if phone_number and is_valid_phone_format_simple(phone_number) and is_regional_match_simple(phone_number, sido):
+                            # 역검색 검증
+                            reverse_validation = reverse_search_validation(driver, phone_number, name, sido)
+                            validation_monitor.record_reverse_search(
+                                reverse_validation['is_valid'], 
+                                reverse_validation['reason'], 
+                                reverse_validation['confidence']
+                            )
+                            
+                            if reverse_validation['is_valid']:
                             valid_phone = phone_number
-                            print(f"✅ 워커 {worker_id}: 전화번호 발견 (쿼리 {query_idx+1}) - {name} -> {valid_phone}")
+                                validation_monitor.record_phone_validation(True)
+                                print(f"✅ 워커 {worker_id}: 전화번호 발견 및 역검색 검증 성공 (쿼리 {query_idx+1}) - {name} -> {valid_phone}")
+                                print(f"   검증 신뢰도: {reverse_validation['confidence']:.2f}")
                             break
+                            else:
+                                validation_monitor.record_phone_validation(False, reverse_validation['reason'])
+                                print(f"❌ 워커 {worker_id}: 전화번호 역검색 검증 실패 (쿼리 {query_idx+1}) - {name} -> {phone_number}")
+                                print(f"   사유: {reverse_validation['reason']}")
                         else:
                             print(f"❌ 워커 {worker_id}: 전화번호 검색 실패 (쿼리 {query_idx+1}) - {name}")
                             if query_idx < len(phone_search_queries) - 1:
@@ -298,9 +317,22 @@ def process_improved_contact_extraction(chunk_df: pd.DataFrame, worker_id: int, 
                         fax_number = search_fax_number(driver, fax_search_query, fax_patterns)
                         
                         if fax_number and is_valid_phone_format_simple(fax_number) and is_regional_match_simple(fax_number, sido):
+                            # 역검색 검증
+                            reverse_validation = reverse_search_validation(driver, fax_number, name, sido, search_type="팩스")
+                            validation_monitor.record_reverse_search(
+                                reverse_validation['is_valid'], 
+                                reverse_validation['reason'], 
+                                reverse_validation['confidence']
+                            )
+                            
+                            if reverse_validation['is_valid']:
                             valid_fax = fax_number
-                            print(f"✅ 워커 {worker_id}: 팩스번호 발견 (쿼리 {query_idx+1}) - {name} -> {valid_fax}")
+                                print(f"✅ 워커 {worker_id}: 팩스번호 발견 및 역검색 검증 성공 (쿼리 {query_idx+1}) - {name} -> {valid_fax}")
+                                print(f"   검증 신뢰도: {reverse_validation['confidence']:.2f}")
                             break
+                            else:
+                                print(f"❌ 워커 {worker_id}: 팩스번호 역검색 검증 실패 (쿼리 {query_idx+1}) - {name} -> {fax_number}")
+                                print(f"   사유: {reverse_validation['reason']}")
                         else:
                             print(f"❌ 워커 {worker_id}: 팩스번호 검색 실패 (쿼리 {query_idx+1}) - {name}")
                             if query_idx < len(fax_search_queries) - 1:
@@ -312,11 +344,33 @@ def process_improved_contact_extraction(chunk_df: pd.DataFrame, worker_id: int, 
                 else:
                     print(f"⏭️ 워커 {worker_id}: 팩스번호 이미 존재 - {name} -> {existing_fax}")
                 
-                # 🚨 중복 번호 처리 로직
-                if valid_phone and valid_fax and valid_phone == valid_fax:
-                    print(f"⚠️ 워커 {worker_id}: 전화번호와 팩스번호가 동일함 - {name} -> {valid_phone}")
-                    print(f"🔄 워커 {worker_id}: 팩스번호를 빈 값으로 처리")
-                    valid_fax = None  # 동일한 경우 팩스번호를 제거
+                # 🚨 팩스번호 검증 로직 (전화번호와의 유사성 기준)
+                if valid_phone and valid_fax:
+                    fax_validation_result = validate_fax_number(valid_fax, valid_phone, sido, name)
+                    validation_monitor.record_fax_validation(
+                        fax_validation_result['is_valid'], 
+                        fax_validation_result['reason'], 
+                        fax_validation_result['confidence']
+                    )
+                    
+                    if not fax_validation_result['is_valid']:
+                        print(f"⚠️ 워커 {worker_id}: 팩스번호 검증 실패 - {name}")
+                        print(f"   사유: {fax_validation_result['reason']}")
+                        print(f"   전화번호: {valid_phone}, 팩스번호: {valid_fax}")
+                        valid_fax = None  # 검증 실패 시 팩스번호 제거
+                    else:
+                        print(f"✅ 워커 {worker_id}: 팩스번호 검증 성공 - {name} -> {valid_fax}")
+                elif valid_fax and not valid_phone:
+                    # 전화번호가 없는 경우 팩스번호만으로 검증
+                    standalone_valid = is_valid_phone_format_simple(valid_fax) and is_regional_match_simple(valid_fax, sido)
+                    validation_monitor.record_fax_validation(
+                        standalone_valid, 
+                        "팩스번호 단독 검증" if not standalone_valid else ""
+                    )
+                    
+                    if not standalone_valid:
+                        print(f"⚠️ 워커 {worker_id}: 팩스번호 단독 검증 실패 - {name} -> {valid_fax}")
+                        valid_fax = None
                 
                 results.append({
                     'index': idx,
@@ -525,38 +579,147 @@ def search_fax_number(driver, query: str, fax_patterns: List[str]):
         time.sleep(random.uniform(5, 10))
         return None
 
-# 간단한 전화번호 정규화
+# 강화된 전화번호 정규화
 def normalize_phone_simple(phone: str) -> str:
-    """간단한 전화번호 정규화"""
-    numbers = re.findall(r'\d+', phone)
-    if not numbers:
-        return phone
+    """강화된 전화번호 정규화"""
+    if not phone:
+        return ""
     
-    if len(numbers) >= 3:
-        return f"{numbers[0]}-{numbers[1]}-{numbers[2]}"
-    elif len(numbers) == 2:
-        return f"{numbers[0]}-{numbers[1]}"
-    else:
-        return numbers[0]
+    # 숫자만 추출
+    digits = re.sub(r'[^\d]', '', phone)
+    if not digits:
+        return ""
+    
+    # 길이 검증
+    if len(digits) < 8 or len(digits) > 11:
+        return ""
+    
+    # 지역번호별 정규화
+    if digits.startswith('02'):
+        # 서울 (02-XXXX-XXXX)
+        if len(digits) == 9:
+            return f"02-{digits[2:5]}-{digits[5:]}"
+        elif len(digits) == 10:
+            return f"02-{digits[2:6]}-{digits[6:]}"
+    elif digits.startswith('0'):
+        # 지역번호 (0XX-XXX-XXXX 또는 0XX-XXXX-XXXX)
+        if len(digits) == 10:
+            return f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
+        elif len(digits) == 11:
+            return f"{digits[:3]}-{digits[3:7]}-{digits[7:]}"
+    elif digits.startswith('070'):
+        # 인터넷 전화 (070-XXXX-XXXX)
+        if len(digits) == 11:
+            return f"070-{digits[3:7]}-{digits[7:]}"
+    elif digits.startswith('1'):
+        # 단축번호 (1XXX-XXXX)
+        if len(digits) == 8:
+            return f"{digits[:4]}-{digits[4:]}"
+    
+    return ""
 
-# 간단한 전화번호 형식 검사
+# 강화된 전화번호 형식 검사
 def is_valid_phone_format_simple(phone: str) -> bool:
-    """간단한 전화번호 형식 검사"""
+    """강화된 전화번호 형식 검사 (KOREAN_AREA_CODES 활용)"""
     try:
+        if not phone:
+            return False
+        
         digits = re.sub(r'[^\d]', '', phone)
         if len(digits) < 8 or len(digits) > 11:
             return False
         
-        valid_patterns = [
-            r'^02\d{7,8}$',
-            r'^0[3-6]\d{7,8}$',
-            r'^070\d{7,8}$',
-            r'^1[5-9]\d{6,7}$',
-            r'^080\d{7,8}$',
-        ]
+        # 지역번호 추출
+        if digits.startswith('02'):
+            area_code = '02'
+            if len(digits) not in [9, 10]:
+                return False
+        elif digits.startswith('0'):
+            area_code = digits[:3]
+            if len(digits) not in [10, 11]:
+                return False
+        elif digits.startswith('070'):
+            area_code = '070'
+            if len(digits) != 11:
+                return False
+        elif digits.startswith('1'):
+            # 단축번호 (1588, 1599 등)
+            if len(digits) not in [8, 9]:
+                return False
+                return True
+        else:
+            return False
         
-        for pattern in valid_patterns:
-            if re.match(pattern, digits):
+        # KOREAN_AREA_CODES에서 유효한 지역번호인지 확인
+        if area_code not in KOREAN_AREA_CODES:
+        return False
+        
+        return True
+        
+    except Exception:
+        return False
+
+# 강화된 지역 일치성 검사
+def is_regional_match_simple(phone: str, sido: str) -> bool:
+    """강화된 지역 일치성 검사 (KOREAN_AREA_CODES 활용)"""
+    try:
+        if not phone or not sido:
+            return True  # 데이터가 없으면 허용
+        
+        digits = re.sub(r'[^\d]', '', phone)
+        if len(digits) < 8:
+            return False
+        
+        # 지역번호 추출
+        if digits.startswith('02'):
+            area_code = '02'
+        elif digits.startswith('0'):
+            area_code = digits[:3]
+        elif digits.startswith('070'):
+            area_code = '070'
+        elif digits.startswith('1'):
+            # 단축번호는 지역 구분이 없으므로 허용
+            return True
+        else:
+            return False
+        
+        # KOREAN_AREA_CODES에서 지역 확인
+        phone_region = KOREAN_AREA_CODES.get(area_code, "")
+        if not phone_region:
+            return False
+        
+        # 특별 처리: 인터넷전화와 핸드폰은 지역 구분이 없으므로 허용
+        if phone_region in ["인터넷전화", "핸드폰"]:
+            return True
+        
+        # 지역 매칭 검사 (더 엄격한 검사)
+        sido_normalized = sido.replace("특별시", "").replace("광역시", "").replace("특별자치도", "").replace("도", "").replace("시", "")
+        
+        # 정확한 지역 매칭
+        region_matches = {
+            "서울": ["서울"],
+            "경기": ["경기"],
+            "인천": ["인천"],
+            "강원": ["강원"],
+            "충남": ["충남", "충청남도"],
+            "대전": ["대전"],
+            "충북": ["충북", "충청북도"],
+            "세종": ["세종"],
+            "부산": ["부산"],
+            "울산": ["울산"],
+            "대구": ["대구"],
+            "경북": ["경북", "경상북도"],
+            "경남": ["경남", "경상남도"],
+            "전남": ["전남", "전라남도"],
+            "광주": ["광주"],
+            "전북": ["전북", "전라북도"],
+            "제주": ["제주"]
+        }
+        
+        expected_regions = region_matches.get(phone_region, [phone_region])
+        
+        for expected_region in expected_regions:
+            if expected_region in sido_normalized or sido_normalized in expected_region:
                 return True
         
         return False
@@ -564,26 +727,453 @@ def is_valid_phone_format_simple(phone: str) -> bool:
     except Exception:
         return False
 
-# 간단한 지역 일치성 검사
-def is_regional_match_simple(phone: str, sido: str) -> bool:
-    """간단한 지역 일치성 검사"""
+# 팩스번호 검증 함수 (전화번호와의 유사성 기준)
+def validate_fax_number(fax: str, phone: str, sido: str, institution_name: str) -> Dict[str, Any]:
+    """
+    팩스번호 검증 (전화번호와의 유사성 기준)
+    
+    Args:
+        fax: 팩스번호
+        phone: 전화번호
+        sido: 시도
+        institution_name: 기관명
+        
+    Returns:
+        Dict: 검증 결과 {'is_valid': bool, 'reason': str, 'confidence': float}
+    """
     try:
-        digits = re.sub(r'[^\d]', '', phone)
-        if len(digits) >= 10:
-            area_code = digits[:2] if digits.startswith('02') else digits[:3]
+        if not fax or not phone:
+            return {'is_valid': False, 'reason': '전화번호 또는 팩스번호가 없음', 'confidence': 0.0}
+        
+        # 1. 기본 형식 검증
+        if not is_valid_phone_format_simple(fax):
+            return {'is_valid': False, 'reason': '팩스번호 형식이 올바르지 않음', 'confidence': 0.0}
+        
+        # 2. 지역 일치성 검증
+        if not is_regional_match_simple(fax, sido):
+            return {'is_valid': False, 'reason': '팩스번호가 해당 지역과 일치하지 않음', 'confidence': 0.0}
+        
+        # 3. 전화번호와 동일한지 확인
+        if fax == phone:
+            return {'is_valid': False, 'reason': '팩스번호가 전화번호와 동일함', 'confidence': 0.0}
+        
+        # 4. 전화번호와의 유사성 검증
+        similarity_score = calculate_phone_similarity(fax, phone)
+        
+        # 5. 지역번호 일치성 확인
+        fax_digits = re.sub(r'[^\d]', '', fax)
+        phone_digits = re.sub(r'[^\d]', '', phone)
+        
+        # 지역번호 추출
+        if fax_digits.startswith('02'):
+            fax_area_code = '02'
+        elif fax_digits.startswith('0'):
+            fax_area_code = fax_digits[:3]
         else:
-            area_code = digits[:2] if digits.startswith('02') else digits[:3]
+            fax_area_code = fax_digits[:3]
         
-        phone_region = KOREAN_AREA_CODES.get(area_code, "")
+        if phone_digits.startswith('02'):
+            phone_area_code = '02'
+        elif phone_digits.startswith('0'):
+            phone_area_code = phone_digits[:3]
+        else:
+            phone_area_code = phone_digits[:3]
         
-        # 지역 매칭 (완화된 검사)
-        if phone_region and sido:
-            return phone_region in sido or sido in phone_region
+        # 지역번호가 다른 경우 의심스러움
+        if fax_area_code != phone_area_code:
+            # 인접 지역인지 확인
+            adjacent_regions = get_adjacent_regions(phone_area_code)
+            if fax_area_code not in adjacent_regions:
+                return {
+                    'is_valid': False, 
+                    'reason': f'팩스번호 지역번호({fax_area_code})가 전화번호 지역번호({phone_area_code})와 다름', 
+                    'confidence': 0.2
+                }
         
-        return True  # 매칭 실패 시 허용
+        # 6. 유사성 점수 기반 검증
+        confidence = similarity_score
+        
+        # 지역번호가 같으면 신뢰도 증가
+        if fax_area_code == phone_area_code:
+            confidence += 0.3
+        
+        # 번호 패턴 유사성 확인
+        if has_similar_pattern(fax_digits, phone_digits):
+            confidence += 0.2
+        
+        # 최종 판정
+        if confidence >= 0.6:
+            return {'is_valid': True, 'reason': '검증 통과', 'confidence': confidence}
+        else:
+            return {
+                'is_valid': False, 
+                'reason': f'전화번호와 유사성이 낮음 (신뢰도: {confidence:.2f})', 
+                'confidence': confidence
+            }
+        
+    except Exception as e:
+        return {'is_valid': False, 'reason': f'검증 중 오류 발생: {str(e)}', 'confidence': 0.0}
+
+def calculate_phone_similarity(fax: str, phone: str) -> float:
+    """전화번호와 팩스번호의 유사성 계산"""
+    try:
+        fax_digits = re.sub(r'[^\d]', '', fax)
+        phone_digits = re.sub(r'[^\d]', '', phone)
+        
+        if not fax_digits or not phone_digits:
+            return 0.0
+        
+        # 지역번호 제거하고 비교
+        if fax_digits.startswith('02'):
+            fax_local = fax_digits[2:]
+        elif fax_digits.startswith('0'):
+            fax_local = fax_digits[3:]
+        else:
+            fax_local = fax_digits
+        
+        if phone_digits.startswith('02'):
+            phone_local = phone_digits[2:]
+        elif phone_digits.startswith('0'):
+            phone_local = phone_digits[3:]
+        else:
+            phone_local = phone_digits
+        
+        # 연속된 동일 숫자 개수 확인
+        common_digits = 0
+        min_length = min(len(fax_local), len(phone_local))
+        
+        for i in range(min_length):
+            if fax_local[i] == phone_local[i]:
+                common_digits += 1
+            else:
+                break
+        
+        # 유사성 점수 계산
+        similarity = common_digits / max(len(fax_local), len(phone_local))
+        
+        return similarity
         
     except Exception:
+        return 0.0
+
+def get_adjacent_regions(area_code: str) -> List[str]:
+    """인접 지역 코드 반환"""
+    adjacent_map = {
+        '02': ['031', '032'],  # 서울 - 경기, 인천
+        '031': ['02', '032', '033', '041', '043'],  # 경기 - 서울, 인천, 강원, 충남, 충북
+        '032': ['02', '031'],  # 인천 - 서울, 경기
+        '033': ['031', '043'],  # 강원 - 경기, 충북
+        '041': ['031', '042', '043'],  # 충남 - 경기, 대전, 충북
+        '042': ['041', '043'],  # 대전 - 충남, 충북
+        '043': ['031', '033', '041', '042'],  # 충북 - 경기, 강원, 충남, 대전
+        '051': ['052', '055'],  # 부산 - 울산, 경남
+        '052': ['051', '053', '054', '055'],  # 울산 - 부산, 대구, 경북, 경남
+        '053': ['052', '054', '055'],  # 대구 - 울산, 경북, 경남
+        '054': ['052', '053', '055'],  # 경북 - 울산, 대구, 경남
+        '055': ['051', '052', '053', '054'],  # 경남 - 부산, 울산, 대구, 경북
+        '061': ['062', '063'],  # 전남 - 광주, 전북
+        '062': ['061', '063'],  # 광주 - 전남, 전북
+        '063': ['061', '062'],  # 전북 - 전남, 광주
+        '064': []  # 제주 - 인접 지역 없음
+    }
+    
+    return adjacent_map.get(area_code, [])
+
+def has_similar_pattern(fax_digits: str, phone_digits: str) -> bool:
+    """번호 패턴 유사성 확인"""
+    try:
+        # 뒷자리 4자리 비교
+        if len(fax_digits) >= 4 and len(phone_digits) >= 4:
+            fax_suffix = fax_digits[-4:]
+            phone_suffix = phone_digits[-4:]
+            
+            # 뒷자리가 연속된 경우 (예: 1234, 1235)
+            if abs(int(fax_suffix) - int(phone_suffix)) <= 10:
         return True 
+        
+        # 중간 자리 패턴 비교
+        if len(fax_digits) >= 7 and len(phone_digits) >= 7:
+            fax_middle = fax_digits[-7:-4]
+            phone_middle = phone_digits[-7:-4]
+            
+            if fax_middle == phone_middle:
+                return True
+        
+        return False
+        
+    except Exception:
+        return False
+
+# 역검색 검증 함수 (번호로 기관명 확인)
+def reverse_search_validation(driver, phone_number: str, institution_name: str, sido: str, search_type: str = "전화") -> Dict[str, Any]:
+    """
+    전화번호/팩스번호를 역검색하여 기관명과 일치하는지 확인
+    
+    Args:
+        driver: WebDriver 인스턴스
+        phone_number: 검색할 전화번호/팩스번호
+        institution_name: 기관명
+        sido: 시도
+        search_type: 검색 타입 ("전화" 또는 "팩스")
+        
+    Returns:
+        Dict: 검증 결과 {'is_valid': bool, 'reason': str, 'confidence': float}
+    """
+    try:
+        if not phone_number or not institution_name:
+            return {'is_valid': False, 'reason': '전화번호 또는 기관명이 없음', 'confidence': 0.0}
+        
+        # 역검색 쿼리 생성 (단순화)
+        reverse_queries = [
+            f"{phone_number}"
+        ]
+        
+        max_confidence = 0.0
+        best_match_reason = ""
+        
+        for query in reverse_queries:
+            try:
+                # 구글 검색 실행
+                driver.get('https://www.google.com')
+                time.sleep(random.uniform(1.0, 2.0))
+                
+                # 검색창 찾기
+                search_box = WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.NAME, 'q'))
+                )
+                
+                # 검색어 입력
+                search_box.clear()
+                search_box.send_keys(query)
+                search_box.send_keys(Keys.RETURN)
+                
+                # 결과 페이지 대기
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.ID, 'search'))
+                )
+                
+                time.sleep(random.uniform(1.0, 2.0))
+                
+                # 페이지 소스 가져오기
+                page_source = driver.page_source
+                soup = BeautifulSoup(page_source, 'html.parser')
+                text_content = soup.get_text()
+                
+                # 기관명 매칭 확인
+                confidence = calculate_institution_match_confidence(text_content, institution_name, sido)
+                
+                if confidence > max_confidence:
+                    max_confidence = confidence
+                    best_match_reason = f"역검색 쿼리 '{query}'에서 기관명 매칭 확인"
+                
+                # 높은 신뢰도면 바로 성공 처리
+                if confidence >= 0.7:
+                    return {
+                        'is_valid': True,
+                        'reason': best_match_reason,
+                        'confidence': confidence
+                    }
+                
+                # 검색 간격
+                time.sleep(random.uniform(1.0, 2.0))
+                
+            except Exception as e:
+                print(f"⚠️ 역검색 쿼리 '{query}' 실행 중 오류: {e}")
+                continue
+        
+        # 최종 판정
+        if max_confidence >= 0.5:
+            return {
+                'is_valid': True,
+                'reason': best_match_reason,
+                'confidence': max_confidence
+            }
+        else:
+            return {
+                'is_valid': False,
+                'reason': f'역검색에서 기관명 매칭 실패 (최대 신뢰도: {max_confidence:.2f})',
+                'confidence': max_confidence
+            }
+        
+    except Exception as e:
+        return {'is_valid': False, 'reason': f'역검색 중 오류 발생: {str(e)}', 'confidence': 0.0}
+
+def calculate_institution_match_confidence(text_content: str, institution_name: str, sido: str) -> float:
+    """텍스트 내용에서 기관명 매칭 신뢰도 계산"""
+    try:
+        if not text_content or not institution_name:
+            return 0.0
+        
+        text_lower = text_content.lower()
+        confidence = 0.0
+        
+        # 기관명 정규화
+        institution_normalized = institution_name.replace(sido, "").strip()
+        institution_keywords = [
+            institution_normalized,
+            institution_normalized.replace("주민센터", ""),
+            institution_normalized.replace("행정복지센터", ""),
+            institution_normalized.replace("행정센터", "")
+        ]
+        
+        # 시도 정보 확인
+        if sido in text_content:
+            confidence += 0.2
+        
+        # 기관명 키워드 매칭
+        for keyword in institution_keywords:
+            if keyword and keyword.strip():
+                if keyword.strip() in text_content:
+                    confidence += 0.4
+                    break
+        
+        # 주민센터 관련 키워드 확인
+        center_keywords = ["주민센터", "행정복지센터", "행정센터", "동사무소", "구청", "시청"]
+        for keyword in center_keywords:
+            if keyword in text_content:
+                confidence += 0.2
+                break
+        
+        # 주소 관련 키워드 확인
+        address_keywords = ["주소", "위치", "찾아오시는길", "오시는길"]
+        for keyword in address_keywords:
+            if keyword in text_content:
+                confidence += 0.1
+                break
+        
+        # 연락처 관련 키워드 확인
+        contact_keywords = ["전화", "연락처", "팩스", "문의"]
+        for keyword in contact_keywords:
+            if keyword in text_content:
+                confidence += 0.1
+                break
+        
+        return min(confidence, 1.0)  # 최대 1.0으로 제한
+        
+    except Exception:
+        return 0.0
+
+# 검증 시스템 성능 모니터링 클래스
+class ValidationMonitor:
+    """검증 시스템 성능 모니터링"""
+    
+    def __init__(self):
+        """검증 모니터 초기화"""
+        self.stats = {
+            'total_phone_validations': 0,
+            'successful_phone_validations': 0,
+            'failed_phone_validations': 0,
+            'total_fax_validations': 0,
+            'successful_fax_validations': 0,
+            'failed_fax_validations': 0,
+            'total_reverse_searches': 0,
+            'successful_reverse_searches': 0,
+            'failed_reverse_searches': 0,
+            'validation_reasons': {},
+            'confidence_scores': []
+        }
+    
+    def record_phone_validation(self, success: bool, reason: str = ""):
+        """전화번호 검증 결과 기록"""
+        self.stats['total_phone_validations'] += 1
+        if success:
+            self.stats['successful_phone_validations'] += 1
+        else:
+            self.stats['failed_phone_validations'] += 1
+            if reason:
+                self.stats['validation_reasons'][reason] = self.stats['validation_reasons'].get(reason, 0) + 1
+    
+    def record_fax_validation(self, success: bool, reason: str = "", confidence: float = 0.0):
+        """팩스번호 검증 결과 기록"""
+        self.stats['total_fax_validations'] += 1
+        if success:
+            self.stats['successful_fax_validations'] += 1
+        else:
+            self.stats['failed_fax_validations'] += 1
+            if reason:
+                self.stats['validation_reasons'][reason] = self.stats['validation_reasons'].get(reason, 0) + 1
+        
+        if confidence > 0:
+            self.stats['confidence_scores'].append(confidence)
+    
+    def record_reverse_search(self, success: bool, reason: str = "", confidence: float = 0.0):
+        """역검색 결과 기록"""
+        self.stats['total_reverse_searches'] += 1
+        if success:
+            self.stats['successful_reverse_searches'] += 1
+        else:
+            self.stats['failed_reverse_searches'] += 1
+            if reason:
+                self.stats['validation_reasons'][reason] = self.stats['validation_reasons'].get(reason, 0) + 1
+        
+        if confidence > 0:
+            self.stats['confidence_scores'].append(confidence)
+    
+    def get_statistics(self) -> Dict[str, Any]:
+        """검증 통계 반환"""
+        stats = self.stats.copy()
+        
+        # 성공률 계산
+        if stats['total_phone_validations'] > 0:
+            stats['phone_success_rate'] = stats['successful_phone_validations'] / stats['total_phone_validations']
+        else:
+            stats['phone_success_rate'] = 0.0
+        
+        if stats['total_fax_validations'] > 0:
+            stats['fax_success_rate'] = stats['successful_fax_validations'] / stats['total_fax_validations']
+        else:
+            stats['fax_success_rate'] = 0.0
+        
+        if stats['total_reverse_searches'] > 0:
+            stats['reverse_search_success_rate'] = stats['successful_reverse_searches'] / stats['total_reverse_searches']
+        else:
+            stats['reverse_search_success_rate'] = 0.0
+        
+        # 평균 신뢰도 계산
+        if stats['confidence_scores']:
+            stats['average_confidence'] = sum(stats['confidence_scores']) / len(stats['confidence_scores'])
+        else:
+            stats['average_confidence'] = 0.0
+        
+        return stats
+    
+    def print_statistics(self):
+        """검증 통계 출력"""
+        stats = self.get_statistics()
+        
+        print("\n" + "="*60)
+        print("🔍 강화된 검증 시스템 성능 통계")
+        print("="*60)
+        
+        print(f"📞 전화번호 검증:")
+        print(f"   총 검증 횟수: {stats['total_phone_validations']}")
+        print(f"   성공: {stats['successful_phone_validations']} ({stats['phone_success_rate']:.1%})")
+        print(f"   실패: {stats['failed_phone_validations']}")
+        
+        print(f"\n📠 팩스번호 검증:")
+        print(f"   총 검증 횟수: {stats['total_fax_validations']}")
+        print(f"   성공: {stats['successful_fax_validations']} ({stats['fax_success_rate']:.1%})")
+        print(f"   실패: {stats['failed_fax_validations']}")
+        
+        print(f"\n🔄 역검색 검증:")
+        print(f"   총 검증 횟수: {stats['total_reverse_searches']}")
+        print(f"   성공: {stats['successful_reverse_searches']} ({stats['reverse_search_success_rate']:.1%})")
+        print(f"   실패: {stats['failed_reverse_searches']}")
+        
+        print(f"\n📊 신뢰도 분석:")
+        print(f"   평균 신뢰도: {stats['average_confidence']:.2f}")
+        print(f"   신뢰도 샘플 수: {len(stats['confidence_scores'])}")
+        
+        if stats['validation_reasons']:
+            print(f"\n❌ 주요 실패 사유:")
+            sorted_reasons = sorted(stats['validation_reasons'].items(), key=lambda x: x[1], reverse=True)
+            for reason, count in sorted_reasons[:5]:
+                print(f"   {reason}: {count}회")
+        
+        print("="*60)
+
+# 전역 검증 모니터 인스턴스
+validation_monitor = ValidationMonitor()
 
 # AI 모델 관리 클래스 - 4개의 Gemini API 키 지원
 class AIModelManager:
@@ -828,17 +1418,25 @@ class ImprovedCommunityCenterCrawler:
             'memory_percent': 0
         }
         
-        # 🚀 멀티프로세싱 설정 (12개 워커로 최적화)
+        # 🚀 멀티프로세싱 설정 (동적 워커 수 조정)
         # AMD Ryzen 5 3600 (6코어 12스레드) 환경에 최적화
         cpu_count = multiprocessing.cpu_count()
-        self.max_workers = 12  # 12개 워커 고정 (하드웨어 사양에 최적화)
         
-        # 청크 크기를 12개 워커에 맞게 조정
-        self.chunk_size = 8  # 더 큰 청크로 효율성 향상
+        # Headless 모드에 따른 워커 수 동적 조정
+        if globals().get('HEADLESS_MODE', True):
+            self.max_workers = 18  # Headless 모드: 18개 워커 (메모리 효율적)
+            self.chunk_size = 12   # 더 큰 청크로 효율성 향상
+        else:
+            self.max_workers = 12  # GUI 모드: 12개 워커 (안정성 우선)
+            self.chunk_size = 8    # 안정적인 청크 크기
         
-        # 요청 간격 설정 (초) - 12개 워커에 맞게 최적화
-        self.request_delay_min = 1.0  # 최소 1초
-        self.request_delay_max = 2.0  # 최대 2초
+        # 요청 간격 설정 (초) - 워커 수에 맞게 최적화
+        if globals().get('HEADLESS_MODE', True):
+            self.request_delay_min = 0.8  # Headless: 더 빠른 요청
+            self.request_delay_max = 1.5  # Headless: 더 빠른 요청
+        else:
+            self.request_delay_min = 1.0  # GUI: 안정적인 요청
+            self.request_delay_max = 2.0  # GUI: 안정적인 요청
         
         # 에러 발생 시 대기 시간 (초) - 단축
         self.error_wait_time = 5
@@ -864,7 +1462,10 @@ class ImprovedCommunityCenterCrawler:
         # 시스템 모니터링 시작
         self._start_system_monitoring()
         
-        self.logger.info(f"🚀 ImprovedCommunityCenterCrawler 초기화 완료 (워커: {self.max_workers}개)")
+        headless_status = "Headless" if globals().get('HEADLESS_MODE', True) else "GUI"
+        self.logger.info(f"🚀 ImprovedCommunityCenterCrawler 초기화 완료")
+        self.logger.info(f"🔧 {headless_status} 모드 - 워커: {self.max_workers}개, 청크: {self.chunk_size}개")
+        self.logger.info(f"⚡ 요청 간격: {self.request_delay_min}~{self.request_delay_max}초")
         self.logger.info(f"🔧 AMD Ryzen 5 3600 (6코어 12스레드) 환경에 최적화된 설정 적용")
     
     def _initialize_ai(self):
@@ -895,6 +1496,10 @@ class ImprovedCommunityCenterCrawler:
             chrome_options.add_argument('--no-first-run')
             chrome_options.add_argument('--disable-infobars')
             chrome_options.add_argument('--disable-notifications')
+            
+            # Headless 모드 설정 (전역 변수로 제어)
+            if globals().get('HEADLESS_MODE', True):
+                chrome_options.add_argument('--headless')
             
             # 리소스 절약 옵션
             chrome_options.add_argument('--disable-images')
@@ -1274,65 +1879,7 @@ class ImprovedCommunityCenterCrawler:
             return None 
     
 
-    def _normalize_phone_number(self, phone: str) -> str:
-        """전화번호 정규화"""
-        numbers = re.findall(r'\d+', phone)
-        if not numbers:
-            return phone
-        
-        if len(numbers) >= 3:
-            return f"{numbers[0]}-{numbers[1]}-{numbers[2]}"
-        elif len(numbers) == 2:
-            return f"{numbers[0]}-{numbers[1]}"
-        else:
-            return numbers[0]
-    
-    def _is_valid_phone_format(self, phone: str) -> bool:
-        """전화번호 형식 유효성 검사"""
-        try:
-            digits = re.sub(r'[^\d]', '', phone)
-            if len(digits) < 8 or len(digits) > 11:
-                return False
-            
-            valid_patterns = [
-                r'^02\d{7,8}$',
-                r'^0[3-6]\d{7,8}$',
-                r'^070\d{7,8}$',
-                r'^1[5-9]\d{6,7}$',
-                r'^080\d{7,8}$',
-            ]
-            
-            for pattern in valid_patterns:
-                if re.match(pattern, digits):
-                    return True
-            
-            return False
-            
-        except Exception:
-            return False
-    
-    def _is_regional_match(self, phone: str, sido: str) -> bool:
-        """지역 일치성 검사"""
-        try:
-            if not phone or not sido:
-                return True
-            
-            digits = re.sub(r'[^\d]', '', phone)
-            if len(digits) >= 10:
-                area_code = digits[:2] if digits.startswith('02') else digits[:3]
-            else:
-                area_code = digits[:2] if digits.startswith('02') else digits[:3]
-            
-            phone_region = KOREAN_AREA_CODES.get(area_code, "")
-            
-            # 지역 매칭 (완화된 검사)
-            if phone_region and sido:
-                return phone_region in sido or sido in phone_region
-            
-            return True  # 매칭 실패 시 허용
-            
-        except Exception:
-            return True 
+ 
 
 # 메인 실행 함수 (미추출 데이터 전용)
 def main():
@@ -1341,8 +1888,32 @@ def main():
         print("🚀 주민센터 미추출 데이터 연락처 추출 시스템 시작")
         print("=" * 60)
         
+        # Headless 모드 선택
+        print("\n🔧 브라우저 모드 선택:")
+        print("1. Headless 모드 (권장) - CPU/메모리 사용량 낮음, 브라우저 창 안 보임")
+        print("2. GUI 모드 - 브라우저 창 보임, CPU/메모리 사용량 높음")
+        
+        while True:
+            choice = input("\n선택하세요 (1 또는 2, 기본값: 1): ").strip()
+            if choice == "" or choice == "1":
+                globals()['HEADLESS_MODE'] = True
+                print("✅ Headless 모드로 실행합니다 (CPU/메모리 최적화)")
+                break
+            elif choice == "2":
+                globals()['HEADLESS_MODE'] = False
+                print("✅ GUI 모드로 실행합니다 (브라우저 창 표시)")
+                break
+            else:
+                print("❌ 잘못된 선택입니다. 1 또는 2를 입력하세요.")
+        
+        # 워커 수 조정 (Headless 모드에 따라)
+        if globals()['HEADLESS_MODE']:
+            print(f"🔧 Headless 모드: 18개 워커로 최적화")
+        else:
+            print(f"🔧 GUI 모드: 12개 워커로 안정화")
+        
         # 미추출 CSV 파일 경로 설정
-        csv_path = "행정안전부_읍면동 하부행정기관 현황_20240731_전화번호미추출.csv"
+        csv_path = r"C:\Users\MyoengHo Shin\pjt\cradcrawlpython\rawdatafile\행정안전부_읍면동 하부행정기관 현황_20240731.csv"
         
         # 파일 존재 확인
         if not os.path.exists(csv_path):
@@ -1358,12 +1929,19 @@ def main():
         print("=" * 60)
         print("✅ 주민센터 미추출 데이터 연락처 추출 완료!")
         
+        # 강화된 검증 시스템 성능 통계 출력
+        validation_monitor.print_statistics()
+        
     except KeyboardInterrupt:
         print("\n⚠️ 사용자에 의해 중단되었습니다.")
+        # 중단 시에도 통계 출력
+        validation_monitor.print_statistics()
     except Exception as e:
         print(f"❌ 시스템 오류: {e}")
         import traceback
         traceback.print_exc()
+        # 오류 시에도 통계 출력
+        validation_monitor.print_statistics()
 
 if __name__ == "__main__":
     main() 
