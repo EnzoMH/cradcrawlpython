@@ -235,23 +235,23 @@ class WebDriverManager:
             raise
 
 class GoogleSearchEngine:
-    """구글 검색 엔진 클래스"""
+    """구글 검색 엔진 클래스 - 단순화된 버전"""
     
     def __init__(self, driver_manager: WebDriverManager):
         self.driver_manager = driver_manager
-        self.search_patterns = [
-            r'([가-힣]+(?:구청|시청|군청|동사무소|주민센터|행정복지센터|면사무소|읍사무소))',
-            r'([가-힣]+(?:대학교|대학|학교|교육청|교육지원청))',
-            r'([가-힣]+(?:병원|의원|클리닉|보건소|보건센터))',
-            r'([가-힣]+(?:경찰서|파출소|지구대|소방서|소방관서))',
-            r'([가-힣]+(?:법원|검찰청|등기소|세무서))',
-            r'([가-힣]+(?:우체국|체신청|통신사업소))',
-            r'([가-힣]+(?:공사|공단|공기업|기관|센터|사업소))',
-            r'([가-힣\s]+)(?:\s|$)'
+        # 기관명 패턴 단순화
+        self.institution_keywords = [
+            '주민센터', '행정복지센터', '동사무소', '면사무소', '읍사무소',
+            '시청', '구청', '군청', '청사', '시 ', '구 ', '군 ',
+            '병원', '의원', '보건소', '보건센터', '클리닉',
+            '학교', '대학', '교육청', '교육지원청',
+            '경찰서', '파출소', '지구대', '소방서',
+            '법원', '검찰청', '세무서', '등기소',
+            '우체국', '체신청', '공사', '공단', '센터', '사업소'
         ]
     
     def search_institution_name(self, phone_number: str, number_type: str = "전화번호", worker_id: int = 0) -> SearchResult:
-        """전화번호로 기관명 검색"""
+        """전화번호로 기관명 검색 - 단순화된 버전"""
         if not phone_number or phone_number.strip() == "":
             return SearchResult(
                 phone_number=phone_number,
@@ -274,7 +274,7 @@ class GoogleSearchEngine:
         try:
             driver = self.driver_manager.create_driver(worker_id)
             
-            # 검색 쿼리 생성
+            # 단순한 검색 쿼리: "전화번호" 또는 "팩스번호"
             search_query = f'"{clean_number}" {number_type}'
             
             # 안전한 랜덤 지연
@@ -283,8 +283,6 @@ class GoogleSearchEngine:
             
             # 구글 검색 실행
             driver.get('https://www.google.com')
-            
-            # 추가 대기 시간
             time.sleep(random.uniform(1.0, 2.0))
             
             # 검색창 찾기 및 검색
@@ -293,23 +291,17 @@ class GoogleSearchEngine:
             )
             
             search_box.clear()
-            # 자연스러운 타이핑 시뮬레이션
-            for char in search_query:
-                search_box.send_keys(char)
-                time.sleep(random.uniform(0.03, 0.08))
-            
+            search_box.send_keys(search_query)
             search_box.send_keys(Keys.RETURN)
             
             # 검색 결과 대기
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.ID, "search"))
             )
-            
-            # 추가 대기 시간
             time.sleep(random.uniform(1.0, 2.0))
             
-            # 기관명 추출
-            institution_name = self._extract_institution_name(driver, clean_number)
+            # 단순화된 기관명 추출
+            institution_name = self._extract_institution_name_simple(driver, clean_number)
             
             search_time = time.time() - start_time
             
@@ -363,8 +355,8 @@ class GoogleSearchEngine:
         
         return clean_number
     
-    def _extract_institution_name(self, driver: uc.Chrome, phone_number: str) -> str:
-        """검색 결과에서 기관명 추출"""
+    def _extract_institution_name_simple(self, driver: uc.Chrome, phone_number: str) -> str:
+        """단순화된 기관명 추출"""
         try:
             # BeautifulSoup를 사용하여 페이지 소스 파싱
             page_source = driver.page_source
@@ -373,32 +365,15 @@ class GoogleSearchEngine:
             # 전체 텍스트 추출
             text_content = soup.get_text()
             
-            # 기관명 추출 (정규식 패턴 사용)
-            institution_name = self._parse_institution_name(text_content, phone_number)
+            # 검색 결과 영역만 추출 (더 정확한 결과를 위해)
+            search_results = soup.find('div', {'id': 'search'})
+            if search_results:
+                search_text = search_results.get_text()
+            else:
+                search_text = text_content
             
-            # 추가적으로 특정 HTML 요소들도 확인
-            if not institution_name:
-                # 제목 태그들 확인
-                title_elements = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
-                for element in title_elements:
-                    if element.get_text():
-                        title_text = element.get_text()
-                        potential_name = self._parse_institution_name(title_text, phone_number)
-                        if potential_name:
-                            institution_name = potential_name
-                            break
-            
-            # 더 구체적인 검색 (span, div 등의 텍스트 요소들)
-            if not institution_name:
-                text_elements = soup.find_all(['span', 'div', 'p', 'strong', 'b'])
-                for element in text_elements:
-                    if element.get_text():
-                        element_text = element.get_text()
-                        if phone_number.replace('-', '') in element_text.replace('-', '').replace(' ', ''):
-                            potential_name = self._parse_institution_name(element_text, phone_number)
-                            if potential_name:
-                                institution_name = potential_name
-                                break
+            # 기관명 추출
+            institution_name = self._find_institution_name(search_text, phone_number)
             
             return institution_name
             
@@ -406,42 +381,162 @@ class GoogleSearchEngine:
             logger.error(f"기관명 추출 오류: {e}")
             return ""
     
-    def _parse_institution_name(self, text: str, phone_number: str) -> str:
-        """텍스트에서 기관명 파싱"""
+    def _find_institution_name(self, text: str, phone_number: str) -> str:
+        """텍스트에서 기관명 찾기 - 단순화된 버전"""
         if not text:
             return ""
         
-        # 패턴 매칭으로 기관명 추출
-        for pattern in self.search_patterns:
-            matches = re.findall(pattern, text)
+        # 전화번호 주변 텍스트 추출
+        phone_clean = re.sub(r'[^\d]', '', phone_number)
+        
+        # 텍스트를 줄 단위로 분리
+        lines = text.split('\n')
+        
+        # 전화번호가 포함된 줄들 찾기
+        relevant_lines = []
+        for line in lines:
+            line_clean = re.sub(r'[^\d]', '', line)
+            if phone_clean in line_clean:
+                relevant_lines.append(line.strip())
+        
+        # 관련 줄들에서 기관명 추출
+        for line in relevant_lines:
+            # 기관 키워드가 포함된 경우
+            for keyword in self.institution_keywords:
+                if keyword in line:
+                    # 기관명 추출 시도
+                    institution_name = self._extract_name_from_line(line, keyword)
+                    if institution_name:
+                        return institution_name
+        
+        # 기관 키워드가 없는 경우, 일반적인 기관명 패턴 찾기
+        for line in relevant_lines:
+            # 한글 기관명 패턴 찾기
+            matches = re.findall(r'([가-힣]{2,10}(?:구청|시청|군청|센터|사무소|병원|의원|학교|대학|청|서|소|원|관|공사|공단))', line)
             if matches:
-                # 가장 적절한 매치 선택
-                for match in matches:
-                    institution_name = match.strip()
-                    if len(institution_name) >= 2 and len(institution_name) <= 30:
-                        # 전화번호와 연관성 확인
-                        if self._is_relevant_institution(institution_name, text, phone_number):
-                            return institution_name
+                return matches[0]
         
         return ""
     
-    def _is_relevant_institution(self, institution_name: str, full_text: str, phone_number: str) -> bool:
-        """기관명의 연관성 확인"""
-        # 기본 필터링
-        if not institution_name or len(institution_name) < 2:
-            return False
+    def _extract_name_from_line(self, line: str, keyword: str) -> str:
+        """한 줄에서 기관명 추출"""
+        # 키워드 앞의 한글 텍스트를 기관명으로 추출
+        pattern = r'([가-힣]{2,10})' + re.escape(keyword)
+        match = re.search(pattern, line)
         
-        # 불필요한 단어 필터링
-        exclude_words = ['전화번호', '팩스번호', '연락처', '문의', '상담', '예약', '신청']
-        if any(word in institution_name for word in exclude_words):
-            return False
+        if match:
+            institution_name = match.group(1) + keyword
+            # 기관명 길이 검증
+            if 2 <= len(institution_name) <= 20:
+                return institution_name
         
-        # 전화번호가 텍스트에 포함되어 있는지 확인
-        clean_phone = re.sub(r'[^\d]', '', phone_number)
-        if clean_phone in re.sub(r'[^\d]', '', full_text):
-            return True
+        # 키워드 뒤의 텍스트에서 기관명 추출
+        keyword_index = line.find(keyword)
+        if keyword_index != -1:
+            # 키워드 앞뒤 텍스트 추출
+            before_text = line[:keyword_index].strip()
+            after_text = line[keyword_index + len(keyword):].strip()
+            
+            # 앞쪽 텍스트에서 기관명 추출
+            before_match = re.search(r'([가-힣]{2,10})$', before_text)
+            if before_match:
+                return before_match.group(1) + keyword
         
-        return False
+        return ""
+    
+    def process_single_row(self, row_data: Tuple[int, pd.Series]) -> Dict[str, Any]:
+        """단일 행 처리"""
+        idx, row = row_data
+        
+        # 워커 ID 생성 (스레드 ID 기반)
+        thread_id = threading.current_thread().ident
+        worker_id = abs(hash(thread_id)) % 100  # 0-99 범위의 워커 ID
+        
+        start_time = time.time()
+        
+        try:
+            results = {
+                'index': idx,
+                'phone_institution': '',
+                'fax_institution': '',
+                'phone_success': False,
+                'fax_success': False
+            }
+            
+            # 전화번호 처리
+            phone_number = str(row.get('전화번호', '')).strip()
+            if phone_number and phone_number != '':
+                # 기존에 실제기관명이 있는지 확인
+                existing_phone_institution = str(row.get('전화번호_실제기관명', '')).strip()
+                if not existing_phone_institution:
+                    phone_result = self.search_engine.search_institution_name(phone_number, "전화번호", worker_id)
+                    results['phone_institution'] = phone_result.institution_name
+                    results['phone_success'] = phone_result.search_successful
+                    
+                    with self.lock:
+                        self.stats.phone_extractions += 1
+                        if phone_result.search_successful:
+                            self.stats.successful_extractions += 1
+                        else:
+                            self.stats.failed_extractions += 1
+                            self.stats.error_counts[phone_result.error_message] += 1
+                        self.stats.add_search_time(phone_result.search_time)
+                else:
+                    results['phone_institution'] = existing_phone_institution
+                    results['phone_success'] = True
+            
+            # 팩스번호 처리
+            fax_number = str(row.get('팩스번호', '')).strip()
+            if fax_number and fax_number != '':
+                # 기존에 실제기관명이 있는지 확인
+                existing_fax_institution = str(row.get('팩스번호_실제기관명', '')).strip()
+                if not existing_fax_institution:
+                    fax_result = self.search_engine.search_institution_name(fax_number, "팩스번호", worker_id)
+                    results['fax_institution'] = fax_result.institution_name
+                    results['fax_success'] = fax_result.search_successful
+                    
+                    with self.lock:
+                        self.stats.fax_extractions += 1
+                        if fax_result.search_successful:
+                            self.stats.successful_extractions += 1
+                        else:
+                            self.stats.failed_extractions += 1
+                            self.stats.error_counts[fax_result.error_message] += 1
+                        self.stats.add_search_time(fax_result.search_time)
+                else:
+                    results['fax_institution'] = existing_fax_institution
+                    results['fax_success'] = True
+            
+            # 빈 번호 처리
+            if not phone_number and not fax_number:
+                with self.lock:
+                    self.stats.empty_numbers += 1
+            
+            processing_time = time.time() - start_time
+            success = results['phone_success'] or results['fax_success']
+            
+            worker_id_str = f"worker_{worker_id}"
+            self.system_monitor.record_worker_performance(worker_id_str, processing_time, success)
+            
+            with self.lock:
+                self.stats.total_processed += 1
+            
+            return results
+            
+        except Exception as e:
+            logger.error(f"행 처리 오류 (인덱스 {idx}): {e}")
+            with self.lock:
+                self.stats.total_processed += 1
+                self.stats.failed_extractions += 1
+                self.stats.error_counts[f"처리 오류: {str(e)}"] += 1
+            
+            return {
+                'index': idx,
+                'phone_institution': '',
+                'fax_institution': '',
+                'phone_success': False,
+                'fax_success': False
+            }
 
 class InstitutionNameExtractor:
     """실제기관명 추출 메인 클래스"""
@@ -494,34 +589,45 @@ class InstitutionNameExtractor:
             # 실제 컬럼 구조 확인
             logger.info(f"원본 컬럼: {list(df.columns)}")
             
-            # 컬럼명 정리 - 실제 파일 구조에 맞게 수정
+            # 실제 파일 구조에 맞게 컬럼명 처리
             if len(df.columns) == 10:
-                # 예상 구조: 연번, 시도, 시군구, 읍면동, 우편번호, 주소, 전화번호, 실제기관명(전화), 팩스번호, 실제기관명(팩스)
-                new_columns = ['연번', '시도', '시군구', '읍면동', '우편번호', '주    소', '전화번호', '전화번호_실제기관명', '팩스번호', '팩스번호_실제기관명']
-                df.columns = new_columns
+                # 사용자가 보여준 구조: 연번, 시도, 시군구, 읍면동, 우편번호, 주소, 전화번호, 실제기관명, 팩스번호, 실제기관명
+                expected_columns = ['연번', '시도', '시군구', '읍면동', '우편번호', '주    소', '전화번호', '전화번호_실제기관명', '팩스번호', '팩스번호_실제기관명']
+                df.columns = expected_columns
+                logger.info("컬럼명을 표준 구조로 변경 완료")
             else:
                 # 기존 컬럼명 유지하되 실제기관명 컬럼 구분
                 columns = list(df.columns)
+                phone_col_idx = -1
+                fax_col_idx = -1
+                
+                # 전화번호와 팩스번호 컬럼 위치 찾기
                 for i, col in enumerate(columns):
-                    if '실제기관명' in str(col):
-                        if i == 7:  # 전화번호 다음
+                    if '전화번호' in str(col) and '실제기관명' not in str(col):
+                        phone_col_idx = i
+                    elif '팩스번호' in str(col) and '실제기관명' not in str(col):
+                        fax_col_idx = i
+                
+                # 실제기관명 컬럼 이름 변경
+                for i, col in enumerate(columns):
+                    if '실제기관명' in str(col) or col == '':
+                        if i == phone_col_idx + 1:  # 전화번호 다음
                             columns[i] = '전화번호_실제기관명'
-                        elif i == 9:  # 팩스번호 다음
+                        elif i == fax_col_idx + 1:  # 팩스번호 다음
                             columns[i] = '팩스번호_실제기관명'
+                
                 df.columns = columns
             
             # 빈 값 처리
             df = df.fillna('')
             
-            # 전화번호_실제기관명 컬럼이 없으면 생성
+            # 실제기관명 컬럼이 없으면 생성
             if '전화번호_실제기관명' not in df.columns:
                 df['전화번호_실제기관명'] = ''
-            
-            # 팩스번호_실제기관명 컬럼이 없으면 생성
             if '팩스번호_실제기관명' not in df.columns:
                 df['팩스번호_실제기관명'] = ''
             
-            logger.info(f"데이터 로드 완료 - 컬럼: {list(df.columns)}")
+            logger.info(f"최종 컬럼 구조: {list(df.columns)}")
             return df
             
         except Exception as e:

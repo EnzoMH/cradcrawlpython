@@ -1,0 +1,189 @@
+2025-07-15 14:11:08,865 - INFO - 🚀 InstitutionNameExtractor 초기화 완료
+2025-07-15 14:11:08,866 - INFO - 🔧 Headless 모드 - 워커: 12개
+2025-07-15 14:11:08,866 - INFO - 🔧 워커 수 동적 조정 활성화 (범위: 9-12개)
+2025-07-15 14:11:08,867 - INFO - 🔧 중간저장 간격: 100개 단위
+2025-07-15 14:11:08,867 - INFO - 🔧 AMD Ryzen 5 3600 (6코어 12스레드) 환경에 최적화된 설정 적용
+2025-07-15 14:11:08,867 - INFO - 실제기관명 추출 시작
+2025-07-15 14:11:08,868 - INFO - 데이터 로드 시작: rawdatafile\failed_data_250715.xlsx
+2025-07-15 14:11:09,351 - INFO - 총 3555개 행 로드 완료
+2025-07-15 14:11:09,351 - INFO - 원본 컬럼: ['연번', '시도', '시군구', '읍면동', '우편번호', '주    소', '전화번호', '실제기관명', '팩스번호', '실제기관명.1']
+2025-07-15 14:11:09,354 - INFO - 데이터 로드 완료 - 컬럼: ['연번', '시도', '시군구', '읍면동', '우편번호', '주    소', '전화번호', '전화번호_실제기관명', '팩스번호', '팩스번호_실제기관명']
+2025-07-15 14:11:09,356 - INFO - 처리 대상: 3271개 행
+2025-07-15 14:11:21,258 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 14:11:22,031 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:11:57,317 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 14:11:58,084 - INFO - 🔧 워커 64: undetected-chromedriver 생성 완료 (포트: 9862)
+2025-07-15 14:12:02,094 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:02,632 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:12:03,221 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:03,753 - INFO - 🔧 워커 48: undetected-chromedriver 생성 완료 (포트: 9702)
+2025-07-15 14:12:06,956 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:07,493 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:12:18,935 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:19,470 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:12:23,370 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:23,901 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:12:25,519 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:25,728 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:26,074 - INFO - 🔧 워커 56: undetected-chromedriver 생성 완료 (포트: 9782)
+2025-07-15 14:12:26,276 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:12:26,672 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:27,175 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:27,244 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:12:27,727 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:12:31,058 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:31,601 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:12:42,621 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:12:43,153 - INFO - 🔧 워커 68: undetected-chromedriver 생성 완료 (포트: 9902)
+2025-07-15 14:13:02,034 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 14:13:02,808 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:13:12,618 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:13:13,160 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:13:29,757 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 14:13:30,541 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:13:31,323 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:13:31,861 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:13:34,245 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:13:34,786 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:13:40,843 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:13:41,385 - INFO - 🔧 워커 68: undetected-chromedriver 생성 완료 (포트: 9902)
+2025-07-15 14:13:42,129 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:13:42,164 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:13:42,710 - INFO - 🔧 워커 48: undetected-chromedriver 생성 완료 (포트: 9702)
+2025-07-15 14:13:42,769 - INFO - 🔧 워커 64: undetected-chromedriver 생성 완료 (포트: 9862)
+2025-07-15 14:13:44,160 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:13:44,724 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:13:46,125 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:13:46,709 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:14:00,097 - INFO - 진행률: 0.3% (10/3271)
+2025-07-15 14:14:01,637 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:14:02,174 - INFO - 🔧 워커 56: undetected-chromedriver 생성 완료 (포트: 9782)
+2025-07-15 14:14:09,270 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:14:09,806 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:14:09,908 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:14:10,444 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:14:21,345 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:14:21,886 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:14:25,168 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:14:25,708 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:14:46,021 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 14:14:46,790 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:14:50,592 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:14:51,123 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:14:56,931 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:14:57,470 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:14:59,530 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:00,070 - INFO - 🔧 워커 48: undetected-chromedriver 생성 완료 (포트: 9702)
+2025-07-15 14:15:06,591 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:07,125 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:15:08,252 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:08,791 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:15:21,313 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:21,708 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:21,854 - INFO - 🔧 워커 64: undetected-chromedriver 생성 완료 (포트: 9862)
+2025-07-15 14:15:22,253 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:15:23,888 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:24,420 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:15:32,849 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:33,383 - INFO - 🔧 워커 68: undetected-chromedriver 생성 완료 (포트: 9902)
+2025-07-15 14:15:36,571 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:37,115 - INFO - 🔧 워커 56: undetected-chromedriver 생성 완료 (포트: 9782)
+2025-07-15 14:15:39,839 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:40,379 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:15:53,573 - INFO - 진행률: 0.6% (20/3271)
+2025-07-15 14:15:56,148 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:15:56,690 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:16:04,992 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:16:05,528 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:16:06,387 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:16:06,932 - INFO - 🔧 워커 48: undetected-chromedriver 생성 완료 (포트: 9702)
+2025-07-15 14:16:13,624 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:16:14,158 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:16:23,648 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:16:24,176 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:16:25,991 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:16:26,534 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:16:53,625 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 14:16:54,391 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:16:54,962 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:16:55,497 - INFO - 🔧 워커 56: undetected-chromedriver 생성 완료 (포트: 9782)
+2025-07-15 14:16:57,915 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:16:58,444 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:17:04,773 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:17:05,311 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:17:05,660 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:17:06,201 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:17:06,375 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:17:06,634 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:17:06,994 - INFO - 🔧 워커 64: undetected-chromedriver 생성 완료 (포트: 9862)
+2025-07-15 14:17:07,350 - INFO - 🔧 워커 48: undetected-chromedriver 생성 완료 (포트: 9702)
+2025-07-15 14:17:07,767 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:17:08,396 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:17:08,606 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:17:09,196 - INFO - 🔧 워커 68: undetected-chromedriver 생성 완료 (포트: 9902)
+2025-07-15 14:17:19,718 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:17:20,347 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:17:42,025 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 14:17:42,805 - INFO - 🔧 워커 56: undetected-chromedriver 생성 완료 (포트: 9782)
+2025-07-15 14:17:52,500 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:17:53,039 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:17:59,845 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:00,383 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:18:00,678 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:01,219 - INFO - 🔧 워커 48: undetected-chromedriver 생성 완료 (포트: 9702)
+2025-07-15 14:18:02,192 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:02,724 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:18:14,784 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:15,325 - INFO - 🔧 워커 68: undetected-chromedriver 생성 완료 (포트: 9902)
+2025-07-15 14:18:16,497 - INFO - 진행률: 0.9% (30/3271)
+2025-07-15 14:18:19,205 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:19,755 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:18:27,236 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:27,779 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:18:34,211 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:34,761 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:18:36,020 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:36,564 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:18:38,884 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:39,432 - INFO - 🔧 워커 64: undetected-chromedriver 생성 완료 (포트: 9862)
+2025-07-15 14:18:40,398 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:40,984 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:18:47,174 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:47,704 - INFO - 🔧 워커 56: undetected-chromedriver 생성 완료 (포트: 9782)
+2025-07-15 14:18:56,042 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:56,576 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:18:56,967 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:57,510 - INFO - 🔧 워커 48: undetected-chromedriver 생성 완료 (포트: 9702)
+2025-07-15 14:18:58,599 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:18:59,142 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:19:27,688 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 14:19:28,475 - INFO - 🔧 워커 64: undetected-chromedriver 생성 완료 (포트: 9862)
+2025-07-15 14:19:33,456 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:19:33,995 - INFO - 🔧 워커 56: undetected-chromedriver 생성 완료 (포트: 9782)
+2025-07-15 14:19:35,809 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:19:36,355 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:19:38,477 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:19:39,015 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:19:43,865 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:19:44,397 - INFO - 🔧 워커 68: undetected-chromedriver 생성 완료 (포트: 9902)
+2025-07-15 14:19:52,966 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:19:53,504 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:19:54,619 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:19:55,114 - INFO - 진행률: 1.2% (40/3271)
+2025-07-15 14:19:55,164 - INFO - 🔧 워커 48: undetected-chromedriver 생성 완료 (포트: 9702)
+2025-07-15 14:19:59,148 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:19:59,685 - INFO - 🔧 워커 72: undetected-chromedriver 생성 완료 (포트: 9942)
+2025-07-15 14:20:01,246 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:20:01,801 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
+2025-07-15 14:20:06,238 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:20:06,603 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:20:06,787 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:20:07,192 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:20:19,719 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:20:20,251 - INFO - 🔧 워커 84: undetected-chromedriver 생성 완료 (포트: 10062)
+2025-07-15 14:20:27,901 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:20:28,429 - INFO - 🔧 워커 56: undetected-chromedriver 생성 완료 (포트: 9782)
+2025-07-15 14:20:37,818 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:20:38,359 - INFO - 🔧 워커 16: undetected-chromedriver 생성 완료 (포트: 9382)
+2025-07-15 14:20:44,329 - WARNING - could not detect version_main.therefore, we are assuming it is chrome 108 or higher
+2025-07-15 14:20:44,864 - INFO - 🔧 워커 80: undetected-chromedriver 생성 완료 (포트: 10022)
