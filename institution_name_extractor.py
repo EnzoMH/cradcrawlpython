@@ -200,6 +200,11 @@ class WebDriverManager:
             chrome_options.add_argument('--aggressive-cache-discard')
             chrome_options.add_argument('--max-unused-resource-memory-usage-percentage=5')
             
+            # 워커별 별도 사용자 데이터 디렉토리 설정 (충돌 방지)
+            import tempfile
+            temp_dir = tempfile.mkdtemp(prefix=f'chrome_worker_{worker_id}_')
+            chrome_options.add_argument(f'--user-data-dir={temp_dir}')
+            
             # 안전한 포트 설정
             debug_port = 9222 + (worker_id * 10)
             chrome_options.add_argument(f'--remote-debugging-port={debug_port}')
@@ -212,8 +217,8 @@ class WebDriverManager:
             ]
             chrome_options.add_argument(f'--user-agent={random.choice(user_agents)}')
             
-            # 드라이버 생성
-            driver = uc.Chrome(options=chrome_options, version_main=None)
+            # 드라이버 생성 (version_main 제거)
+            driver = uc.Chrome(options=chrome_options)
             
             # 타임아웃 설정
             driver.implicitly_wait(10)
@@ -457,6 +462,11 @@ class InstitutionNameExtractor:
         # 스레드 동기화
         self.lock = threading.Lock()
         
+        # 중간저장 관련 변수
+        self.intermediate_save_counter = 0
+        self.intermediate_save_interval = 100  # 100개 단위로 중간저장
+        self.processed_count = 0
+        
         # 워커 수 동적 조정
         headless_status = "Headless" if self.headless_mode else "GUI"
         if self.headless_mode:
@@ -469,6 +479,7 @@ class InstitutionNameExtractor:
         logger.info(f"🚀 InstitutionNameExtractor 초기화 완료")
         logger.info(f"🔧 {headless_status} 모드 - 워커: {self.current_workers}개")
         logger.info(f"🔧 워커 수 동적 조정 활성화 (범위: {MIN_WORKERS}-{MAX_WORKERS}개)")
+        logger.info(f"🔧 중간저장 간격: {self.intermediate_save_interval}개 단위")
         logger.info(f"🔧 AMD Ryzen 5 3600 (6코어 12스레드) 환경에 최적화된 설정 적용")
     
     def load_data(self) -> pd.DataFrame:
@@ -653,6 +664,10 @@ class InstitutionNameExtractor:
             # 결과 저장용 딕셔너리
             results = {}
             
+            # 중간저장 카운터 초기화
+            self.intermediate_save_counter = 0
+            self.processed_count = 0
+            
             # 멀티스레딩으로 처리
             with ThreadPoolExecutor(max_workers=self.current_workers) as executor:
                 # 작업 제출
@@ -662,33 +677,48 @@ class InstitutionNameExtractor:
                 }
                 
                 # 결과 수집
-                processed_count = 0
                 for future in as_completed(future_to_idx):
                     try:
                         result = future.result()
                         results[result['index']] = result
-                        processed_count += 1
+                        self.processed_count += 1
+                        self.intermediate_save_counter += 1
                         
                         # 진행률 출력
-                        if processed_count % 10 == 0:
-                            progress = (processed_count / len(target_rows)) * 100
-                            logger.info(f"진행률: {progress:.1f}% ({processed_count}/{len(target_rows)})")
+                        if self.processed_count % 10 == 0:
+                            progress = (self.processed_count / len(target_rows)) * 100
+                            logger.info(f"진행률: {progress:.1f}% ({self.processed_count}/{len(target_rows)})")
+                        
+                        # 중간저장 (100개 단위)
+                        if self.intermediate_save_counter >= self.intermediate_save_interval:
+                            # 현재까지의 결과를 DataFrame에 적용
+                            for idx, res in results.items():
+                                if res['phone_institution']:
+                                    df.at[idx, '전화번호_실제기관명'] = res['phone_institution']
+                                if res['fax_institution']:
+                                    df.at[idx, '팩스번호_실제기관명'] = res['fax_institution']
+                            
+                            # 중간저장 수행
+                            self._save_intermediate_results(df, f"중간저장_{self.processed_count}개처리")
+                            self.intermediate_save_counter = 0
+                            logger.info(f"💾 중간 저장 완료: {self.processed_count}개 처리됨")
                         
                         # 워커 수 조정 검토
-                        if processed_count % self.worker_adjustment_interval == 0:
+                        if self.processed_count % self.worker_adjustment_interval == 0:
                             self.adjust_worker_count()
                             
                     except Exception as e:
                         logger.error(f"Future 처리 오류: {e}")
+                        self.processed_count += 1  # 오류 발생 시에도 카운터 증가
             
-            # 결과를 DataFrame에 적용
+            # 최종 결과를 DataFrame에 적용
             for idx, result in results.items():
                 if result['phone_institution']:
                     df.at[idx, '전화번호_실제기관명'] = result['phone_institution']
                 if result['fax_institution']:
                     df.at[idx, '팩스번호_실제기관명'] = result['fax_institution']
             
-            # 결과 저장
+            # 최종 결과 저장
             self.save_results(df)
             
             # 통계 출력
@@ -697,9 +727,35 @@ class InstitutionNameExtractor:
             logger.info("실제기관명 추출 완료")
             return True
             
+        except KeyboardInterrupt:
+            logger.info("⚠️ 사용자 중단 요청 감지")
+            # 중단 시 현재까지의 결과를 DataFrame에 적용
+            for idx, result in results.items():
+                if result['phone_institution']:
+                    df.at[idx, '전화번호_실제기관명'] = result['phone_institution']
+                if result['fax_institution']:
+                    df.at[idx, '팩스번호_실제기관명'] = result['fax_institution']
+            
+            # 사용자 중단 시 중간저장
+            self._save_intermediate_results(df, "사용자중단저장")
+            raise
         except Exception as e:
             logger.error(f"실제기관명 추출 실패: {e}")
             logger.error(traceback.format_exc())
+            
+            # 오류 발생 시 현재까지의 결과를 DataFrame에 적용
+            try:
+                for idx, result in results.items():
+                    if result['phone_institution']:
+                        df.at[idx, '전화번호_실제기관명'] = result['phone_institution']
+                    if result['fax_institution']:
+                        df.at[idx, '팩스번호_실제기관명'] = result['fax_institution']
+                
+                # 오류 발생 시 중간저장
+                self._save_intermediate_results(df, "오류발생저장")
+            except:
+                pass
+            
             return False
     
     def save_results(self, df: pd.DataFrame):
@@ -743,6 +799,35 @@ class InstitutionNameExtractor:
         except Exception as e:
             logger.error(f"결과 저장 실패: {e}")
             raise
+    
+    def _save_intermediate_results(self, df: pd.DataFrame, suffix: str = "중간저장"):
+        """중간 결과 저장 (Excel 형식)"""
+        try:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            base_name = os.path.splitext(os.path.basename(self.input_file))[0]
+            intermediate_filename = f"{base_name}_기관명추출_{suffix}_{timestamp}.xlsx"
+            intermediate_path = os.path.join("rawdatafile", intermediate_filename)
+            
+            # 디렉토리 생성
+            os.makedirs(os.path.dirname(intermediate_path), exist_ok=True)
+            
+            # Excel 저장
+            df.to_excel(intermediate_path, index=False, engine='openpyxl')
+            
+            # 통계 정보
+            total_count = len(df)
+            phone_filled = len(df[df['전화번호_실제기관명'].notna() & (df['전화번호_실제기관명'] != '')])
+            fax_filled = len(df[df['팩스번호_실제기관명'].notna() & (df['팩스번호_실제기관명'] != '')])
+            
+            logger.info(f"💾 중간 저장 완료: {intermediate_path}")
+            logger.info(f"📊 현재 통계 - 전체: {total_count}, 전화기관명: {phone_filled}, 팩스기관명: {fax_filled}")
+            logger.info(f"📊 처리 진행률: {self.processed_count}개 처리 완료")
+            
+            return intermediate_path
+            
+        except Exception as e:
+            logger.error(f"❌ 중간 저장 오류: {e}")
+            return None
     
     def print_statistics(self):
         """통계 출력"""
@@ -809,6 +894,7 @@ def main():
         print(f"  - Headless 모드: {globals()['HEADLESS_MODE']}")
         print(f"  - 워커 수 범위: {MIN_WORKERS}-{MAX_WORKERS}개")
         print(f"  - 동적 워커 수 조정: 활성화")
+        print(f"  - 중간저장 간격: 100개 단위")
         print(f"  - AMD Ryzen 5 3600 최적화: 적용")
         print("=" * 60)
         
