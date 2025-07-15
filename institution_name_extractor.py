@@ -272,20 +272,25 @@ class GoogleSearchEngine:
         start_time = time.time()
         
         try:
+            logger.info(f"🔍 워커 {worker_id}: {number_type} 검색 시작 - {clean_number}")
+            
             driver = self.driver_manager.create_driver(worker_id)
             
             # 단순한 검색 쿼리: "전화번호" 또는 "팩스번호"
             search_query = f'"{clean_number}" {number_type}'
+            logger.info(f"🔍 워커 {worker_id}: 구글 검색 쿼리 - {search_query}")
             
             # 안전한 랜덤 지연
             delay = random.uniform(0.5, 1.5)
             time.sleep(delay)
             
             # 구글 검색 실행
+            logger.info(f"🌐 워커 {worker_id}: 구글 검색 페이지 접속 중...")
             driver.get('https://www.google.com')
             time.sleep(random.uniform(1.0, 2.0))
             
             # 검색창 찾기 및 검색
+            logger.info(f"⌨️ 워커 {worker_id}: 검색어 입력 중...")
             search_box = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.NAME, "q"))
             )
@@ -295,15 +300,22 @@ class GoogleSearchEngine:
             search_box.send_keys(Keys.RETURN)
             
             # 검색 결과 대기
+            logger.info(f"⏳ 워커 {worker_id}: 검색 결과 대기 중...")
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.ID, "search"))
             )
             time.sleep(random.uniform(1.0, 2.0))
             
             # 단순화된 기관명 추출
+            logger.info(f"🔎 워커 {worker_id}: 기관명 추출 중...")
             institution_name = self._extract_institution_name_simple(driver, clean_number)
             
             search_time = time.time() - start_time
+            
+            if institution_name:
+                logger.info(f"✅ 워커 {worker_id}: 기관명 발견! {clean_number} -> {institution_name} ({search_time:.2f}초)")
+            else:
+                logger.info(f"❌ 워커 {worker_id}: 기관명 찾기 실패 - {clean_number} ({search_time:.2f}초)")
             
             return SearchResult(
                 phone_number=phone_number,
@@ -314,6 +326,7 @@ class GoogleSearchEngine:
             )
             
         except TimeoutException:
+            logger.warning(f"⏰ 워커 {worker_id}: 검색 타임아웃 - {clean_number}")
             return SearchResult(
                 phone_number=phone_number,
                 search_successful=False,
@@ -321,6 +334,7 @@ class GoogleSearchEngine:
                 search_time=time.time() - start_time
             )
         except Exception as e:
+            logger.error(f"❌ 워커 {worker_id}: 검색 오류 - {clean_number}: {e}")
             return SearchResult(
                 phone_number=phone_number,
                 search_successful=False,
@@ -358,27 +372,34 @@ class GoogleSearchEngine:
     def _extract_institution_name_simple(self, driver: uc.Chrome, phone_number: str) -> str:
         """단순화된 기관명 추출"""
         try:
+            logger.info(f"📄 페이지 소스 파싱 중...")
+            
             # BeautifulSoup를 사용하여 페이지 소스 파싱
             page_source = driver.page_source
             soup = BeautifulSoup(page_source, 'html.parser')
-            
-            # 전체 텍스트 추출
-            text_content = soup.get_text()
             
             # 검색 결과 영역만 추출 (더 정확한 결과를 위해)
             search_results = soup.find('div', {'id': 'search'})
             if search_results:
                 search_text = search_results.get_text()
+                logger.info(f"🔍 검색 결과 텍스트 길이: {len(search_text)} 문자")
             else:
-                search_text = text_content
+                search_text = soup.get_text()
+                logger.info(f"🔍 전체 페이지 텍스트 길이: {len(search_text)} 문자")
             
             # 기관명 추출
+            logger.info(f"🏢 기관명 추출 시작...")
             institution_name = self._find_institution_name(search_text, phone_number)
+            
+            if institution_name:
+                logger.info(f"✅ 기관명 추출 성공: {institution_name}")
+            else:
+                logger.info(f"❌ 기관명 추출 실패")
             
             return institution_name
             
         except Exception as e:
-            logger.error(f"기관명 추출 오류: {e}")
+            logger.error(f"❌ 기관명 추출 오류: {e}")
             return ""
     
     def _find_institution_name(self, text: str, phone_number: str) -> str:
@@ -455,6 +476,8 @@ class GoogleSearchEngine:
         start_time = time.time()
         
         try:
+            logger.info(f"🔄 워커 {worker_id}: 행 {idx} 처리 시작")
+            
             results = {
                 'index': idx,
                 'phone_institution': '',
@@ -466,6 +489,7 @@ class GoogleSearchEngine:
             # 전화번호 처리
             phone_number = str(row.get('전화번호', '')).strip()
             if phone_number and phone_number != '':
+                logger.info(f"📞 워커 {worker_id}: 전화번호 처리 - {phone_number}")
                 # 기존에 실제기관명이 있는지 확인
                 existing_phone_institution = str(row.get('전화번호_실제기관명', '')).strip()
                 if not existing_phone_institution:
@@ -482,12 +506,14 @@ class GoogleSearchEngine:
                             self.stats.error_counts[phone_result.error_message] += 1
                         self.stats.add_search_time(phone_result.search_time)
                 else:
+                    logger.info(f"⏭️ 워커 {worker_id}: 전화번호 기관명 이미 존재 - {existing_phone_institution}")
                     results['phone_institution'] = existing_phone_institution
                     results['phone_success'] = True
             
             # 팩스번호 처리
             fax_number = str(row.get('팩스번호', '')).strip()
             if fax_number and fax_number != '':
+                logger.info(f"📠 워커 {worker_id}: 팩스번호 처리 - {fax_number}")
                 # 기존에 실제기관명이 있는지 확인
                 existing_fax_institution = str(row.get('팩스번호_실제기관명', '')).strip()
                 if not existing_fax_institution:
@@ -504,11 +530,13 @@ class GoogleSearchEngine:
                             self.stats.error_counts[fax_result.error_message] += 1
                         self.stats.add_search_time(fax_result.search_time)
                 else:
+                    logger.info(f"⏭️ 워커 {worker_id}: 팩스번호 기관명 이미 존재 - {existing_fax_institution}")
                     results['fax_institution'] = existing_fax_institution
                     results['fax_success'] = True
             
             # 빈 번호 처리
             if not phone_number and not fax_number:
+                logger.info(f"⚠️ 워커 {worker_id}: 전화번호와 팩스번호 모두 없음")
                 with self.lock:
                     self.stats.empty_numbers += 1
             
@@ -521,10 +549,12 @@ class GoogleSearchEngine:
             with self.lock:
                 self.stats.total_processed += 1
             
+            logger.info(f"✅ 워커 {worker_id}: 행 {idx} 처리 완료 ({processing_time:.2f}초) - 성공: {success}")
+            
             return results
             
         except Exception as e:
-            logger.error(f"행 처리 오류 (인덱스 {idx}): {e}")
+            logger.error(f"❌ 워커 {worker_id}: 행 처리 오류 (인덱스 {idx}): {e}")
             with self.lock:
                 self.stats.total_processed += 1
                 self.stats.failed_extractions += 1
@@ -645,6 +675,8 @@ class InstitutionNameExtractor:
         start_time = time.time()
         
         try:
+            logger.info(f"🔄 워커 {worker_id}: 행 {idx} 처리 시작")
+            
             results = {
                 'index': idx,
                 'phone_institution': '',
@@ -656,6 +688,7 @@ class InstitutionNameExtractor:
             # 전화번호 처리
             phone_number = str(row.get('전화번호', '')).strip()
             if phone_number and phone_number != '':
+                logger.info(f"📞 워커 {worker_id}: 전화번호 처리 - {phone_number}")
                 # 기존에 실제기관명이 있는지 확인
                 existing_phone_institution = str(row.get('전화번호_실제기관명', '')).strip()
                 if not existing_phone_institution:
@@ -672,12 +705,14 @@ class InstitutionNameExtractor:
                             self.stats.error_counts[phone_result.error_message] += 1
                         self.stats.add_search_time(phone_result.search_time)
                 else:
+                    logger.info(f"⏭️ 워커 {worker_id}: 전화번호 기관명 이미 존재 - {existing_phone_institution}")
                     results['phone_institution'] = existing_phone_institution
                     results['phone_success'] = True
             
             # 팩스번호 처리
             fax_number = str(row.get('팩스번호', '')).strip()
             if fax_number and fax_number != '':
+                logger.info(f"📠 워커 {worker_id}: 팩스번호 처리 - {fax_number}")
                 # 기존에 실제기관명이 있는지 확인
                 existing_fax_institution = str(row.get('팩스번호_실제기관명', '')).strip()
                 if not existing_fax_institution:
@@ -694,11 +729,13 @@ class InstitutionNameExtractor:
                             self.stats.error_counts[fax_result.error_message] += 1
                         self.stats.add_search_time(fax_result.search_time)
                 else:
+                    logger.info(f"⏭️ 워커 {worker_id}: 팩스번호 기관명 이미 존재 - {existing_fax_institution}")
                     results['fax_institution'] = existing_fax_institution
                     results['fax_success'] = True
             
             # 빈 번호 처리
             if not phone_number and not fax_number:
+                logger.info(f"⚠️ 워커 {worker_id}: 전화번호와 팩스번호 모두 없음")
                 with self.lock:
                     self.stats.empty_numbers += 1
             
@@ -711,10 +748,12 @@ class InstitutionNameExtractor:
             with self.lock:
                 self.stats.total_processed += 1
             
+            logger.info(f"✅ 워커 {worker_id}: 행 {idx} 처리 완료 ({processing_time:.2f}초) - 성공: {success}")
+            
             return results
             
         except Exception as e:
-            logger.error(f"행 처리 오류 (인덱스 {idx}): {e}")
+            logger.error(f"❌ 워커 {worker_id}: 행 처리 오류 (인덱스 {idx}): {e}")
             with self.lock:
                 self.stats.total_processed += 1
                 self.stats.failed_extractions += 1
