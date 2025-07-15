@@ -33,13 +33,17 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.chrome.options import Options  # undetected_chromedriver 사용
 from selenium.common.exceptions import (
     TimeoutException, WebDriverException, NoSuchElementException,
     ElementNotInteractableException, StaleElementReferenceException
 )
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
+import undetected_chromedriver as uc
+
+# BeautifulSoup 관련 imports
+from bs4 import BeautifulSoup
 
 # 로깅 설정
 logging.basicConfig(
@@ -151,45 +155,78 @@ class WebDriverManager:
     
     def __init__(self, headless: bool = True):
         self.headless = headless
-        self.driver_options = self._setup_chrome_options()
     
-    def _setup_chrome_options(self) -> Options:
-        """크롬 옵션 설정"""
-        options = Options()
-        
-        if self.headless:
-            options.add_argument('--headless=new')
-        
-        # 메모리 최적화 설정 (8GB 환경 고려)
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--disable-extensions')
-        options.add_argument('--disable-plugins')
-        options.add_argument('--disable-images')
-        options.add_argument('--disable-javascript')
-        options.add_argument('--memory-pressure-off')
-        options.add_argument('--max_old_space_size=512')
-        
-        # 성능 최적화
-        options.add_argument('--disable-background-timer-throttling')
-        options.add_argument('--disable-backgrounding-occluded-windows')
-        options.add_argument('--disable-renderer-backgrounding')
-        options.add_argument('--disable-features=TranslateUI')
-        options.add_argument('--disable-default-apps')
-        options.add_argument('--disable-sync')
-        
-        # 사용자 에이전트 설정
-        options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
-        
-        return options
-    
-    def create_driver(self) -> webdriver.Chrome:
-        """새로운 웹드라이버 생성"""
+    def create_driver(self, worker_id: int = 0) -> uc.Chrome:
+        """새로운 undetected-chromedriver 생성 (워커별 개별 설정)"""
         try:
-            return webdriver.Chrome(options=self.driver_options)
+            # 워커 간 시차 두기
+            startup_delay = random.uniform(0.5, 1.5) * worker_id
+            time.sleep(startup_delay)
+            
+            chrome_options = uc.ChromeOptions()
+            
+            # 기본 옵션
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--window-size=1366,768')
+            chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+            chrome_options.add_argument('--disable-extensions')
+            chrome_options.add_argument('--mute-audio')
+            chrome_options.add_argument('--no-first-run')
+            chrome_options.add_argument('--disable-infobars')
+            chrome_options.add_argument('--disable-notifications')
+            
+            # Headless 모드 설정
+            if self.headless:
+                chrome_options.add_argument('--headless')
+            
+            # 리소스 절약 옵션
+            chrome_options.add_argument('--disable-images')
+            chrome_options.add_argument('--disable-plugins')
+            chrome_options.add_argument('--disable-web-security')
+            chrome_options.add_argument('--disable-features=VizDisplayCompositor')
+            chrome_options.add_argument('--disable-ipc-flooding-protection')
+            chrome_options.add_argument('--disable-background-timer-throttling')
+            chrome_options.add_argument('--disable-backgrounding-occluded-windows')
+            chrome_options.add_argument('--disable-renderer-backgrounding')
+            chrome_options.add_argument('--disable-features=TranslateUI')
+            chrome_options.add_argument('--disable-default-apps')
+            chrome_options.add_argument('--disable-sync')
+            
+            # 메모리 최적화
+            chrome_options.add_argument('--memory-pressure-off')
+            chrome_options.add_argument('--max_old_space_size=256')
+            chrome_options.add_argument('--aggressive-cache-discard')
+            chrome_options.add_argument('--max-unused-resource-memory-usage-percentage=5')
+            
+            # 안전한 포트 설정
+            debug_port = 9222 + (worker_id * 10)
+            chrome_options.add_argument(f'--remote-debugging-port={debug_port}')
+            
+            # User-Agent 랜덤화
+            user_agents = [
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36'
+            ]
+            chrome_options.add_argument(f'--user-agent={random.choice(user_agents)}')
+            
+            # 드라이버 생성
+            driver = uc.Chrome(options=chrome_options, version_main=None)
+            
+            # 타임아웃 설정
+            driver.implicitly_wait(10)
+            driver.set_page_load_timeout(20)
+            
+            # 웹드라이버 감지 방지
+            driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+            
+            logger.info(f"🔧 워커 {worker_id}: undetected-chromedriver 생성 완료 (포트: {debug_port})")
+            return driver
+            
         except Exception as e:
-            logger.error(f"웹드라이버 생성 실패: {e}")
+            logger.error(f"워커 {worker_id} 웹드라이버 생성 실패: {e}")
             raise
 
 class GoogleSearchEngine:
@@ -208,7 +245,7 @@ class GoogleSearchEngine:
             r'([가-힣\s]+)(?:\s|$)'
         ]
     
-    def search_institution_name(self, phone_number: str, number_type: str = "전화번호") -> SearchResult:
+    def search_institution_name(self, phone_number: str, number_type: str = "전화번호", worker_id: int = 0) -> SearchResult:
         """전화번호로 기관명 검색"""
         if not phone_number or phone_number.strip() == "":
             return SearchResult(
@@ -230,13 +267,20 @@ class GoogleSearchEngine:
         start_time = time.time()
         
         try:
-            driver = self.driver_manager.create_driver()
+            driver = self.driver_manager.create_driver(worker_id)
             
             # 검색 쿼리 생성
             search_query = f'"{clean_number}" {number_type}'
             
+            # 안전한 랜덤 지연
+            delay = random.uniform(0.5, 1.5)
+            time.sleep(delay)
+            
             # 구글 검색 실행
             driver.get('https://www.google.com')
+            
+            # 추가 대기 시간
+            time.sleep(random.uniform(1.0, 2.0))
             
             # 검색창 찾기 및 검색
             search_box = WebDriverWait(driver, 10).until(
@@ -244,13 +288,20 @@ class GoogleSearchEngine:
             )
             
             search_box.clear()
-            search_box.send_keys(search_query)
+            # 자연스러운 타이핑 시뮬레이션
+            for char in search_query:
+                search_box.send_keys(char)
+                time.sleep(random.uniform(0.03, 0.08))
+            
             search_box.send_keys(Keys.RETURN)
             
             # 검색 결과 대기
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.ID, "search"))
             )
+            
+            # 추가 대기 시간
+            time.sleep(random.uniform(1.0, 2.0))
             
             # 기관명 추출
             institution_name = self._extract_institution_name(driver, clean_number)
@@ -307,32 +358,44 @@ class GoogleSearchEngine:
         
         return clean_number
     
-    def _extract_institution_name(self, driver: webdriver.Chrome, phone_number: str) -> str:
+    def _extract_institution_name(self, driver: uc.Chrome, phone_number: str) -> str:
         """검색 결과에서 기관명 추출"""
         try:
-            # 검색 결과 요소들 찾기
-            search_results = driver.find_elements(By.CSS_SELECTOR, "div.g")
+            # BeautifulSoup를 사용하여 페이지 소스 파싱
+            page_source = driver.page_source
+            soup = BeautifulSoup(page_source, 'html.parser')
             
-            for result in search_results[:5]:  # 상위 5개 결과만 확인
-                try:
-                    # 제목과 설명 텍스트 추출
-                    title_element = result.find_element(By.CSS_SELECTOR, "h3")
-                    title_text = title_element.text if title_element else ""
-                    
-                    snippet_element = result.find_element(By.CSS_SELECTOR, "div[data-sncf]")
-                    snippet_text = snippet_element.text if snippet_element else ""
-                    
-                    # 전체 텍스트에서 기관명 추출
-                    full_text = f"{title_text} {snippet_text}"
-                    institution_name = self._parse_institution_name(full_text, phone_number)
-                    
-                    if institution_name:
-                        return institution_name
-                        
-                except Exception as e:
-                    continue
+            # 전체 텍스트 추출
+            text_content = soup.get_text()
             
-            return ""
+            # 기관명 추출 (정규식 패턴 사용)
+            institution_name = self._parse_institution_name(text_content, phone_number)
+            
+            # 추가적으로 특정 HTML 요소들도 확인
+            if not institution_name:
+                # 제목 태그들 확인
+                title_elements = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+                for element in title_elements:
+                    if element.get_text():
+                        title_text = element.get_text()
+                        potential_name = self._parse_institution_name(title_text, phone_number)
+                        if potential_name:
+                            institution_name = potential_name
+                            break
+            
+            # 더 구체적인 검색 (span, div 등의 텍스트 요소들)
+            if not institution_name:
+                text_elements = soup.find_all(['span', 'div', 'p', 'strong', 'b'])
+                for element in text_elements:
+                    if element.get_text():
+                        element_text = element.get_text()
+                        if phone_number.replace('-', '') in element_text.replace('-', '').replace(' ', ''):
+                            potential_name = self._parse_institution_name(element_text, phone_number)
+                            if potential_name:
+                                institution_name = potential_name
+                                break
+            
+            return institution_name
             
         except Exception as e:
             logger.error(f"기관명 추출 오류: {e}")
@@ -383,13 +446,30 @@ class InstitutionNameExtractor:
         self.output_file = output_file
         self.stats = ExtractionStats()
         self.system_monitor = SystemMonitor()
-        self.driver_manager = WebDriverManager(headless=HEADLESS_MODE)
+        
+        # Headless 모드 설정
+        self.headless_mode = globals().get('HEADLESS_MODE', True)
+        
+        # WebDriver 관리자 초기화
+        self.driver_manager = WebDriverManager(headless=self.headless_mode)
         self.search_engine = GoogleSearchEngine(self.driver_manager)
+        
+        # 스레드 동기화
         self.lock = threading.Lock()
         
-        # 동적 워커 수 조정
-        self.current_workers = MAX_WORKERS
+        # 워커 수 동적 조정
+        headless_status = "Headless" if self.headless_mode else "GUI"
+        if self.headless_mode:
+            self.current_workers = MAX_WORKERS  # Headless 모드: 12개 워커
+        else:
+            self.current_workers = max(MIN_WORKERS, MAX_WORKERS - 3)  # GUI 모드: 9개 워커
+        
         self.worker_adjustment_interval = 50  # 50개 처리마다 워커 수 조정 검토
+        
+        logger.info(f"🚀 InstitutionNameExtractor 초기화 완료")
+        logger.info(f"🔧 {headless_status} 모드 - 워커: {self.current_workers}개")
+        logger.info(f"🔧 워커 수 동적 조정 활성화 (범위: {MIN_WORKERS}-{MAX_WORKERS}개)")
+        logger.info(f"🔧 AMD Ryzen 5 3600 (6코어 12스레드) 환경에 최적화된 설정 적용")
     
     def load_data(self) -> pd.DataFrame:
         """Excel 데이터 로드"""
@@ -440,7 +520,11 @@ class InstitutionNameExtractor:
     def process_single_row(self, row_data: Tuple[int, pd.Series]) -> Dict[str, Any]:
         """단일 행 처리"""
         idx, row = row_data
-        worker_id = f"worker_{threading.current_thread().ident}"
+        
+        # 워커 ID 생성 (스레드 ID 기반)
+        thread_id = threading.current_thread().ident
+        worker_id = abs(hash(thread_id)) % 100  # 0-99 범위의 워커 ID
+        
         start_time = time.time()
         
         try:
@@ -458,7 +542,7 @@ class InstitutionNameExtractor:
                 # 기존에 실제기관명이 있는지 확인
                 existing_phone_institution = str(row.get('전화번호_실제기관명', '')).strip()
                 if not existing_phone_institution:
-                    phone_result = self.search_engine.search_institution_name(phone_number, "전화번호")
+                    phone_result = self.search_engine.search_institution_name(phone_number, "전화번호", worker_id)
                     results['phone_institution'] = phone_result.institution_name
                     results['phone_success'] = phone_result.search_successful
                     
@@ -480,7 +564,7 @@ class InstitutionNameExtractor:
                 # 기존에 실제기관명이 있는지 확인
                 existing_fax_institution = str(row.get('팩스번호_실제기관명', '')).strip()
                 if not existing_fax_institution:
-                    fax_result = self.search_engine.search_institution_name(fax_number, "팩스번호")
+                    fax_result = self.search_engine.search_institution_name(fax_number, "팩스번호", worker_id)
                     results['fax_institution'] = fax_result.institution_name
                     results['fax_success'] = fax_result.search_successful
                     
@@ -504,7 +588,8 @@ class InstitutionNameExtractor:
             processing_time = time.time() - start_time
             success = results['phone_success'] or results['fax_success']
             
-            self.system_monitor.record_worker_performance(worker_id, processing_time, success)
+            worker_id_str = f"worker_{worker_id}"
+            self.system_monitor.record_worker_performance(worker_id_str, processing_time, success)
             
             with self.lock:
                 self.stats.total_processed += 1
@@ -692,13 +777,39 @@ class InstitutionNameExtractor:
 def main():
     """메인 함수"""
     try:
+        print("🚀 실제기관명 추출 시스템 시작")
         print("=" * 60)
-        print("실제기관명 추출 시스템")
+        
+        # Headless 모드 선택
+        print("\n🔧 브라우저 모드 선택:")
+        print("1. Headless 모드 (권장) - CPU/메모리 사용량 낮음, 브라우저 창 안 보임")
+        print("2. GUI 모드 - 브라우저 창 보임, CPU/메모리 사용량 높음")
+        
+        while True:
+            choice = input("\n선택하세요 (1 또는 2, 기본값: 1): ").strip()
+            if choice == "" or choice == "1":
+                globals()['HEADLESS_MODE'] = True
+                print("✅ Headless 모드로 실행합니다 (CPU/메모리 최적화)")
+                break
+            elif choice == "2":
+                globals()['HEADLESS_MODE'] = False
+                print("✅ GUI 모드로 실행합니다 (브라우저 창 표시)")
+                break
+            else:
+                print("❌ 잘못된 선택입니다. 1 또는 2를 입력하세요.")
+        
+        # 워커 수 조정 (Headless 모드에 따라)
+        if globals()['HEADLESS_MODE']:
+            print(f"🔧 Headless 모드: {MAX_WORKERS}개 워커로 최적화")
+        else:
+            print(f"🔧 GUI 모드: {max(MIN_WORKERS, MAX_WORKERS - 3)}개 워커로 안정화")
+        
         print("=" * 60)
         print(f"시스템 설정:")
-        print(f"  - Headless 모드: {HEADLESS_MODE}")
+        print(f"  - Headless 모드: {globals()['HEADLESS_MODE']}")
         print(f"  - 워커 수 범위: {MIN_WORKERS}-{MAX_WORKERS}개")
-        print(f"  - 시작 워커 수: {MAX_WORKERS}개")
+        print(f"  - 동적 워커 수 조정: 활성화")
+        print(f"  - AMD Ryzen 5 3600 최적화: 적용")
         print("=" * 60)
         
         # 입력 파일 경로
@@ -706,8 +817,10 @@ def main():
         
         # 파일 존재 확인
         if not os.path.exists(input_file):
-            print(f"오류: 입력 파일을 찾을 수 없습니다: {input_file}")
+            print(f"❌ 입력 파일을 찾을 수 없습니다: {input_file}")
             return False
+        
+        print(f"📁 입력 파일 경로: {input_file}")
         
         # 추출기 생성 및 실행
         extractor = InstitutionNameExtractor(
@@ -727,10 +840,10 @@ def main():
         return success
         
     except KeyboardInterrupt:
-        print("\n사용자에 의해 중단되었습니다.")
+        print("\n⚠️ 사용자에 의해 중단되었습니다.")
         return False
     except Exception as e:
-        print(f"\n예상치 못한 오류가 발생했습니다: {e}")
+        print(f"\n❌ 예상치 못한 오류가 발생했습니다: {e}")
         logger.error(f"메인 함수 오류: {e}")
         logger.error(traceback.format_exc())
         return False

@@ -9,3 +9,1276 @@
      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'str' object has no attribute 'isna'
 
+2025-07-15 13:45:47,784 - INFO - 실제기관명 추출 시작
+2025-07-15 13:45:47,784 - INFO - 데이터 로드 시작: rawdatafile\failed_data_250715.xlsx
+2025-07-15 13:45:48,308 - INFO - 총 3555개 행 로드 완료
+2025-07-15 13:45:48,308 - INFO - 원본 컬럼: ['연번', '시도', '시군구', '읍면동', '우편번호', '주    소', '전화번호', '실제기관명', '팩스번호', '실제기관명.1']
+2025-07-15 13:45:48,310 - INFO - 데이터 로드 완료 - 컬럼: ['연번', '시도', '시군구', '읍면동', '우편번호', '주    소', '전화번호', '전화번호_실제기관명', '팩스번호', '팩스번호_실제기관명']
+2025-07-15 13:45:48,315 - INFO - 처리 대상: 3271개 행
+2025-07-15 13:45:50,683 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:50,798 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,042 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,042 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,123 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,285 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,286 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,286 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,286 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,425 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:51,721 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,749 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:51,787 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:52,216 - INFO - 🔧 undetected-chromedriver 생성 완료
+2025-07-15 13:45:52,354 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:52,494 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:52,494 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:52,534 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:52,537 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:52,540 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:52,883 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:53,040 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:53,089 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:53,241 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:53,283 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:53,283 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:53,284 - INFO - 진행률: 0.3% (10/3271)
+2025-07-15 13:45:53,551 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:53,679 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:53,679 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:53,897 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:53,898 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:54,176 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:54,177 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:54,448 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:54,485 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:54,551 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:54,787 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:54,938 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:54,988 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:55,136 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:55,165 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:55,165 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:55,468 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:55,616 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:55,867 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:55,867 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:55,902 - INFO - 진행률: 0.6% (20/3271)
+2025-07-15 13:45:56,173 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:56,426 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:56,463 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:56,501 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:56,595 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:56,740 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:56,817 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:56,940 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:57,132 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:57,279 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:57,316 - ERROR - 웹드라이버 생성 실패: [WinError 2] 지정된 파일을 찾을 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\LICENSE.chromedriver'
+2025-07-15 13:45:57,317 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:57,319 - ERROR - 웹드라이버 생성 실패: [Errno 2] No such file or directory: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:57,587 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:57,729 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:57,734 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:57,747 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:57,747 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:57,993 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:58,136 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:58,286 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:58,326 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:58,487 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:58,488 - INFO - 진행률: 0.9% (30/3271)
+2025-07-15 13:45:58,659 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:45:58,806 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:45:58,903 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,082 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,271 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,328 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,473 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,473 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,654 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,798 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,864 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,957 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:45:59,958 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:00,070 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:46:00,246 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:46:00,436 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:00,488 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:00,611 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:46:00,759 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:46:01,005 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe'
+2025-07-15 13:46:01,184 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:01,229 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:01,349 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:46:01,508 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:46:01,645 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:01,798 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:01,839 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:46:02,011 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:46:02,053 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:02,214 - ERROR - 웹드라이버 생성 실패: [WinError 2] 지정된 파일을 찾을 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32'
+2025-07-15 13:46:02,214 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:46:02,215 - ERROR - 웹드라이버 생성 실패: [Errno 2] No such file or directory: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:02,462 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:46:02,628 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:46:02,914 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:02,951 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:03,195 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:03,243 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:03,245 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:03,544 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:03,638 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:03,716 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:03,849 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:03,891 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:46:03,932 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:39,725 - INFO - 실제기관명 추출 시작
+2025-07-15 13:47:39,726 - INFO - 데이터 로드 시작: rawdatafile\failed_data_250715.xlsx
+2025-07-15 13:47:40,235 - INFO - 총 3555개 행 로드 완료
+2025-07-15 13:47:40,235 - INFO - 원본 컬럼: ['연번', '시도', '시군구', '읍면동', '우편번호', '주    소', '전화번호', '실제기관명', '팩스번호', '실제기관명.1']
+2025-07-15 13:47:40,237 - INFO - 데이터 로드 완료 - 컬럼: ['연번', '시도', '시군구', '읍면동', '우편번호', '주    소', '전화번호', '전화번호_실제기관명', '팩스번호', '팩스번호_실제기관명']
+2025-07-15 13:47:40,240 - INFO - 처리 대상: 3271개 행
+2025-07-15 13:47:41,835 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:42,236 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:42,249 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,270 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,286 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,288 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:42,302 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,315 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,315 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,336 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,336 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,384 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,396 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,407 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,449 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,459 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,471 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,481 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,492 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,493 - INFO - 진행률: 0.3% (10/3271)
+2025-07-15 13:47:42,503 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,515 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,525 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,535 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,547 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,557 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,568 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,578 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,587 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,597 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,607 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,617 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,630 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,641 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,653 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,654 - INFO - 🔧 undetected-chromedriver 생성 완료
+2025-07-15 13:47:42,666 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,677 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,679 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:42,694 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,694 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,696 - INFO - 진행률: 0.6% (20/3271)
+2025-07-15 13:47:42,709 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,710 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,726 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,730 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,744 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,747 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,768 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,773 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,786 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,789 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,808 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,809 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,826 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,826 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,842 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,843 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,856 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,860 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,876 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,876 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,877 - INFO - 진행률: 0.9% (30/3271)
+2025-07-15 13:47:42,892 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,892 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,909 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,909 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,925 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,925 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,943 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,943 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,961 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,962 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,979 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,979 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,986 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:42,995 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:42,996 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,015 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,015 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,018 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,019 - INFO - 진행률: 1.2% (40/3271)
+2025-07-15 13:47:43,039 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,039 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,044 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,055 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,078 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,078 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,078 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,098 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,103 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,106 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,124 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,130 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,130 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,148 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,154 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,154 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,178 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,182 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,182 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,186 - INFO - 진행률: 1.5% (50/3271)
+2025-07-15 13:47:43,193 - INFO - 워커 수 감소: 10개
+2025-07-15 13:47:43,206 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,213 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,214 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,235 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,239 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,243 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,263 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,265 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,285 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,286 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,289 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:43,303 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,308 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,337 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,338 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,338 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,342 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,346 - INFO - 진행률: 1.8% (60/3271)
+2025-07-15 13:47:43,364 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,369 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,376 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,380 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,403 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,412 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,413 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,414 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,436 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,436 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:43,443 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,446 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,447 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,472 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,479 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,480 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,491 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:43,491 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:43,493 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:43,498 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,504 - INFO - 진행률: 2.1% (70/3271)
+2025-07-15 13:47:43,506 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:43,506 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:43,507 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:43,508 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,532 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,532 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,532 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,535 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,535 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,536 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,576 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,576 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,584 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,584 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,589 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,589 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,589 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,589 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,589 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,589 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,592 - INFO - 진행률: 2.4% (80/3271)
+2025-07-15 13:47:43,614 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,633 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,633 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,633 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,633 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,633 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,636 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,641 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,643 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,643 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,644 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,677 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,680 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,680 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,693 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,696 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,696 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,696 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,699 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,699 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,699 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,699 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,701 - INFO - 진행률: 2.8% (90/3271)
+2025-07-15 13:47:43,733 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,744 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,744 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,744 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,744 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,747 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,752 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,752 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,752 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,752 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,752 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,788 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,788 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,788 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,808 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,808 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,808 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,808 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,808 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,808 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,808 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,808 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,810 - INFO - 진행률: 3.1% (100/3271)
+2025-07-15 13:47:43,812 - INFO - 워커 수 감소: 9개
+2025-07-15 13:47:43,846 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,854 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,854 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,854 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,857 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,862 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,862 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,862 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,862 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,862 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,862 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,891 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,892 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,892 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,901 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,901 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,911 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,911 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,911 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,912 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,912 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,912 - INFO - 진행률: 3.4% (110/3271)
+2025-07-15 13:47:43,943 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,949 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,949 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,963 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,963 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,963 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,963 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,969 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,969 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,969 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:43,969 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,006 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,012 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,012 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,013 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,013 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,013 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,013 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,013 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,013 - INFO - 진행률: 3.7% (120/3271)
+2025-07-15 13:47:44,050 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,050 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,055 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,061 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,062 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,064 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,067 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,067 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,067 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,070 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,070 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,102 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,107 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,107 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,113 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,115 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,115 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,118 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,121 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,121 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,121 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,123 - INFO - 진행률: 4.0% (130/3271)
+2025-07-15 13:47:44,135 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,135 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,171 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,172 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,185 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,185 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,185 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,188 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,193 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,193 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,193 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,194 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,194 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,195 - INFO - 진행률: 4.3% (140/3271)
+2025-07-15 13:47:44,237 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,238 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,238 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,238 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,251 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,251 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,251 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,251 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,251 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,251 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,255 - INFO - 진행률: 4.6% (150/3271)
+2025-07-15 13:47:44,289 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,300 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,300 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,300 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,300 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,300 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,308 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,308 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,309 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,309 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,309 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,347 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,350 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,350 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,355 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,362 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,362 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,365 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,365 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,365 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,366 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,366 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,368 - INFO - 진행률: 4.9% (160/3271)
+2025-07-15 13:47:44,400 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,411 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,411 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,411 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,411 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,411 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,419 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,422 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,422 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,422 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,422 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,460 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,477 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,477 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,477 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,477 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,477 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,477 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,477 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,480 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,483 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,483 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,483 - INFO - 진행률: 5.2% (170/3271)
+2025-07-15 13:47:44,513 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,524 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,531 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,534 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,534 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,534 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,537 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,537 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,537 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,570 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,573 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,580 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,583 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,583 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,583 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,588 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,588 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,589 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,589 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,589 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,590 - INFO - 진행률: 5.5% (180/3271)
+2025-07-15 13:47:44,628 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,628 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,637 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,637 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,637 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,637 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,645 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,648 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,648 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,648 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,649 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,651 - INFO - 진행률: 5.8% (190/3271)
+2025-07-15 13:47:44,701 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,704 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,716 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,716 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,716 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,716 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,716 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,721 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,724 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,724 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,724 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,767 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,777 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,777 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,786 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,799 - INFO - 진행률: 6.1% (200/3271)
+2025-07-15 13:47:44,816 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,816 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,840 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,843 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,845 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,845 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,845 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,872 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,891 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,891 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,891 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,891 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,891 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,893 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,896 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,896 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,896 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,932 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,940 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,940 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,940 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,948 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,948 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,948 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,948 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,951 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,951 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,952 - INFO - 진행률: 6.4% (210/3271)
+2025-07-15 13:47:44,984 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,989 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,990 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,997 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,997 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,997 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,998 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:44,998 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,003 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,003 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,006 - INFO - 진행률: 6.7% (220/3271)
+2025-07-15 13:47:45,035 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,038 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,038 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,049 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,052 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,052 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,052 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,055 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,055 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,056 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,087 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,088 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,093 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,095 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,098 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,098 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,098 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,099 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,100 - INFO - 진행률: 7.0% (230/3271)
+2025-07-15 13:47:45,128 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,128 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,131 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,131 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,135 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,139 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,146 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,148 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,152 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,155 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,190 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,196 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,196 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,202 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,204 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,204 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,204 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,205 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,207 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,208 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,209 - INFO - 진행률: 7.3% (240/3271)
+2025-07-15 13:47:45,234 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,243 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,246 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,250 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,253 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,253 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,253 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,256 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,257 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,293 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,308 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,308 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,308 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,308 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,309 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,309 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,309 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,309 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,312 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,314 - INFO - 진행률: 7.6% (250/3271)
+2025-07-15 13:47:45,357 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,357 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,357 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,357 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,357 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,358 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,358 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,358 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,361 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,363 - INFO - 진행률: 7.9% (260/3271)
+2025-07-15 13:47:45,386 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,387 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,387 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,390 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,390 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,421 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,434 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,434 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,434 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,434 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,434 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,437 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,439 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,440 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,440 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,445 - INFO - 진행률: 8.3% (270/3271)
+2025-07-15 13:47:45,484 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,484 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,484 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,484 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,484 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,485 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,485 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,485 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,509 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:45,518 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,528 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,528 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,529 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,536 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,537 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,539 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,539 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,540 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,540 - INFO - 진행률: 8.6% (280/3271)
+2025-07-15 13:47:45,540 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,583 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,593 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,593 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,593 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,593 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,601 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,601 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,601 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,601 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,601 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,601 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,603 - INFO - 진행률: 8.9% (290/3271)
+2025-07-15 13:47:45,633 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,638 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,638 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,653 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,653 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,653 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,653 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,653 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,654 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,654 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,656 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,658 - INFO - 진행률: 9.2% (300/3271)
+2025-07-15 13:47:45,690 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,693 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,693 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,701 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,704 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,704 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,709 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,711 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,712 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,712 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,712 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,748 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,748 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,751 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,764 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,764 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,764 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,764 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,764 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,764 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,767 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,767 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,768 - INFO - 진행률: 9.5% (310/3271)
+2025-07-15 13:47:45,802 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,812 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,812 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,812 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,812 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,820 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,820 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,822 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,822 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,823 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,823 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,825 - INFO - 진행률: 9.8% (320/3271)
+2025-07-15 13:47:45,867 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,877 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,877 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,877 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,877 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,877 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,880 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,880 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,880 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,880 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,883 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,912 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,923 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,923 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,923 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,931 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,931 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,932 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,932 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,932 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,934 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,935 - INFO - 진행률: 10.1% (330/3271)
+2025-07-15 13:47:45,978 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,978 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,978 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,988 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,988 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,988 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,991 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,991 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,991 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,991 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,991 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:45,993 - INFO - 진행률: 10.4% (340/3271)
+2025-07-15 13:47:46,026 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,036 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,036 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,036 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,044 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,046 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,047 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,047 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,047 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,047 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,047 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,050 - INFO - 진행률: 10.7% (350/3271)
+2025-07-15 13:47:46,079 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,100 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,100 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,101 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,101 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,101 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,103 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,104 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,104 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,104 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,104 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,140 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,145 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,148 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,148 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,156 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,161 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,161 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,161 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,161 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,161 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,161 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,163 - INFO - 진행률: 11.0% (360/3271)
+2025-07-15 13:47:46,201 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,209 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,209 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,209 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,209 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,210 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,210 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,212 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,212 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,213 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,244 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,259 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,259 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,259 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,259 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,259 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,259 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,264 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,267 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,267 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,267 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,267 - INFO - 진행률: 11.3% (370/3271)
+2025-07-15 13:47:46,301 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,306 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,306 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,321 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,322 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,322 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,322 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,322 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,325 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,325 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,325 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,328 - INFO - 진행률: 11.6% (380/3271)
+2025-07-15 13:47:46,357 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,365 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,370 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,373 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,373 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,373 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,376 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,376 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,381 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,381 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,381 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,417 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,417 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,432 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,434 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,435 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,435 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,435 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,435 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,435 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,435 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,435 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,437 - INFO - 진행률: 11.9% (390/3271)
+2025-07-15 13:47:46,473 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,476 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,476 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,481 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,482 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,482 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,482 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,487 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,487 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,487 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,487 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,521 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,529 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,529 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,532 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,532 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,539 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,542 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,542 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,542 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,542 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,542 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,542 - INFO - 진행률: 12.2% (400/3271)
+2025-07-15 13:47:46,578 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,578 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,580 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,580 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,583 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,583 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,583 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,586 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,589 - INFO - 진행률: 12.5% (410/3271)
+2025-07-15 13:47:46,621 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,621 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,621 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,621 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,624 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,624 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,627 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,627 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,662 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,676 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,676 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,676 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,676 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,676 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,684 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,684 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,684 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,684 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,685 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,699 - INFO - 진행률: 12.8% (420/3271)
+2025-07-15 13:47:46,722 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,722 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,730 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,736 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,736 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,736 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,736 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,736 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,736 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,736 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,771 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,771 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,771 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,771 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,774 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,782 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,783 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,783 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,783 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,811 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,817 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,817 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,817 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,817 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,817 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,821 - INFO - 진행률: 13.1% (430/3271)
+2025-07-15 13:47:46,823 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,835 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,835 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,841 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,842 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,882 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,882 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,882 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,884 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,887 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,890 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,890 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,893 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,893 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,893 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,895 - INFO - 진행률: 13.5% (440/3271)
+2025-07-15 13:47:46,927 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,930 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,937 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,937 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,937 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,937 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,938 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,940 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,950 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,952 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,955 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,985 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:46,994 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,000 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,000 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,006 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,007 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,007 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,010 - INFO - 진행률: 13.8% (450/3271)
+2025-07-15 13:47:47,013 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,013 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,013 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,013 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,039 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,039 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,039 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,086 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,087 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,087 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,087 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,094 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,097 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,097 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,100 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,100 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,100 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,102 - INFO - 진행률: 14.1% (460/3271)
+2025-07-15 13:47:47,134 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,134 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,137 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,142 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,142 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,142 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,145 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,145 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,145 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,183 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,183 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,194 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,194 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,199 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,199 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,199 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,199 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,199 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,199 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,199 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,201 - INFO - 진행률: 14.4% (470/3271)
+2025-07-15 13:47:47,236 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,246 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,247 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,247 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,249 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,257 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,257 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,257 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,257 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,257 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,257 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,259 - INFO - 진행률: 14.7% (480/3271)
+2025-07-15 13:47:47,300 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,311 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,311 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,312 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,312 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,312 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,317 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,317 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,317 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,317 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,317 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,327 - INFO - 진행률: 15.0% (490/3271)
+2025-07-15 13:47:47,359 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,359 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,359 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,360 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,360 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,362 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,363 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,363 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,392 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,392 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,392 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,395 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,400 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,401 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,401 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,440 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,440 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,440 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,441 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,441 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,444 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,448 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,450 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,453 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,453 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,456 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,457 - INFO - 진행률: 15.3% (500/3271)
+2025-07-15 13:47:47,486 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,499 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,502 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,502 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,502 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,502 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,504 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,504 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,504 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,512 - ERROR - 기관명 추출 오류: ('Connection aborted.', ConnectionResetError(10054, '현재 연결은 원격 호스트에 의해 강제로 끊겼습니다', None, 10054, None))
+2025-07-15 13:47:47,534 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,544 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,544 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,545 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,545 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,548 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,548 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,556 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,567 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,582 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,582 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,594 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,594 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,594 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,599 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,602 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,605 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,605 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,648 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,648 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,661 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,663 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,663 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,663 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,663 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,663 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,666 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,666 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:47,666 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:49,013 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:49,175 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:49,288 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:49,422 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:49,450 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:49,450 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:50,118 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:50,263 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:50,333 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:50,488 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:50,564 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:50,683 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:50,684 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:50,984 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:51,021 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:51,068 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:51,069 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:51,251 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:51,287 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:51,396 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:51,533 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:51,672 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:51,686 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:51,686 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:52,393 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:52,533 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:52,539 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:52,551 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:52,552 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:52,921 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:52,922 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:52,999 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:53,000 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:53,232 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:53,233 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:53,410 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:53,411 - ERROR - 웹드라이버 생성 실패: [Errno 2] No such file or directory: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\LICENSE.chromedriver'
+2025-07-15 13:47:53,584 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:53,629 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:53,632 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:53,838 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:53,914 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:54,068 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:54,434 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:54,582 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:54,739 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:54,906 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:54,972 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:55,088 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:55,088 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:55,334 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:55,393 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:55,563 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:55,623 - ERROR - 웹드라이버 생성 실패: [Errno 2] No such file or directory: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\LICENSE.chromedriver'
+2025-07-15 13:47:55,623 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:55,625 - ERROR - 웹드라이버 생성 실패: [Errno 2] No such file or directory: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:55,933 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:55,976 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:56,016 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:56,196 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:56,239 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:56,399 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:56,413 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:56,417 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:56,490 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:56,690 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:56,764 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:56,901 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:57,050 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:57,198 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:57,344 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:57,403 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:57,490 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:57,640 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:57,698 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:57,781 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:57,952 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:58,137 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:58,177 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:58,345 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:58,508 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:58,670 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:58,718 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:58,718 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:58,719 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:59,001 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:59,164 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:59,164 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:59,166 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:59,189 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:59,189 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:59,189 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:59,192 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:59,193 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:59,365 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:47:59,626 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:47:59,793 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:47:59,860 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:00,000 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:00,144 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:00,361 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:00,509 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:00,919 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:01,077 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:01,204 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:01,461 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:01,519 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:01,645 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:01,645 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:01,646 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:01,798 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:02,030 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:02,073 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:02,075 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:02,145 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:02,385 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:02,527 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:02,991 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:03,132 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:03,518 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:03,561 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:03,773 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:03,829 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:04,021 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:04,060 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:04,224 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:04,261 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:04,298 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:04,512 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:04,655 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:04,700 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:04,854 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:04,919 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:05,060 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:05,473 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:05,608 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:05,657 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:05,856 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:06,000 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:06,035 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:06,076 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:06,258 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:06,335 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:06,460 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\THIRD_PARTY_NOTICES.chromedriver'
+2025-07-15 13:48:06,620 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:06,766 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:06,878 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:07,018 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:07,024 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:07,034 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:07,037 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:07,272 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:07,410 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:07,428 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:07,428 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:07,741 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:07,781 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:07,917 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:07,918 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:08,044 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:08,054 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:08,319 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:08,371 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:08,506 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:08,563 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:08,739 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:08,795 - ERROR - 웹드라이버 생성 실패: [WinError 32] 다른 프로세스가 파일을 사용 중이기 때문에 프로세스가 액세스 할 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:08,863 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:09,033 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:09,197 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:09,317 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:09,356 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:09,356 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:09,607 - INFO - patching driver executable C:\Users\MyoengHo Shin\appdata\roaming\undetected_chromedriver\undetected_chromedriver.exe
+2025-07-15 13:48:09,747 - ERROR - 웹드라이버 생성 실패: [WinError 183] 파일이 이미 있으므로 만들 수 없습니다: 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\MyoengHo Shin\\appdata\\roaming\\undetected_chromedriver\\undetected_chromedriver.exe'
+2025-07-15 13:48:09,753 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:09,765 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
+2025-07-15 13:48:09,766 - ERROR - 웹드라이버 생성 실패: you cannot reuse the ChromeOptions object
