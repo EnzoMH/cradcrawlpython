@@ -45,6 +45,10 @@ import undetected_chromedriver as uc
 # BeautifulSoup 관련 imports
 from bs4 import BeautifulSoup
 
+# Gemini API import 추가
+import google.generativeai as genai
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
+
 # 로깅 설정
 logging.basicConfig(
     level=logging.INFO,
@@ -97,6 +101,205 @@ class ExtractionStats:
         if self.total_processed == 0:
             return 0.0
         return (self.successful_extractions / self.total_processed) * 100
+
+class GeminiAnalyzer:
+    """Gemini AI 기반 기관명 분석 클래스"""
+    
+    def __init__(self):
+        # 환경변수에서 API 키들 로드
+        self.api_keys = [
+            os.getenv('GEMINI_API_KEY'),
+            os.getenv('GEMINI_API_KEY_2'), 
+            os.getenv('GEMINI_API_KEY_3'),
+            os.getenv('GEMINI_API_KEY_4')
+        ]
+        
+        # 유효한 키만 필터링
+        self.api_keys = [key for key in self.api_keys if key]
+        
+        if not self.api_keys:
+            raise ValueError("Gemini API 키가 설정되지 않았습니다.")
+        
+        logger.info(f"🤖 GeminiAnalyzer 초기화 완료 - {len(self.api_keys)}개 API 키 로드")
+        
+        # 레이트 리밋 관리 (키별 분당 요청 수 추적)
+        self.rate_limits = {i: {'requests': 0, 'last_reset': time.time()} for i in range(len(self.api_keys))}
+        self.rpm_limit = 1800  # 분당 1800회 제한 (여유분 200 보존)
+        
+        # 프롬프트 템플릿
+        self.prompt_template = """다음은 "{phone_number}" 번호에 대한 구글 검색 결과입니다.
+이 번호가 속한 정확한 기관명을 추출해주세요.
+
+검색 결과:
+{search_results}
+
+답변은 기관명만 간단히 답해주세요. 예: "서귀포시 송산동주민센터"
+기관명을 찾을 수 없다면 "없음"이라고 답해주세요."""
+
+    def analyze_search_results(self, texts: List[str], phone_number: str, worker_id: int = 0) -> str:
+        """검색 결과 텍스트들을 Gemini AI로 분석하여 기관명 추출"""
+        try:
+            # API 키 선택 (워커별 할당)
+            key_index = worker_id % len(self.api_keys)
+            
+            # 레이트 리밋 체크
+            if not self._check_rate_limit(key_index):
+                # 다른 키 시도
+                key_index = self._get_available_key()
+                if key_index is None:
+                    logger.warning(f"⚠️ 워커 {worker_id}: 모든 API 키가 레이트 리밋 초과")
+                    return ""
+            
+            # API 키 설정
+            genai.configure(api_key=self.api_keys[key_index])
+            
+            # 프롬프트 생성
+            prompt = self._create_prompt(texts, phone_number)
+            
+            # Gemini 모델 생성
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            
+            # 안전 설정 (제한 완화)
+            safety_settings = {
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+            }
+            
+            logger.info(f"🤖 워커 {worker_id}: Gemini API 호출 중 (키: {key_index+1})")
+            
+            # API 호출
+            response = model.generate_content(
+                prompt,
+                safety_settings=safety_settings
+            )
+            
+            # 요청 수 증가
+            self._record_request(key_index)
+            
+            # 응답 처리
+            if response.text:
+                result = response.text.strip()
+                logger.info(f"✅ 워커 {worker_id}: Gemini 분석 완료 - '{result}'")
+                
+                # 응답 검증
+                if self._validate_response(result):
+                    return result
+                else:
+                    logger.warning(f"⚠️ 워커 {worker_id}: Gemini 응답 검증 실패 - '{result}'")
+                    return ""
+            else:
+                logger.warning(f"⚠️ 워커 {worker_id}: Gemini 응답이 비어있음")
+                return ""
+                
+        except Exception as e:
+            logger.error(f"❌ 워커 {worker_id}: Gemini API 오류 - {e}")
+            return ""
+    
+    def _create_prompt(self, texts: List[str], phone_number: str) -> str:
+        """프롬프트 생성"""
+        # 텍스트들을 번호순으로 정리
+        search_results = ""
+        for i, text in enumerate(texts, 1):
+            if text.strip():
+                search_results += f"{i}. {text.strip()}\n"
+        
+        return self.prompt_template.format(
+            phone_number=phone_number,
+            search_results=search_results
+        )
+    
+    def _validate_response(self, response: str) -> bool:
+        """Gemini 응답 검증"""
+        if not response or response.strip() == "":
+            return False
+            
+        response = response.strip()
+        
+        # "없음" 응답 체크
+        if response in ["없음", "정보없음", "찾을 수 없음"]:
+            return False
+            
+        # 너무 긴 응답 체크
+        if len(response) > 50:
+            return False
+            
+        # 한글 기관명 패턴 체크 (2-30자)
+        if not re.match(r'^[가-힣0-9\s]{2,30}$', response):
+            return False
+            
+        # 금지된 단어 체크
+        forbidden_words = ["검색결과", "정보없음", "확인불가", "ERROR", "error"]
+        if any(word in response for word in forbidden_words):
+            return False
+            
+        return True
+    
+    def _check_rate_limit(self, key_index: int) -> bool:
+        """레이트 리밋 체크"""
+        current_time = time.time()
+        rate_info = self.rate_limits[key_index]
+        
+        # 1분이 지났으면 리셋
+        if current_time - rate_info['last_reset'] >= 60:
+            rate_info['requests'] = 0
+            rate_info['last_reset'] = current_time
+        
+        return rate_info['requests'] < self.rpm_limit
+    
+    def _get_available_key(self) -> Optional[int]:
+        """사용 가능한 API 키 인덱스 반환"""
+        for i in range(len(self.api_keys)):
+            if self._check_rate_limit(i):
+                return i
+        return None
+    
+    def _record_request(self, key_index: int):
+        """API 요청 기록"""
+        self.rate_limits[key_index]['requests'] += 1
+
+class CacheManager:
+    """파일 기반 캐싱 시스템"""
+    
+    def __init__(self, cache_file: str = "rawdatafile/search_cache.json"):
+        self.cache_file = cache_file
+        self.cache_data = self._load_cache()
+        logger.info(f"💾 CacheManager 초기화 - {len(self.cache_data)}개 캐시 항목 로드")
+    
+    def get_cached_result(self, phone_number: str) -> Optional[str]:
+        """캐시에서 결과 조회"""
+        return self.cache_data.get(phone_number, {}).get('institution_name')
+    
+    def save_result(self, phone_number: str, result: str, metadata: dict = None):
+        """결과를 캐시에 저장"""
+        self.cache_data[phone_number] = {
+            'institution_name': result,
+            'timestamp': datetime.now().isoformat(),
+            'metadata': metadata or {}
+        }
+        self._save_cache()
+    
+    def _load_cache(self) -> dict:
+        """캐시 파일 로드"""
+        try:
+            if os.path.exists(self.cache_file):
+                with open(self.cache_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+        except Exception as e:
+            logger.warning(f"⚠️ 캐시 로드 실패: {e}")
+        return {}
+    
+    def _save_cache(self):
+        """캐시 파일 저장"""
+        try:
+            os.makedirs(os.path.dirname(self.cache_file), exist_ok=True)
+            with open(self.cache_file, 'w', encoding='utf-8') as f:
+                json.dump(self.cache_data, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            logger.error(f"❌ 캐시 저장 실패: {e}")
+
+# LinkCrawler는 WebDriverManager 정의 후에 정의됩니다
 
 class SystemMonitor:
     """시스템 성능 모니터링 클래스"""
@@ -217,8 +420,8 @@ class WebDriverManager:
             ]
             chrome_options.add_argument(f'--user-agent={random.choice(user_agents)}')
             
-            # 드라이버 생성 (version_main 제거)
-            driver = uc.Chrome(options=chrome_options)
+            # 드라이버 생성 (version_main=None으로 Chrome 138 호환성 확보)
+            driver = uc.Chrome(options=chrome_options, version_main=None)
             
             # 타임아웃 설정
             driver.implicitly_wait(10)
@@ -234,11 +437,101 @@ class WebDriverManager:
             logger.error(f"워커 {worker_id} 웹드라이버 생성 실패: {e}")
             raise
 
-class GoogleSearchEngine:
-    """구글 검색 엔진 클래스 - 단순화된 버전"""
+class LinkCrawler:
+    """링크 추출 및 페이지 크롤링 클래스"""
     
     def __init__(self, driver_manager: WebDriverManager):
         self.driver_manager = driver_manager
+        logger.info("🔗 LinkCrawler 초기화 완료")
+    
+    def extract_links_from_search(self, driver) -> List[str]:
+        """구글 검색 결과에서 링크 추출"""
+        try:
+            # BeautifulSoup로 페이지 파싱
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            
+            links = []
+            # 검색 결과 링크 선택자
+            search_results = soup.select('div.g h3 a')
+            
+            for result in search_results[:5]:  # 상위 5개만
+                href = result.get('href')
+                if href and href.startswith('http'):
+                    links.append(href)
+            
+            logger.info(f"🔗 검색 결과에서 {len(links)}개 링크 추출")
+            return links
+            
+        except Exception as e:
+            logger.error(f"❌ 링크 추출 오류: {e}")
+            return []
+    
+    def crawl_page_content(self, url: str, worker_id: int) -> str:
+        """개별 페이지 크롤링"""
+        driver = None
+        try:
+            logger.info(f"🌐 워커 {worker_id}: 페이지 크롤링 시작 - {url}")
+            
+            driver = self.driver_manager.create_driver(worker_id + 1000)  # 별도 워커 ID 범위
+            driver.set_page_load_timeout(10)  # 타임아웃 단축
+            
+            # 페이지 접속
+            driver.get(url)
+            time.sleep(3)  # JS 렌더링 대기
+            
+            # HTML 콘텐츠 추출 및 전처리
+            content = self._preprocess_html_content(driver.page_source)
+            
+            logger.info(f"✅ 워커 {worker_id}: 페이지 크롤링 완료 - {len(content)}자")
+            return content
+            
+        except Exception as e:
+            logger.warning(f"⚠️ 워커 {worker_id}: 페이지 크롤링 실패 - {url}: {e}")
+            return ""
+        finally:
+            if driver:
+                try:
+                    driver.quit()
+                except:
+                    pass
+    
+    def _preprocess_html_content(self, html: str) -> str:
+        """HTML 콘텐츠 전처리"""
+        try:
+            # BeautifulSoup로 파싱
+            soup = BeautifulSoup(html, 'html.parser')
+            
+            # 불필요한 태그 제거
+            for tag in soup(['script', 'style', 'nav', 'header', 'footer', 'aside']):
+                tag.decompose()
+            
+            # 텍스트만 추출
+            text = soup.get_text()
+            
+            # 공백 정리
+            lines = [line.strip() for line in text.splitlines()]
+            text = '\n'.join([line for line in lines if line])
+            
+            # 최대 길이 제한 (2000자)
+            if len(text) > 2000:
+                text = text[:2000]
+            
+            return text
+            
+        except Exception as e:
+            logger.error(f"❌ HTML 전처리 오류: {e}")
+            return ""
+
+class GoogleSearchEngine:
+    """구글 검색 엔진 클래스 - Gemini AI 통합 버전"""
+    
+    def __init__(self, driver_manager: WebDriverManager):
+        self.driver_manager = driver_manager
+        
+        # 새로운 구성 요소들 초기화
+        self.gemini_analyzer = GeminiAnalyzer()
+        self.cache_manager = CacheManager()
+        self.link_crawler = LinkCrawler(driver_manager)
         # 기관명 패턴 단순화
         self.institution_keywords = [
             '주민센터', '행정복지센터', '동사무소', '면사무소', '읍사무소',
@@ -276,8 +569,20 @@ class GoogleSearchEngine:
             
             driver = self.driver_manager.create_driver(worker_id)
             
-            # 단순한 검색 쿼리: "전화번호" 또는 "팩스번호"
-            search_query = f'"{clean_number}" {number_type}'
+            # 팩스번호의 경우 다양한 검색 쿼리 시도
+            if number_type == "팩스번호":
+                search_queries = [
+                    f'"{clean_number}" 팩스번호',
+                    f'"{clean_number}" 팩스',
+                    f'"{clean_number}" FAX',
+                    f'"{clean_number}" 주민센터',
+                    f'"{clean_number}"'
+                ]
+                search_query = search_queries[0]  # 첫 번째부터 시도
+                logger.info(f"🔍 워커 {worker_id}: 팩스번호 검색 - 다양한 쿼리 시도 예정")
+            else:
+                search_query = f'"{clean_number}" {number_type}'
+            
             logger.info(f"🔍 워커 {worker_id}: 구글 검색 쿼리 - {search_query}")
             
             # 안전한 랜덤 지연
@@ -369,8 +674,51 @@ class GoogleSearchEngine:
         
         return clean_number
     
+    def _extract_search_results_with_links(self, driver: uc.Chrome, phone_number: str) -> Tuple[List[str], List[str]]:
+        """검색 결과 텍스트 5개 + 링크 5개 동시 추출"""
+        try:
+            logger.info(f"📄 검색 결과 및 링크 추출 중...")
+            
+            # BeautifulSoup를 사용하여 페이지 소스 파싱
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            
+            search_texts = []
+            search_links = []
+            
+            # 검색 결과 컨테이너 찾기
+            search_results = soup.select('div.g')[:5]  # 상위 5개만
+            
+            for result in search_results:
+                # 텍스트 추출 (제목 + 스니펫)
+                title_elem = result.select_one('h3')
+                snippet_elem = result.select_one('span')
+                
+                text_parts = []
+                if title_elem:
+                    text_parts.append(title_elem.get_text().strip())
+                if snippet_elem:
+                    text_parts.append(snippet_elem.get_text().strip())
+                
+                combined_text = ' '.join(text_parts)
+                if combined_text:
+                    search_texts.append(combined_text)
+                
+                # 링크 추출
+                link_elem = result.select_one('h3 a')
+                if link_elem:
+                    href = link_elem.get('href')
+                    if href and href.startswith('http'):
+                        search_links.append(href)
+            
+            logger.info(f"🔍 추출 완료 - 텍스트: {len(search_texts)}개, 링크: {len(search_links)}개")
+            return search_texts, search_links
+            
+        except Exception as e:
+            logger.error(f"❌ 검색 결과 추출 오류: {e}")
+            return [], []
+    
     def _extract_institution_name_simple(self, driver: uc.Chrome, phone_number: str) -> str:
-        """단순화된 기관명 추출"""
+        """단순화된 기관명 추출 (기존 방식 - 전화번호용)"""
         try:
             logger.info(f"📄 페이지 소스 파싱 중...")
             
@@ -465,108 +813,197 @@ class GoogleSearchEngine:
         
         return ""
     
-    def process_single_row(self, row_data: Tuple[int, pd.Series]) -> Dict[str, Any]:
-        """단일 행 처리"""
-        idx, row = row_data
+    def search_institution_name_v2(self, phone_number: str, number_type: str = "팩스번호", worker_id: int = 0) -> SearchResult:
+        """Gemini AI 기반 기관명 검색 - 개선된 버전"""
+        if not phone_number or phone_number.strip() == "":
+            return SearchResult(
+                phone_number=phone_number,
+                search_successful=False,
+                error_message="빈 번호"
+            )
         
-        # 워커 ID 생성 (스레드 ID 기반)
-        thread_id = threading.current_thread().ident
-        worker_id = abs(hash(thread_id)) % 100  # 0-99 범위의 워커 ID
+        # 전화번호 정규화
+        clean_number = self._normalize_phone_number(phone_number)
+        if not clean_number:
+            return SearchResult(
+                phone_number=phone_number,
+                search_successful=False,
+                error_message="잘못된 번호 형식"
+            )
         
+        # 캐시 확인
+        cached_result = self.cache_manager.get_cached_result(clean_number)
+        if cached_result:
+            logger.info(f"💾 워커 {worker_id}: 캐시에서 결과 발견 - {clean_number} -> {cached_result}")
+            return SearchResult(
+                phone_number=phone_number,
+                institution_name=cached_result,
+                confidence=0.95,
+                search_successful=True,
+                search_time=0.1
+            )
+        
+        driver = None
         start_time = time.time()
         
         try:
-            logger.info(f"🔄 워커 {worker_id}: 행 {idx} 처리 시작")
+            logger.info(f"🔍 워커 {worker_id}: {number_type} 검색 시작 (Gemini AI) - {clean_number}")
             
-            results = {
-                'index': idx,
-                'phone_institution': '',
-                'fax_institution': '',
-                'phone_success': False,
-                'fax_success': False
-            }
+            driver = self.driver_manager.create_driver(worker_id)
             
-            # 전화번호 처리
-            phone_number = str(row.get('전화번호', '')).strip()
-            if phone_number and phone_number != '':
-                logger.info(f"📞 워커 {worker_id}: 전화번호 처리 - {phone_number}")
-                # 기존에 실제기관명이 있는지 확인
-                existing_phone_institution = str(row.get('전화번호_실제기관명', '')).strip()
-                if not existing_phone_institution:
-                    phone_result = self.search_engine.search_institution_name(phone_number, "전화번호", worker_id)
-                    results['phone_institution'] = phone_result.institution_name
-                    results['phone_success'] = phone_result.search_successful
+            # 팩스번호의 경우 다양한 검색 쿼리 시도
+            if number_type == "팩스번호":
+                search_queries = [
+                    f'"{clean_number}" 팩스번호',
+                    f'"{clean_number}" 팩스',
+                    f'"{clean_number}" FAX',
+                    f'"{clean_number}" 주민센터',
+                    f'"{clean_number}"'
+                ]
+            else:
+                search_queries = [f'"{clean_number}" {number_type}']
+            
+            # 1차: 검색 결과 텍스트로 Gemini 분석
+            for query in search_queries:
+                logger.info(f"🔍 워커 {worker_id}: 검색 쿼리 시도 - {query}")
+                
+                try:
+                    # 구글 검색 실행
+                    driver.get('https://www.google.com')
+                    time.sleep(random.uniform(1.0, 2.0))
                     
-                    with self.lock:
-                        self.stats.phone_extractions += 1
-                        if phone_result.search_successful:
-                            self.stats.successful_extractions += 1
-                        else:
-                            self.stats.failed_extractions += 1
-                            self.stats.error_counts[phone_result.error_message] += 1
-                        self.stats.add_search_time(phone_result.search_time)
-                else:
-                    logger.info(f"⏭️ 워커 {worker_id}: 전화번호 기관명 이미 존재 - {existing_phone_institution}")
-                    results['phone_institution'] = existing_phone_institution
-                    results['phone_success'] = True
-            
-            # 팩스번호 처리
-            fax_number = str(row.get('팩스번호', '')).strip()
-            if fax_number and fax_number != '':
-                logger.info(f"📠 워커 {worker_id}: 팩스번호 처리 - {fax_number}")
-                # 기존에 실제기관명이 있는지 확인
-                existing_fax_institution = str(row.get('팩스번호_실제기관명', '')).strip()
-                if not existing_fax_institution:
-                    fax_result = self.search_engine.search_institution_name(fax_number, "팩스번호", worker_id)
-                    results['fax_institution'] = fax_result.institution_name
-                    results['fax_success'] = fax_result.search_successful
+                    search_box = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.NAME, "q"))
+                    )
                     
-                    with self.lock:
-                        self.stats.fax_extractions += 1
-                        if fax_result.search_successful:
-                            self.stats.successful_extractions += 1
-                        else:
-                            self.stats.failed_extractions += 1
-                            self.stats.error_counts[fax_result.error_message] += 1
-                        self.stats.add_search_time(fax_result.search_time)
-                else:
-                    logger.info(f"⏭️ 워커 {worker_id}: 팩스번호 기관명 이미 존재 - {existing_fax_institution}")
-                    results['fax_institution'] = existing_fax_institution
-                    results['fax_success'] = True
+                    search_box.clear()
+                    search_box.send_keys(query)
+                    search_box.send_keys(Keys.RETURN)
+                    
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.ID, "search"))
+                    )
+                    time.sleep(random.uniform(1.0, 2.0))
+                    
+                    # 검색 결과 + 링크 추출
+                    search_texts, search_links = self._extract_search_results_with_links(driver, clean_number)
+                    
+                    if search_texts:
+                        # Gemini AI 분석
+                        logger.info(f"🤖 워커 {worker_id}: Gemini AI 분석 시작")
+                        institution_name = self.gemini_analyzer.analyze_search_results(
+                            search_texts, clean_number, worker_id
+                        )
+                        
+                        if institution_name:
+                            search_time = time.time() - start_time
+                            logger.info(f"✅ 워커 {worker_id}: 1차 성공! {clean_number} -> {institution_name}")
+                            
+                            # 캐시에 저장
+                            self.cache_manager.save_result(clean_number, institution_name, {
+                                'method': '1차_검색결과_Gemini',
+                                'query': query,
+                                'search_time': search_time
+                            })
+                            
+                            return SearchResult(
+                                phone_number=phone_number,
+                                institution_name=institution_name,
+                                confidence=0.9,
+                                search_successful=True,
+                                search_time=search_time
+                            )
+                    
+                    # 2차: 링크 크롤링 + Gemini 분석
+                    if search_links:
+                        logger.info(f"🔗 워커 {worker_id}: 2차 시도 - 링크 크롤링")
+                        
+                        crawled_texts = []
+                        for i, link in enumerate(search_links[:3], 1):  # 상위 3개 링크만
+                            logger.info(f"🌐 워커 {worker_id}: 링크 {i} 크롤링 - {link}")
+                            content = self.link_crawler.crawl_page_content(link, worker_id)
+                            if content:
+                                crawled_texts.append(content)
+                        
+                        if crawled_texts:
+                            # Gemini AI 분석
+                            institution_name = self.gemini_analyzer.analyze_search_results(
+                                crawled_texts, clean_number, worker_id
+                            )
+                            
+                            if institution_name:
+                                search_time = time.time() - start_time
+                                logger.info(f"✅ 워커 {worker_id}: 2차 성공! {clean_number} -> {institution_name}")
+                                
+                                # 캐시에 저장
+                                self.cache_manager.save_result(clean_number, institution_name, {
+                                    'method': '2차_링크크롤링_Gemini',
+                                    'query': query,
+                                    'links_count': len(crawled_texts),
+                                    'search_time': search_time
+                                })
+                                
+                                return SearchResult(
+                                    phone_number=phone_number,
+                                    institution_name=institution_name,
+                                    confidence=0.8,
+                                    search_successful=True,
+                                    search_time=search_time
+                                )
+                
+                except Exception as e:
+                    logger.warning(f"⚠️ 워커 {worker_id}: 쿼리 실패 - {query}: {e}")
+                    continue
             
-            # 빈 번호 처리
-            if not phone_number and not fax_number:
-                logger.info(f"⚠️ 워커 {worker_id}: 전화번호와 팩스번호 모두 없음")
-                with self.lock:
-                    self.stats.empty_numbers += 1
+            # 3차: 기존 키워드 매칭 방식 시도
+            logger.info(f"🔄 워커 {worker_id}: 3차 시도 - 기존 키워드 방식")
+            institution_name = self._extract_institution_name_simple(driver, clean_number)
             
-            processing_time = time.time() - start_time
-            success = results['phone_success'] or results['fax_success']
+            if institution_name:
+                search_time = time.time() - start_time
+                logger.info(f"✅ 워커 {worker_id}: 3차 성공! {clean_number} -> {institution_name}")
+                
+                # 캐시에 저장
+                self.cache_manager.save_result(clean_number, institution_name, {
+                    'method': '3차_키워드매칭',
+                    'search_time': search_time
+                })
+                
+                return SearchResult(
+                    phone_number=phone_number,
+                    institution_name=institution_name,
+                    confidence=0.6,
+                    search_successful=True,
+                    search_time=search_time
+                )
             
-            worker_id_str = f"worker_{worker_id}"
-            self.system_monitor.record_worker_performance(worker_id_str, processing_time, success)
+            # 4차: 전체 실패
+            search_time = time.time() - start_time
+            logger.info(f"❌ 워커 {worker_id}: 모든 시도 실패 - {clean_number} ({search_time:.2f}초)")
             
-            with self.lock:
-                self.stats.total_processed += 1
-            
-            logger.info(f"✅ 워커 {worker_id}: 행 {idx} 처리 완료 ({processing_time:.2f}초) - 성공: {success}")
-            
-            return results
+            return SearchResult(
+                phone_number=phone_number,
+                search_successful=False,
+                error_message="모든 방법 실패",
+                search_time=search_time
+            )
             
         except Exception as e:
-            logger.error(f"❌ 워커 {worker_id}: 행 처리 오류 (인덱스 {idx}): {e}")
-            with self.lock:
-                self.stats.total_processed += 1
-                self.stats.failed_extractions += 1
-                self.stats.error_counts[f"처리 오류: {str(e)}"] += 1
-            
-            return {
-                'index': idx,
-                'phone_institution': '',
-                'fax_institution': '',
-                'phone_success': False,
-                'fax_success': False
-            }
+            logger.error(f"❌ 워커 {worker_id}: 전체 검색 오류 - {clean_number}: {e}")
+            return SearchResult(
+                phone_number=phone_number,
+                search_successful=False,
+                error_message=f"검색 오류: {str(e)}",
+                search_time=time.time() - start_time
+            )
+        finally:
+            if driver:
+                try:
+                    driver.quit()
+                except:
+                    pass
+
+# 첫 번째 InstitutionNameExtractor 클래스는 두 번째와 통합됩니다
 
 class InstitutionNameExtractor:
     """실제기관명 추출 메인 클래스"""
@@ -716,7 +1153,8 @@ class InstitutionNameExtractor:
                 # 기존에 실제기관명이 있는지 확인
                 existing_fax_institution = str(row.get('팩스번호_실제기관명', '')).strip()
                 if not existing_fax_institution:
-                    fax_result = self.search_engine.search_institution_name(fax_number, "팩스번호", worker_id)
+                    # 팩스번호는 새로운 Gemini AI 기반 방식 사용
+                    fax_result = self.search_engine.search_institution_name_v2(fax_number, "팩스번호", worker_id)
                     results['fax_institution'] = fax_result.institution_name
                     results['fax_success'] = fax_result.search_successful
                     
