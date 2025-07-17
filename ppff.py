@@ -89,13 +89,14 @@ class StealthWebDriverManager:
         self.logger = logger or logging.getLogger(__name__)
         self.port_manager = AdvancedPortManager()
         
-        # 최신 User-Agent 풀 (2024년 기준)
+        # 최신 User-Agent 풀 (2025년 7월 기준)
         self.user_agents = [
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.76',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0'
         ]
         
         # 화면 해상도 풀 (일반적인 해상도들)
@@ -105,150 +106,580 @@ class StealthWebDriverManager:
         ]
     
     def create_stealth_driver(self, worker_id: int = 0) -> object:
-        """스텔스 드라이버 생성 - 최신 봇 우회 기법 적용"""
+        """스텔스 드라이버 생성 - HTTP 클라이언트 우선, 브라우저 백업"""
         try:
             # 워커별 시작 지연 (봇 감지 회피)
             startup_delay = random.uniform(1.0, 3.0) * (worker_id + 1)
             time.sleep(startup_delay)
             
-            self.logger.info(f"🛡️ 워커 {worker_id}: 스텔스 드라이버 생성 중...")
+            self.logger.info(f"🛡️ 워커 {worker_id}: HTTP 우선 클라이언트 생성 중...")
             
-            # Chrome 옵션 설정
-            chrome_options = uc.ChromeOptions()
+            # 🌍 1순위: HTTP 클라이언트 (브라우저 없이 동작, 가장 안정적)
+            http_client = self._create_http_client(worker_id)
+            if http_client:
+                self.logger.info(f"✅ 워커 {worker_id}: HTTP 클라이언트 생성 성공")
+                return http_client
             
-            # 🔥 최신 봇 감지 우회 옵션 (2024년 기준)
-            chrome_options.add_argument('--no-sandbox')
-            chrome_options.add_argument('--disable-dev-shm-usage')
-            chrome_options.add_argument('--disable-gpu')
-            chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-            chrome_options.add_argument('--disable-extensions')
-            chrome_options.add_argument('--mute-audio')
-            chrome_options.add_argument('--no-first-run')
-            chrome_options.add_argument('--disable-infobars')
-            chrome_options.add_argument('--disable-notifications')
+            # 🚗 2순위: Chrome 안정화 (최소 옵션으로 안정성 확보)
+            chrome_driver = self._create_chrome_stable_driver(worker_id)
+            if chrome_driver:
+                self.logger.info(f"✅ 워커 {worker_id}: Chrome 안정화 드라이버 생성 성공")
+                return chrome_driver
             
-            # 🚫 고급 봇 감지 회피 옵션 (새로운 추가 항목들)
-            chrome_options.add_argument('--disable-web-security')
-            chrome_options.add_argument('--disable-features=VizDisplayCompositor')
-            chrome_options.add_argument('--disable-ipc-flooding-protection')
-            chrome_options.add_argument('--disable-background-timer-throttling')
-            chrome_options.add_argument('--disable-backgrounding-occluded-windows')
-            chrome_options.add_argument('--disable-renderer-backgrounding')
-            chrome_options.add_argument('--disable-features=TranslateUI')
-            chrome_options.add_argument('--disable-default-apps')
-            chrome_options.add_argument('--disable-sync')
-            chrome_options.add_argument('--disable-plugins')
-            chrome_options.add_argument('--disable-component-extensions')
+            # 🌐 3순위: Edge (Windows 기본 브라우저)
+            edge_driver = self._create_edge_driver(worker_id)
+            if edge_driver:
+                self.logger.info(f"✅ 워커 {worker_id}: Edge 드라이버 생성 성공")
+                return edge_driver
             
-            # 🎭 핑거프린트 무작위화
-            selected_ua = random.choice(self.user_agents)
-            selected_size = random.choice(self.screen_sizes)
+            # 🦊 4순위: Firefox (최후 백업)
+            firefox_driver = self._create_firefox_driver(worker_id)
+            if firefox_driver:
+                self.logger.info(f"✅ 워커 {worker_id}: Firefox 드라이버 생성 성공")
+                return firefox_driver
             
-            chrome_options.add_argument(f'--user-agent={selected_ua}')
-            chrome_options.add_argument(f'--window-size={selected_size[0]},{selected_size[1]}')
+            self.logger.error(f"❌ 워커 {worker_id}: 모든 드라이버 및 클라이언트 생성 실패")
+            return None
             
-            # 🔧 Chrome 138+ 호환성 개선
-            chrome_options.add_argument('--no-crash-dialog')
-            chrome_options.add_argument('--disable-crash-reporter')
-            chrome_options.add_argument('--disable-hang-monitor')
-            chrome_options.add_argument('--disable-prompt-on-repost')
-            chrome_options.add_argument('--allow-running-insecure-content')
-            chrome_options.add_argument('--disable-logging')
-            chrome_options.add_argument('--disable-logging-redirect')
-            chrome_options.add_argument('--log-level=3')
+        except Exception as e:
+            self.logger.error(f"❌ 워커 {worker_id}: 드라이버 생성 오류 - {e}")
+            return None
+    
+    def _create_firefox_driver(self, worker_id: int) -> object:
+        """Firefox 드라이버 생성 (가장 안정적) - 수정된 버전"""
+        try:
+            from selenium import webdriver
+            from selenium.webdriver.firefox.options import Options as FirefoxOptions
+            from selenium.webdriver.firefox.service import Service as FirefoxService
             
-            # 💾 메모리 최적화 (AMD Ryzen 5 5500U 환경 고려)
-            chrome_options.add_argument('--memory-pressure-off')
-            chrome_options.add_argument('--max_old_space_size=512')
-            chrome_options.add_argument('--aggressive-cache-discard')
-            chrome_options.add_argument('--max-unused-resource-memory-usage-percentage=10')
-            chrome_options.add_argument('--disable-background-mode')
+            self.logger.info(f"🦊 워커 {worker_id}: Firefox 드라이버 생성 시도")
             
-            # 🌐 동적 포트 할당 (핵심 봇 우회 기법)
-            debug_port = self.port_manager.get_rotated_port(worker_id)
-            chrome_options.add_argument(f'--remote-debugging-port={debug_port}')
+            # Firefox 옵션 설정
+            firefox_options = FirefoxOptions()
             
-            # 📁 워커별 독립 프로필 디렉토리
-            profile_dir = tempfile.mkdtemp(prefix=f'stealth_worker_{worker_id}_')
-            chrome_options.add_argument(f'--user-data-dir={profile_dir}')
+            # 🛡️ Firefox 전용 기본 옵션 (Chrome 옵션 제거)
+            # firefox_options.add_argument('--headless')  # 필요시 활성화
             
-            # 🔐 고급 스텔스 옵션
-            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            chrome_options.add_experimental_option('useAutomationExtension', False)
+            # 🎭 핑거프린트 무작위화 (Firefox preferences 사용)
+            firefox_options.set_preference("general.useragent.override", random.choice(self.user_agents))
+            firefox_options.set_preference("dom.webdriver.enabled", False)
+            firefox_options.set_preference("useAutomationExtension", False)
             
-            # 🎯 Canvas/WebGL 핑거프린트 변조
-            chrome_options.add_argument('--disable-canvas-aa')
-            chrome_options.add_argument('--disable-2d-canvas-clip-aa')
-            chrome_options.add_argument('--disable-gl-drawing-for-tests')
+            # 🔕 알림 및 팝업 비활성화
+            firefox_options.set_preference("dom.push.enabled", False)
+            firefox_options.set_preference("dom.webnotifications.enabled", False)
+            firefox_options.set_preference("dom.popup_maximum", 0)
             
-            # 🛡️ 추가 보안 레이어
-            chrome_options.add_argument('--disable-software-rasterizer')
-            chrome_options.add_argument('--disable-background-networking')
-            chrome_options.add_argument('--disable-component-update')
-            chrome_options.add_argument('--disable-domain-reliability')
-            chrome_options.add_argument('--disable-client-side-phishing-detection')
+            # 💾 메모리 및 캐시 최적화
+            firefox_options.set_preference("browser.cache.disk.enable", False)
+            firefox_options.set_preference("browser.cache.memory.enable", False)
+            firefox_options.set_preference("browser.cache.offline.enable", False)
+            firefox_options.set_preference("network.http.use-cache", False)
             
-            # undetected_chromedriver 생성 (최신 버전 지원)
-            driver = uc.Chrome(
-                options=chrome_options,
-                version_main=None,  # 자동 버전 감지
-                driver_executable_path=None,  # 자동 다운로드
-                browser_executable_path=None,  # 기본 Chrome 사용
-                use_subprocess=True,  # 안정성 향상
-                log_level=3  # 로그 최소화
-            )
+            # 🌏 한국 언어 설정
+            firefox_options.set_preference("intl.accept_languages", "ko-KR,ko,en-US,en")
+            firefox_options.set_preference("browser.startup.homepage", "about:blank")
             
-            # 🔮 JavaScript 레벨 스텔스 적용
-            driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-                "source": """
-                    // WebDriver 속성 숨기기
-                    Object.defineProperty(navigator, 'webdriver', {
-                        get: () => undefined,
-                    });
-                    
-                    // Chrome 객체 속성 숨기기
-                    window.chrome = {
-                        runtime: {},
-                        loadTimes: function() {},
-                        csi: function() {},
-                        app: {}
-                    };
-                    
-                    // 플러그인 배열 수정
-                    Object.defineProperty(navigator, 'plugins', {
-                        get: () => [1, 2, 3, 4, 5],
-                    });
-                    
-                    // 언어 배열 수정
-                    Object.defineProperty(navigator, 'languages', {
-                        get: () => ['ko-KR', 'ko', 'en-US', 'en'],
-                    });
-                    
-                    // Permission API 우회
-                    const originalQuery = window.navigator.permissions.query;
-                    window.navigator.permissions.query = (parameters) => (
-                        parameters.name === 'notifications' ?
-                        Promise.resolve({ state: Notification.permission }) :
-                        originalQuery(parameters)
-                    );
-                """
-            })
+            # 🔒 보안 및 개인정보 설정
+            firefox_options.set_preference("privacy.trackingprotection.enabled", False)
+            firefox_options.set_preference("geo.enabled", False)
+            firefox_options.set_preference("media.navigator.enabled", False)
             
-            self.logger.info(f"✅ 워커 {worker_id}: 스텔스 드라이버 생성 완료 (포트: {debug_port})")
+            # 📏 화면 크기 설정 (Firefox는 창 크기를 직접 설정)
+            firefox_options.set_preference("browser.startup.windowwidth", 1366)
+            firefox_options.set_preference("browser.startup.windowheight", 768)
+            
+            # Firefox 드라이버 생성 (프로필 디렉토리 없이)
+            driver = webdriver.Firefox(options=firefox_options)
+            
+            # 창 크기 직접 설정 (더 안전한 방법)
+            try:
+                driver.set_window_size(1366, 768)
+            except Exception as resize_error:
+                self.logger.warning(f"⚠️ 창 크기 설정 실패: {resize_error}")
+            
+            # 타임아웃 설정
+            driver.implicitly_wait(10)
+            driver.set_page_load_timeout(30)
+            
+            # 스텔스 JavaScript 적용
+            self._apply_firefox_stealth(driver)
+            
+            self.logger.info(f"✅ 워커 {worker_id}: Firefox 드라이버 생성 성공")
             return driver
             
         except Exception as e:
-            self.logger.error(f"❌ 워커 {worker_id}: 스텔스 드라이버 생성 실패 - {e}")
+            self.logger.warning(f"⚠️ 워커 {worker_id}: Firefox 드라이버 생성 실패 - {e}")
             return None
+    
+    def _create_edge_driver(self, worker_id: int) -> object:
+        """Edge 드라이버 생성 (Windows 최적화)"""
+        try:
+            from selenium import webdriver
+            from selenium.webdriver.edge.options import Options as EdgeOptions
+            
+            self.logger.info(f"🌐 워커 {worker_id}: Edge 드라이버 생성 시도")
+            
+            # Edge 옵션 설정
+            edge_options = EdgeOptions()
+            
+            # 🛡️ 기본 스텔스 옵션
+            edge_options.add_argument('--no-sandbox')
+            edge_options.add_argument('--disable-dev-shm-usage')
+            edge_options.add_argument('--disable-gpu')
+            edge_options.add_argument('--window-size=1366,768')
+            edge_options.add_argument('--disable-blink-features=AutomationControlled')
+            edge_options.add_argument('--disable-extensions')
+            edge_options.add_argument('--mute-audio')
+            edge_options.add_argument('--no-first-run')
+            edge_options.add_argument('--disable-infobars')
+            edge_options.add_argument('--disable-notifications')
+            
+            # 🎭 핑거프린트 무작위화
+            edge_options.add_argument(f'--user-agent={random.choice(self.user_agents)}')
+            
+            # 📁 워커별 독립 프로필
+            profile_dir = tempfile.mkdtemp(prefix=f'edge_worker_{worker_id}_')
+            edge_options.add_argument(f'--user-data-dir={profile_dir}')
+            
+            # Edge 드라이버 생성
+            driver = webdriver.Edge(options=edge_options)
+            
+            # 타임아웃 설정
+            driver.implicitly_wait(10)
+            driver.set_page_load_timeout(30)
+            
+            # 스텔스 JavaScript 적용
+            self._apply_post_creation_stealth(driver, worker_id)
+            
+            return driver
+            
+        except Exception as e:
+            self.logger.warning(f"⚠️ 워커 {worker_id}: Edge 드라이버 생성 실패 - {e}")
+            return None
+    
+    def _create_chrome_stable_driver(self, worker_id: int) -> object:
+        """Chrome 안정화 드라이버 생성 (초안전 모드)"""
+        try:
+            from selenium import webdriver
+            from selenium.webdriver.chrome.options import Options as ChromeOptions
+            from selenium.webdriver.chrome.service import Service as ChromeService
+            
+            self.logger.info(f"🚗 워커 {worker_id}: Chrome 초안전 모드 드라이버 생성 시도")
+            
+            # Chrome 서비스 설정
+            chrome_service = None
+            try:
+                # ChromeDriver 경로 확인 및 서비스 생성 (여러 경로 시도)
+                possible_paths = [
+                    os.path.join("chromedriver-win64", "chromedriver.exe"),  # 새로운 폴더 구조
+                    os.path.join("chromedriver", "chromedriver.exe"),        # 기존 폴더 구조
+                    "chromedriver.exe"  # 현재 디렉토리
+                ]
+                
+                chromedriver_path = None
+                for path in possible_paths:
+                    if os.path.exists(path):
+                        chromedriver_path = path
+                        break
+                
+                if chromedriver_path:
+                    chrome_service = ChromeService(chromedriver_path)
+                    self.logger.info(f"📁 ChromeDriver 경로 사용: {chromedriver_path}")
+                else:
+                    self.logger.info("🔍 시스템 PATH에서 ChromeDriver 자동 탐지")
+            except Exception as service_error:
+                self.logger.warning(f"⚠️ ChromeService 설정 실패, 기본값 사용: {service_error}")
+            
+            # 🛡️ 초안전 Chrome 옵션 (최소한만 사용)
+            chrome_options = ChromeOptions()
+            
+            # 절대 필수 옵션만 (검증된 것만)
+            essential_options = [
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--window-size=1366,768',
+                '--disable-logging',
+                '--log-level=3',
+                '--silent',
+                '--disable-extensions',
+                '--no-first-run'
+            ]
+            
+            for option in essential_options:
+                try:
+                    chrome_options.add_argument(option)
+                except Exception as opt_error:
+                    self.logger.warning(f"⚠️ 옵션 설정 실패: {option} - {opt_error}")
+            
+            # User-Agent 설정 (가장 일반적인 것 사용)
+            try:
+                basic_ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                chrome_options.add_argument(f'--user-agent={basic_ua}')
+            except Exception as ua_error:
+                self.logger.warning(f"⚠️ User-Agent 설정 실패: {ua_error}")
+            
+            # 프로필 디렉토리 (간단하게)
+            try:
+                profile_dir = tempfile.mkdtemp(prefix=f'chrome_safe_{worker_id}_')
+                chrome_options.add_argument(f'--user-data-dir={profile_dir}')
+            except Exception as profile_error:
+                self.logger.warning(f"⚠️ 프로필 디렉토리 설정 실패: {profile_error}")
+            
+            # Chrome 드라이버 생성 (서비스 사용/미사용 모두 시도)
+            driver = None
+            try:
+                if chrome_service:
+                    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+                else:
+                    driver = webdriver.Chrome(options=chrome_options)
+            except Exception as creation_error:
+                self.logger.warning(f"⚠️ 첫 번째 Chrome 생성 시도 실패: {creation_error}")
+                
+                # 최후 시도: 옵션 없이
+                try:
+                    minimal_options = ChromeOptions()
+                    minimal_options.add_argument('--no-sandbox')
+                    minimal_options.add_argument('--disable-dev-shm-usage')
+                    driver = webdriver.Chrome(options=minimal_options)
+                except Exception as minimal_error:
+                    self.logger.warning(f"⚠️ 최소 옵션 Chrome 생성도 실패: {minimal_error}")
+                    return None
+            
+            if driver:
+                # 타임아웃 설정
+                try:
+                    driver.implicitly_wait(10)
+                    driver.set_page_load_timeout(30)
+                except Exception as timeout_error:
+                    self.logger.warning(f"⚠️ 타임아웃 설정 실패: {timeout_error}")
+                
+                self.logger.info(f"✅ 워커 {worker_id}: Chrome 초안전 모드 성공")
+                return driver
+            
+            return None
+            
+        except Exception as e:
+            self.logger.warning(f"⚠️ 워커 {worker_id}: Chrome 초안전 모드 생성 실패 - {e}")
+            return None
+    
+    def _apply_post_creation_stealth(self, driver, worker_id: int):
+        """드라이버 생성 후 추가 스텔스 설정 적용"""
+        try:
+            # 2025년 최신 봇 우회: 페이지 로드 전 CDP 명령어들
+            driver.execute_cdp_cmd('Network.setUserAgentOverride', {
+                "userAgent": random.choice(self.user_agents),
+                "acceptLanguage": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+                "platform": "Win32"
+            })
+            
+            # Viewport 설정 (더 자연스러운 크기)
+            selected_size = random.choice(self.screen_sizes)
+            driver.execute_cdp_cmd('Emulation.setDeviceMetricsOverride', {
+                'width': selected_size[0],
+                'height': selected_size[1],
+                "deviceScaleFactor": 1,
+                'mobile': False
+            })
+            
+            # 타임존 설정 (한국 표준시)
+            driver.execute_cdp_cmd('Emulation.setTimezoneOverride', {
+                'timezoneId': 'Asia/Seoul'
+            })
+            
+            self.logger.info(f"🛡️ 워커 {worker_id}: 추가 스텔스 설정 완료")
+            
+        except Exception as e:
+            self.logger.warning(f"⚠️ 워커 {worker_id}: 추가 스텔스 설정 실패 - {e}")
+    
+    def _apply_advanced_javascript_stealth(self, driver):
+        """2025년 고급 JavaScript 스텔스 적용"""
+        try:
+            # 강화된 JavaScript 스텔스 코드
+            stealth_script = """
+            // 2025년 최신 봇 감지 우회
+            
+            // 1. WebDriver 관련 속성들 완전 제거
+            delete navigator.__proto__.webdriver;
+            delete navigator.webdriver;
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => undefined,
+                configurable: true
+            });
+            
+            // 2. Chrome 객체 자연스럽게 설정
+            if (!window.chrome) {
+                window.chrome = {};
+            }
+            window.chrome.runtime = {
+                onConnect: undefined,
+                onMessage: undefined,
+                sendMessage: () => {},
+                connect: () => {}
+            };
+            window.chrome.loadTimes = function() {
+                return {
+                    commitLoadTime: Math.random() * 1000 + 1000,
+                    connectionInfo: 'http/1.1',
+                    finishDocumentLoadTime: Math.random() * 1000 + 2000,
+                    finishLoadTime: Math.random() * 1000 + 2500,
+                    firstPaintAfterLoadTime: 0,
+                    firstPaintTime: Math.random() * 1000 + 1500,
+                    navigationType: 'Other',
+                    npnNegotiatedProtocol: 'unknown',
+                    requestTime: Math.random() * 1000 + 500,
+                    startLoadTime: Math.random() * 1000 + 800,
+                    wasAlternateProtocolAvailable: false,
+                    wasFetchedViaSpdy: false,
+                    wasNpnNegotiated: false
+                };
+            };
+            
+            // 3. 플러그인 시뮬레이션 (더 현실적)
+            Object.defineProperty(navigator, 'plugins', {
+                get: () => [{
+                    0: {type: "application/x-google-chrome-pdf", suffixes: "pdf", description: "Portable Document Format", enabledPlugin: null},
+                    description: "Portable Document Format",
+                    filename: "internal-pdf-viewer",
+                    length: 1,
+                    name: "Chrome PDF Plugin"
+                }, {
+                    0: {type: "application/pdf", suffixes: "pdf", description: "Portable Document Format", enabledPlugin: null},
+                    description: "Portable Document Format", 
+                    filename: "mhjfbmdgcfjbbpaeojofohoefgiehjai",
+                    length: 1,
+                    name: "Chrome PDF Viewer"
+                }]
+            });
+            
+            // 4. 언어 설정 (한국어 우선)
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['ko-KR', 'ko', 'en-US', 'en'],
+                configurable: true
+            });
+            Object.defineProperty(navigator, 'language', {
+                get: () => 'ko-KR',
+                configurable: true
+            });
+            
+            // 5. Permission API 우회 (2025년 강화)
+            const originalPermissions = navigator.permissions;
+            navigator.permissions = {
+                query: function(parameters) {
+                    if (parameters.name === 'notifications') {
+                        return Promise.resolve({state: 'default'});
+                    }
+                    if (parameters.name === 'geolocation') {
+                        return Promise.resolve({state: 'prompt'});
+                    }
+                    return originalPermissions ? originalPermissions.query(parameters) : Promise.resolve({state: 'granted'});
+                }
+            };
+            
+            // 6. MediaDevices 우회 (카메라/마이크 감지 방지)
+            if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+                const original = navigator.mediaDevices.enumerateDevices;
+                navigator.mediaDevices.enumerateDevices = function() {
+                    return original.apply(this, arguments).then(devices => {
+                        return devices.map(device => {
+                            if (device.kind === 'videoinput') {
+                                return {...device, label: 'camera'};
+                            }
+                            if (device.kind === 'audioinput') {
+                                return {...device, label: 'microphone'};  
+                            }
+                            return device;
+                        });
+                    });
+                };
+            }
+            
+            // 7. WebGL Fingerprint 변조
+            const getParameter = WebGLRenderingContext.getParameter;
+            WebGLRenderingContext.prototype.getParameter = function(parameter) {
+                if (parameter === 37445) {
+                    return 'Intel Inc.';
+                }
+                if (parameter === 37446) {
+                    return 'Intel(R) Iris(R) Plus Graphics 640';
+                }
+                return getParameter(parameter);
+            };
+            
+            // 8. Canvas Fingerprint 방지
+            const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
+            HTMLCanvasElement.prototype.toDataURL = function(...args) {
+                const context = this.getContext('2d');
+                if (context) {
+                    const imageData = context.getImageData(0, 0, this.width, this.height);
+                    for (let i = 0; i < imageData.data.length; i += 4) {
+                        imageData.data[i] += Math.floor(Math.random() * 3) - 1;
+                        imageData.data[i + 1] += Math.floor(Math.random() * 3) - 1; 
+                        imageData.data[i + 2] += Math.floor(Math.random() * 3) - 1;
+                    }
+                    context.putImageData(imageData, 0, 0);
+                }
+                return originalToDataURL.apply(this, args);
+            };
+            
+            // 9. Automation 관련 속성 제거
+            Object.defineProperty(window, 'navigator', {
+                value: new Proxy(navigator, {
+                    has: (target, key) => (key === 'webdriver') ? false : key in target,
+                    get: (target, key) => (key === 'webdriver') ? undefined : target[key]
+                })
+            });
+            
+            // 10. CDP Runtime 숨기기 (2025년 새로운 감지 방법 차단)
+            delete window.chrome.runtime.sendMessage;
+            delete window.chrome.runtime.connect;
+            
+            console.log('🛡️ 2025년 고급 스텔스 모드 활성화 완료');
+            """
+            
+            driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+                "source": stealth_script
+            })
+            
+        except Exception as e:
+            self.logger.warning(f"⚠️ JavaScript 스텔스 적용 실패: {e}")
     
     def cleanup_driver(self, driver, worker_id: int):
         """드라이버 정리"""
         try:
             if driver:
+                # 포트 해제
+                try:
+                    port_info = driver.service.port if hasattr(driver, 'service') else None
+                    if port_info:
+                        self.port_manager.release_port(port_info)
+                except:
+                    pass
+                
                 driver.quit()
                 self.logger.info(f"🧹 워커 {worker_id}: 드라이버 정리 완료")
         except Exception as e:
             self.logger.error(f"❌ 워커 {worker_id}: 드라이버 정리 실패 - {e}")
+
+    def _apply_firefox_stealth(self, driver):
+        """Firefox 전용 스텔스 적용"""
+        try:
+            # Firefox 전용 스텔스 JavaScript
+            firefox_stealth_script = """
+            // Firefox 전용 봇 감지 우회
+            
+            // 1. WebDriver 속성 제거
+            delete navigator.__proto__.webdriver;
+            delete navigator.webdriver;
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => undefined,
+                configurable: true
+            });
+            
+            // 2. Firefox 특화 설정
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['ko-KR', 'ko', 'en-US', 'en'],
+                configurable: true
+            });
+            
+            // 3. Platform 정보 설정
+            Object.defineProperty(navigator, 'platform', {
+                get: () => 'Win32',
+                configurable: true
+            });
+            
+            console.log('🦊 Firefox 스텔스 모드 활성화 완료');
+            """
+            
+            driver.execute_script(firefox_stealth_script)
+            self.logger.info("🛡️ Firefox 스텔스 설정 완료")
+            
+        except Exception as e:
+            self.logger.warning(f"⚠️ Firefox 스텔스 설정 실패: {e}")
+
+    def _create_http_client(self, worker_id: int) -> object:
+        """HTTP 클라이언트 생성 (브라우저 없이 동작)"""
+        try:
+            import requests
+            from types import SimpleNamespace
+            
+            self.logger.info(f"🌍 워커 {worker_id}: HTTP 클라이언트 생성 시도")
+            
+            # requests 세션 생성
+            session = requests.Session()
+            
+            # 헤더 설정
+            session.headers.update({
+                'User-Agent': random.choice(self.user_agents),
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1'
+            })
+            
+            # 타임아웃 설정
+            session.timeout = 30
+            
+            # Selenium 인터페이스 모방을 위한 래퍼 클래스 생성
+            class HTTPDriverWrapper:
+                def __init__(self, session, logger):
+                    self.session = session
+                    self.logger = logger
+                    self.current_url = ""
+                    self.page_source = ""
+                
+                def get(self, url):
+                    """페이지 가져오기"""
+                    try:
+                        response = self.session.get(url)
+                        response.raise_for_status()
+                        self.current_url = url
+                        self.page_source = response.text
+                        self.logger.info(f"🌍 HTTP 요청 성공: {url}")
+                        return True
+                    except Exception as e:
+                        self.logger.warning(f"⚠️ HTTP 요청 실패: {url} - {e}")
+                        return False
+                
+                def quit(self):
+                    """세션 종료"""
+                    try:
+                        self.session.close()
+                    except:
+                        pass
+                
+                def find_element(self, by, value):
+                    """요소 찾기 (HTTP에서는 제한적)"""
+                    # HTTP 모드에서는 BeautifulSoup으로 파싱
+                    from bs4 import BeautifulSoup
+                    soup = BeautifulSoup(self.page_source, 'html.parser')
+                    return soup
+                
+                def execute_script(self, script):
+                    """JavaScript 실행 (HTTP에서는 무시)"""
+                    pass
+                
+                def set_window_size(self, width, height):
+                    """창 크기 설정 (HTTP에서는 무시)"""
+                    pass
+                
+                def implicitly_wait(self, timeout):
+                    """암시적 대기 (HTTP에서는 무시)"""
+                    pass
+                
+                def set_page_load_timeout(self, timeout):
+                    """페이지 로드 타임아웃 (HTTP에서는 무시)"""
+                    pass
+            
+            wrapper = HTTPDriverWrapper(session, self.logger)
+            self.logger.info(f"✅ 워커 {worker_id}: HTTP 클라이언트 래퍼 생성 성공")
+            return wrapper
+            
+        except Exception as e:
+            self.logger.warning(f"⚠️ 워커 {worker_id}: HTTP 클라이언트 생성 실패 - {e}")
+            return None
 
 # 로깅 설정하는 함수
 def setup_logger(name="ParallelPhoneFaxFinder"):
@@ -383,7 +814,7 @@ def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = 
                 # 전화번호 기관 검색
                 phone_institution = ''
                 if normalized_phone:
-                    phone_institution = search_google_for_institution(
+                    phone_institution = search_multiple_engines_for_institution(
                         driver, normalized_phone, 'phone', search_patterns, 
                         institution_patterns, ai_model, logger
                     )
@@ -391,7 +822,7 @@ def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = 
                 # 팩스번호 기관 검색
                 fax_institution = ''
                 if normalized_fax:
-                    fax_institution = search_google_for_institution(
+                    fax_institution = search_multiple_engines_for_institution(
                         driver, normalized_fax, 'fax', search_patterns, 
                         institution_patterns, ai_model, logger
                     )
@@ -441,67 +872,265 @@ def normalize_phone_number(phone_number: str) -> str:
     else:
         return str(phone_number)
 
-def search_google_for_institution(driver, number: str, number_type: str, search_patterns: Dict, 
-                                 institution_patterns: List, ai_model, logger) -> Optional[str]:
-    """구글에서 전화번호/팩스번호로 기관 검색하는 메소드 - 스텔스 모드"""
+def search_multiple_engines_for_institution(driver, number: str, number_type: str, search_patterns: Dict, 
+                                          institution_patterns: List, ai_model, logger) -> Optional[str]:
+    """다중 검색 엔진으로 전화번호/팩스번호 기관 검색 - Google, Naver, Daum"""
     try:
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        from selenium.webdriver.common.keys import Keys
+        
+        # 🌏 검색 엔진 목록 (한국 특화 우선)
+        search_engines = [
+            {
+                'name': 'Naver',
+                'url': 'https://search.naver.com/search.naver',
+                'search_box_selector': 'input#query',
+                'search_box_name': 'query',
+                'results_selector': '.lst_total',
+                'delay': (2.0, 3.5)
+            },
+            {
+                'name': 'Daum',
+                'url': 'https://search.daum.net/search',
+                'search_box_selector': 'input#q',
+                'search_box_name': 'q',
+                'results_selector': '.inner_search',
+                'delay': (1.5, 3.0)
+            },
+            {
+                'name': 'Google',
+                'url': 'https://www.google.com',
+                'search_box_selector': 'input[name="q"]',
+                'search_box_name': 'q',
+                'results_selector': '#search',
+                'delay': (2.5, 4.0)
+            }
+        ]
+        
         patterns = search_patterns.get(number_type, [])
         
-        # 여러 검색 패턴 시도
-        for pattern in patterns:
-            if number_type == 'phone':
-                search_query = pattern.format(phone_number=number)
-            else:  # fax
-                search_query = pattern.format(fax_number=number)
+        # 각 검색 엔진별로 시도
+        for engine in search_engines:
+            logger.info(f"🔍 {engine['name']} 검색 시작: {number} ({number_type})")
             
-            logger.info(f"🕵️ {number_type} 스텔스 검색 중: {search_query}")
-            
-            # 🎭 인간 행동 시뮬레이션 - 검색 전 지연
-            human_delay = random.uniform(1.5, 3.5)
-            time.sleep(human_delay)
-            
-            # 구글 검색 (User-Agent는 이미 스텔스 드라이버에서 설정됨)
-            search_url = f"https://www.google.com/search?q={search_query.replace(' ', '+')}"
-            
-            # 🚀 페이지 로드 방식 개선
             try:
-                driver.get(search_url)
+                # 🎯 한국 검색 엔진에 특화된 검색어 사용
+                if engine['name'] in ['Naver', 'Daum']:
+                    korean_patterns = [
+                        f'"{number}" 전화번호',
+                        f'"{number}" 기관',
+                        f'"{number}" 연락처',
+                        f'{number} 어디',
+                        f'{number} 어느곳',
+                        f'{number} 기관명'
+                    ]
+                    search_patterns_list = korean_patterns if number_type == 'phone' else [p.replace('전화번호', '팩스번호') for p in korean_patterns]
+                else:
+                    search_patterns_list = patterns[:3]  # Google은 기존 패턴 사용
                 
-                # 🔄 페이지 로드 완료 대기 (더 안정적)
-                WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.TAG_NAME, "body"))
-                )
+                # 여러 검색 패턴 시도
+                for pattern in search_patterns_list:
+                    if number_type == 'phone':
+                        search_query = pattern.format(phone_number=number) if '{phone_number}' in pattern else pattern
+                    else:  # fax
+                        search_query = pattern.format(fax_number=number) if '{fax_number}' in pattern else pattern
+                    
+                    logger.info(f"🔎 {engine['name']} 패턴 검색: {search_query}")
+                    
+                    # 인간형 검색 실행
+                    result = _perform_human_like_search(driver, engine, search_query, institution_patterns, logger)
+                    
+                    if result:
+                        logger.info(f"✅ {engine['name']}에서 기관명 발견: {result}")
+                        return result
+                    
+                    # 패턴 간 지연
+                    pattern_delay = random.uniform(2.0, 4.0)
+                    time.sleep(pattern_delay)
                 
-                # 🎯 추가 인간 행동 시뮬레이션 - 스크롤
-                driver.execute_script("window.scrollTo(0, Math.floor(Math.random() * 500));")
-                
-            except TimeoutException:
-                logger.warning(f"⚠️ 페이지 로드 타임아웃: {search_query}")
+            except Exception as engine_error:
+                logger.warning(f"⚠️ {engine['name']} 검색 실패: {engine_error}")
                 continue
             
-            # 🤖 봇 감지 회피를 위한 추가 지연
-            detection_avoidance_delay = random.uniform(2.5, 4.5)
-            time.sleep(detection_avoidance_delay)
-            
-            # 페이지 소스 가져오기
-            page_source = driver.page_source
-            soup = BeautifulSoup(page_source, 'html.parser')
-            
-            # 기관명 추출 시도
-            institution_name = extract_institution_from_page(soup, number, institution_patterns, ai_model, logger)
-            
-            if institution_name:
-                logger.info(f"✅ {number_type} 기관명 발견: {institution_name}")
-                return institution_name
-            
-            # 다음 패턴 시도 전 더 긴 지연 (봇 감지 회피)
-            pattern_delay = random.uniform(2.0, 4.0)
-            time.sleep(pattern_delay)
+            # 엔진 간 지연 (봇 감지 회피)
+            engine_delay = random.uniform(3.0, 6.0)
+            time.sleep(engine_delay)
+        
+        # AI 모델 최종 시도 (모든 검색 엔진 실패시)
+        if ai_model:
+            logger.info("🤖 AI 모델 최종 시도")
+            return _ai_fallback_search(number, number_type, ai_model, logger)
         
         return None
         
     except Exception as e:
-        logger.error(f"❌ 스텔스 구글 검색 실패: {number} ({number_type}) - {e}")
+        logger.error(f"❌ 다중 검색 엔진 검색 실패: {number} ({number_type}) - {e}")
+        return None
+
+def _perform_human_like_search(driver, engine_config: Dict, search_query: str, 
+                              institution_patterns: List, logger) -> Optional[str]:
+    """인간형 검색 수행 (다중 엔진 지원 + HTTP 클라이언트 호환)"""
+    try:
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        from selenium.webdriver.common.keys import Keys
+        from bs4 import BeautifulSoup
+        import urllib.parse
+        
+        # 🔍 HTTP 클라이언트 감지 (hasattr로 확인)
+        is_http_client = hasattr(driver, 'session') and hasattr(driver, 'page_source')
+        
+        if is_http_client:
+            logger.info(f"🌍 HTTP 클라이언트로 {engine_config['name']} 검색 수행")
+            return _perform_http_search(driver, engine_config, search_query, institution_patterns, logger)
+        
+        # 🌐 일반 브라우저 검색 (기존 방식)
+        if engine_config['name'] == 'Naver':
+            driver.get('https://www.naver.com')
+        elif engine_config['name'] == 'Daum':  
+            driver.get('https://www.daum.net')
+        else:  # Google
+            driver.get('https://www.google.com')
+        
+        # 페이지 로드 대기
+        time.sleep(random.uniform(1.5, 3.0))
+        
+        # 💭 인간처럼 생각하는 시간
+        thinking_delay = random.uniform(0.8, 2.0)
+        time.sleep(thinking_delay)
+        
+        # 🔍 검색창 찾기 (엔진별 선택자 사용)
+        try:
+            search_box = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, engine_config['search_box_selector']))
+            )
+        except:
+            # 대체 방법: name 속성 사용
+            search_box = driver.find_element(By.NAME, engine_config['search_box_name'])
+        
+        # 🧹 검색창 비우기
+        search_box.clear()
+        time.sleep(random.uniform(0.3, 0.7))
+        
+        # ⌨️ 인간처럼 한 글자씩 타이핑
+        for char in search_query:
+            search_box.send_keys(char)
+            typing_delay = random.uniform(0.05, 0.15)
+            time.sleep(typing_delay)
+        
+        # 💭 타이핑 완료 후 검토 시간
+        review_delay = random.uniform(0.5, 1.2)
+        time.sleep(review_delay)
+        
+        # 🔍 검색 실행
+        search_box.send_keys(Keys.RETURN)
+        
+        # 🔄 결과 페이지 대기
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, engine_config['results_selector']))
+        )
+        
+        # 🎯 결과 확인 시간
+        result_delay = random.uniform(*engine_config['delay'])
+        time.sleep(result_delay)
+        
+        # 📜 가끔 스크롤 (인간 행동 시뮬레이션)
+        if random.choice([True, False]):
+            scroll_amount = random.randint(200, 600)
+            driver.execute_script(f"window.scrollTo(0, {scroll_amount});")
+            time.sleep(random.uniform(1.0, 2.0))
+        
+        # 페이지 분석
+        page_source = driver.page_source
+        soup = BeautifulSoup(page_source, 'html.parser')
+        
+        # 🤖 봇 감지 확인
+        page_text = soup.get_text().lower()
+        if any(keyword in page_text for keyword in ['captcha', 'unusual traffic', 'bot', '비정상적인 요청', '자동화']):
+            logger.warning(f"🤖 {engine_config['name']}에서 봇 감지 가능성")
+            time.sleep(random.uniform(10.0, 20.0))
+            return None
+        
+        # 기관명 추출
+        return extract_institution_from_page(soup, search_query, institution_patterns, None, logger)
+        
+    except Exception as e:
+        logger.warning(f"⚠️ {engine_config['name']} 인간형 검색 실패: {search_query} - {e}")
+        return None
+
+def _perform_http_search(http_client, engine_config: Dict, search_query: str, 
+                        institution_patterns: List, logger) -> Optional[str]:
+    """HTTP 클라이언트 전용 검색"""
+    try:
+        import urllib.parse
+        from bs4 import BeautifulSoup
+        
+        # 🌏 검색 엔진별 URL 구성
+        encoded_query = urllib.parse.quote(search_query)
+        
+        if engine_config['name'] == 'Naver':
+            search_url = f"https://search.naver.com/search.naver?query={encoded_query}"
+        elif engine_config['name'] == 'Daum':
+            search_url = f"https://search.daum.net/search?q={encoded_query}"
+        else:  # Google
+            search_url = f"https://www.google.com/search?q={encoded_query}"
+        
+        logger.info(f"🌍 HTTP 요청: {search_url}")
+        
+        # 🔍 HTTP 요청 실행
+        success = http_client.get(search_url)
+        if not success:
+            logger.warning(f"⚠️ HTTP 요청 실패: {search_url}")
+            return None
+        
+        # 🎯 인간 행동 시뮬레이션 지연
+        human_delay = random.uniform(*engine_config['delay'])
+        time.sleep(human_delay)
+        
+        # 📄 응답 분석
+        soup = BeautifulSoup(http_client.page_source, 'html.parser')
+        
+        # 🤖 봇 감지 확인
+        page_text = soup.get_text().lower()
+        if any(keyword in page_text for keyword in ['captcha', 'unusual traffic', 'bot', '비정상적인 요청', '자동화']):
+            logger.warning(f"🤖 HTTP {engine_config['name']}에서 봇 감지 가능성")
+            return None
+        
+        # 기관명 추출
+        return extract_institution_from_page(soup, search_query, institution_patterns, None, logger)
+        
+    except Exception as e:
+        logger.warning(f"⚠️ HTTP {engine_config['name']} 검색 실패: {search_query} - {e}")
+        return None
+
+def _ai_fallback_search(number: str, number_type: str, ai_model, logger) -> Optional[str]:
+    """AI 모델 기반 최종 검색"""
+    try:
+        prompt = f"""
+한국의 {number_type}번호 '{number}'와 관련된 기관명을 추론해주세요.
+
+다음과 같은 패턴을 고려해주세요:
+- 지역번호 기반 추론 (예: 02는 서울, 031은 경기 등)
+- 일반적인 기관 전화번호 패턴
+- 공공기관, 의료기관, 교육기관, 복지시설 등
+
+기관명만 간단히 답변해주세요. 확실하지 않으면 '미확인'이라고 답변해주세요.
+"""
+        
+        response = ai_model.generate_content(prompt)
+        result = response.text.strip()
+        
+        if result and result != '미확인' and len(result) > 2:
+            logger.info(f"🤖 AI 추론 결과: {result}")
+            return result
+        
+        return None
+        
+    except Exception as e:
+        logger.error(f"❌ AI 최종 검색 실패: {e}")
         return None
 
 def extract_institution_from_page(soup: BeautifulSoup, number: str, institution_patterns: List, 
@@ -815,7 +1444,7 @@ def main():
     """메인 실행 함수"""
     try:
         # 파일 경로
-        excel_path = r"C:\Users\MyoengHo Shin\pjt\cradcrawlpython\rawdatafile\failed_data_250715.xlsx"
+        excel_path = os.path.join("rawdatafile", "failed_data_250715.xlsx")
         
         # 병렬 전화번호/팩스번호 기관 찾기 실행
         finder = ParallelPhoneFaxFinder()
