@@ -8,10 +8,13 @@ failed_data_250715.xlsx의 H열(전화번호 기관명)과 J열(팩스번호 기
 - 자연스러운 검색어 형태로 수정 (따옴표 제거)
 - 더욱 효과적인 검색 패턴 적용
 - 기존 utils/config 모듈 완전 활용
+- undetected_chromedriver 직접 사용
+- 사용자 설정 선택권 제공
+- 자동 배치 크기 계산
 
 작성자: AI Assistant
 작성일: 2025-01-16
-업데이트: 검색어 로직 개선
+업데이트: 사용자 설정 메뉴 및 undetected_chromedriver 직접 사용
 """
 
 import pandas as pd
@@ -39,16 +42,404 @@ from selenium.common.exceptions import TimeoutException, WebDriverException, NoS
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
+# py-cpuinfo 추가 (선택적)
+try:
+    import cpuinfo
+    HAS_CPUINFO = True
+except ImportError:
+    HAS_CPUINFO = False
+    print("⚠️ py-cpuinfo가 설치되지 않았습니다. 자동 감지 기능이 제한됩니다.")
+
 # 기존 모듈들 import
-from utils.web_driver_manager import WebDriverManager
-from utils.google_search_engine import GoogleSearchEngine
 from utils.phone_validator import PhoneValidator
-from utils.worker_manager import WorkerManager
 from utils.excel_processor import ExcelProcessor
 from utils.data_mapper import DataMapper
 from utils.verification_engine import VerificationEngine
-from config.performance_profiles import PerformanceManager
+from config.performance_profiles import PerformanceManager, PerformanceLevel
 from config.crawling_settings import CrawlingSettings
+
+# 사용자 설정 관리 클래스
+@dataclass
+class UserConfig:
+    """사용자 설정 데이터 클래스"""
+    max_workers: int = 4
+    batch_size: int = 100
+    save_directory: str = "results"
+    gemini_api_key: str = ""
+    chrome_version_main: Optional[int] = None
+    config_source: str = "manual"  # "auto", "recommended", "manual"
+
+# 설정 메뉴 관리자
+class ConfigManager:
+    """설정 메뉴 관리자"""
+    
+    def __init__(self):
+        """설정 관리자 초기화"""
+        self.config = UserConfig()
+        self.performance_manager = PerformanceManager()
+        
+        # 결과 저장 디렉토리 확인/생성
+        os.makedirs("results", exist_ok=True)
+        
+    def show_welcome_message(self):
+        """환영 메시지 출력"""
+        print("=" * 80)
+        print("🎯 Enhanced Institution Finder v2 - 개선된 기관명 추출 시스템")
+        print("=" * 80)
+        print("📞 전화번호/팩스번호로 기관명을 자동으로 찾아드립니다!")
+        print("🔍 undetected_chromedriver를 사용한 고급 봇 우회 기능")
+        print("⚙️  다양한 성능 프로필 지원 (저사양~고사양)")
+        print()
+        
+    def show_system_info(self):
+        """시스템 정보 표시"""
+        print("📊 현재 시스템 정보:")
+        print("-" * 50)
+        
+        # performance_manager에서 시스템 정보 가져오기
+        sys_info = self.performance_manager.system_info
+        
+        print(f"💻 CPU: {sys_info.get('cpu_name', 'Unknown')}")
+        print(f"🔧 코어/스레드: {sys_info.get('cpu_cores', 'N/A')}코어 {sys_info.get('cpu_threads', 'N/A')}스레드")
+        print(f"🧠 메모리: {sys_info.get('total_memory_gb', 'N/A')}GB")
+        
+        # py-cpuinfo 정보 추가 (있는 경우)
+        if HAS_CPUINFO:
+            try:
+                cpu_info = cpuinfo.get_cpu_info()
+                cpu_brand = cpu_info.get('brand_raw', 'Unknown')
+                if cpu_brand != sys_info.get('cpu_name', ''):
+                    print(f"📝 상세 CPU: {cpu_brand}")
+            except:
+                pass
+        
+        print()
+
+    def show_config_menu(self) -> UserConfig:
+        """설정 메뉴 표시 및 사용자 선택 처리"""
+        self.show_welcome_message()
+        self.show_system_info()
+        
+        print("⚙️  설정 방식을 선택해주세요:")
+        print("=" * 50)
+        print("1. 🤖 자동 감지 (py-cpuinfo 기반)")
+        print("2. 📋 추천 설정 (performance_profiles.py 기반)")
+        print("3. ✋ 수동 설정 (직접 입력)")
+        print("4. ❓ 도움말")
+        print()
+        
+        while True:
+            try:
+                choice = input("선택해주세요 (1-4): ").strip()
+                
+                if choice == "1":
+                    return self._auto_config()
+                elif choice == "2":
+                    return self._recommended_config()
+                elif choice == "3":
+                    return self._manual_config()
+                elif choice == "4":
+                    self._show_help()
+                    continue
+                else:
+                    print("❌ 잘못된 선택입니다. 1-4 중에서 선택해주세요.")
+                    
+            except KeyboardInterrupt:
+                print("\n🚫 사용자가 취소했습니다.")
+                sys.exit(0)
+            except Exception as e:
+                print(f"❌ 입력 오류: {e}")
+    
+    def _auto_config(self) -> UserConfig:
+        """자동 설정 (py-cpuinfo 기반)"""
+        print("\n🤖 자동 감지 설정을 적용합니다...")
+        
+        # performance_manager에서 자동 선택된 프로필 사용
+        profile = self.performance_manager.get_current_profile()
+        
+        self.config.max_workers = profile.max_workers
+        self.config.batch_size = profile.batch_size
+        self.config.config_source = "auto"
+        
+        print(f"✅ 자동 감지 완료!")
+        print(f"   - 프로필: {profile.name}")
+        print(f"   - 워커 수: {profile.max_workers}개")
+        print(f"   - 배치 크기: {profile.batch_size}개")
+        
+        return self._finalize_config()
+    
+    def _recommended_config(self) -> UserConfig:
+        """추천 설정 (performance_profiles.py 기반)"""
+        print("\n📋 추천 설정을 선택합니다...")
+        
+        # 모든 프로필 표시
+        profiles = {
+            1: PerformanceLevel.LOW_SPEC,
+            2: PerformanceLevel.MEDIUM_SPEC, 
+            3: PerformanceLevel.HIGH_SPEC,
+            4: PerformanceLevel.ULTRA_SPEC
+        }
+        
+        print("사용 가능한 성능 프로필:")
+        print("-" * 60)
+        
+        for num, level in profiles.items():
+            profile = self.performance_manager.profiles[level]
+            print(f"{num}. {profile.name}")
+            print(f"   워커: {profile.max_workers}개 | 배치: {profile.batch_size}개 | 메모리: {profile.chrome_memory_limit}MB")
+        
+        # 현재 자동 선택된 프로필 표시
+        current_profile = self.performance_manager.get_current_profile()
+        print(f"\n🎯 시스템 분석 결과 추천: {current_profile.name}")
+        
+        while True:
+            try:
+                choice = input("\n프로필을 선택하세요 (1-4, Enter=추천사용): ").strip()
+                
+                if not choice:  # Enter만 누른 경우 추천 사용
+                    selected_level = None
+                    selected_profile = current_profile
+                    break
+                    
+                choice_num = int(choice)
+                if choice_num in profiles:
+                    selected_level = profiles[choice_num]
+                    selected_profile = self.performance_manager.profiles[selected_level]
+                    break
+                else:
+                    print("❌ 1-4 중에서 선택해주세요.")
+                    
+            except ValueError:
+                print("❌ 숫자를 입력해주세요.")
+            except KeyboardInterrupt:
+                print("\n🚫 취소되었습니다.")
+                return self.show_config_menu()
+        
+        # 선택된 프로필 적용
+        if selected_level:
+            self.performance_manager.set_profile(selected_level)
+        
+        self.config.max_workers = selected_profile.max_workers
+        self.config.batch_size = selected_profile.batch_size
+        self.config.config_source = "recommended"
+        
+        print(f"\n✅ 프로필 적용 완료: {selected_profile.name}")
+        
+        return self._finalize_config()
+    
+    def _manual_config(self) -> UserConfig:
+        """수동 설정"""
+        print("\n✋ 수동 설정 모드입니다...")
+        
+        # 워커 수 설정 (2-18)
+        while True:
+            try:
+                workers = input("워커 수를 입력하세요 (2-18, 기본값: 4): ").strip()
+                if not workers:
+                    self.config.max_workers = 4
+                    break
+                    
+                worker_num = int(workers)
+                if 2 <= worker_num <= 18:
+                    self.config.max_workers = worker_num
+                    break
+                else:
+                    print("❌ 워커 수는 2-18 사이여야 합니다.")
+                    
+            except ValueError:
+                print("❌ 숫자를 입력해주세요.")
+        
+        print(f"✅ 워커 수: {self.config.max_workers}개")
+        
+        # 배치 크기는 자동 계산 또는 수동 입력
+        print("\n배치 크기 설정:")
+        print("1. 자동 계산 (총 데이터 수 / 워커 수)")
+        print("2. 수동 입력")
+        
+        while True:
+            try:
+                batch_choice = input("선택하세요 (1-2, 기본값: 1): ").strip()
+                if not batch_choice or batch_choice == "1":
+                    self.config.batch_size = "auto"  # 나중에 데이터 로드 후 계산
+                    print("✅ 배치 크기: 자동 계산")
+                    break
+                elif batch_choice == "2":
+                    while True:
+                        try:
+                            batch_input = input("배치 크기를 입력하세요 (10-1000, 기본값: 100): ").strip()
+                            if not batch_input:
+                                self.config.batch_size = 100
+                                break
+                            
+                            batch_num = int(batch_input)
+                            if 10 <= batch_num <= 1000:
+                                self.config.batch_size = batch_num
+                                break
+                            else:
+                                print("❌ 배치 크기는 10-1000 사이여야 합니다.")
+                        except ValueError:
+                            print("❌ 숫자를 입력해주세요.")
+                    print(f"✅ 배치 크기: {self.config.batch_size}개")
+                    break
+                else:
+                    print("❌ 1 또는 2를 선택해주세요.")
+            except ValueError:
+                print("❌ 올바른 선택을 해주세요.")
+        
+        self.config.config_source = "manual"
+        
+        return self._finalize_config()
+    
+    def _finalize_config(self) -> UserConfig:
+        """설정 완료 처리"""
+        
+        # 저장 디렉토리 설정
+        print(f"\n💾 결과 파일 저장 위치:")
+        save_path = input(f"저장 디렉토리 (기본값: results): ").strip()
+        if save_path:
+            self.config.save_directory = save_path
+            os.makedirs(save_path, exist_ok=True)
+        else:
+            self.config.save_directory = "results"
+        
+        print(f"✅ 저장 위치: {self.config.save_directory}/")
+        
+        # Gemini API 키 설정
+        print(f"\n🔑 Gemini API 키 설정:")
+        
+        # 환경변수 확인
+        env_key = os.getenv('GEMINI_API_KEY')
+        if env_key:
+            print(f"✅ 환경변수에서 API 키 발견")
+            self.config.gemini_api_key = env_key
+        else:
+            print("⚠️ GEMINI_API_KEY 환경변수가 설정되지 않았습니다.")
+            api_input = input("API 키를 직접 입력하시겠습니까? (y/N): ").strip().lower()
+            
+            if api_input in ['y', 'yes']:
+                while True:
+                    api_key = input("Gemini API 키를 입력하세요: ").strip()
+                    if api_key:
+                        self.config.gemini_api_key = api_key
+                        # 환경변수에도 설정 (현재 세션에서 사용)
+                        os.environ['GEMINI_API_KEY'] = api_key
+                        print("✅ API 키 설정 완료 (환경변수 업데이트됨)")
+                        break
+                    else:
+                        print("❌ API 키를 입력해주세요.")
+            else:
+                print("⚠️ API 키 없이 진행합니다. (일부 기능 제한될 수 있음)")
+        
+        # Chrome 버전 설정 (Chrome 138 대응)
+        self.config.chrome_version_main = None  # Chrome 138 호환성을 위해 None 사용
+        
+        # 설정값 검증 및 fallback 적용
+        self._validate_and_fix_config()
+        
+        # 최종 설정 확인
+        print("\n" + "=" * 60)
+        print("📋 최종 설정 확인")
+        print("=" * 60)
+        print(f"🔧 워커 수: {self.config.max_workers}개")
+        print(f"📦 배치 크기: {self.config.batch_size}")
+        print(f"💾 저장 위치: {self.config.save_directory}/")
+        print(f"🔑 API 키: {'✅ 설정됨' if self.config.gemini_api_key else '❌ 미설정'}")
+        print(f"🌐 Chrome 버전: Auto (version_main=None)")
+        print(f"📊 설정 방식: {self.config.config_source}")
+        print("=" * 60)
+        
+        confirm = input("\n계속 진행하시겠습니까? (Y/n): ").strip().lower()
+        if confirm in ['', 'y', 'yes']:
+            print("✅ 설정 완료! 크롤링을 시작합니다...\n")
+            return self.config
+        else:
+            print("🔄 설정을 다시 선택합니다...\n")
+            return self.show_config_menu()
+    
+    def _validate_and_fix_config(self):
+        """설정값 검증 및 fallback 적용"""
+        print("\n🔍 설정값 검증 중...")
+        
+        adjustments = []
+        
+        # 워커 수 검증
+        if not isinstance(self.config.max_workers, int) or self.config.max_workers < 1 or self.config.max_workers > 20:
+            original = self.config.max_workers
+            self.config.max_workers = 4
+            adjustments.append(f"워커 수: {original} → {self.config.max_workers} (범위: 1-20)")
+        
+        # 배치 크기 검증 (문자열 "auto"는 허용)
+        if (self.config.batch_size != "auto" and 
+            (not isinstance(self.config.batch_size, int) or self.config.batch_size < 1 or self.config.batch_size > 1000)):
+            original = self.config.batch_size
+            self.config.batch_size = 100
+            adjustments.append(f"배치 크기: {original} → {self.config.batch_size} (범위: 1-1000 또는 'auto')")
+        
+        # 저장 디렉토리 검증
+        if not self.config.save_directory or not isinstance(self.config.save_directory, str):
+            original = self.config.save_directory
+            self.config.save_directory = "results"
+            adjustments.append(f"저장 디렉토리: {original} → {self.config.save_directory}")
+        
+        # 시스템 리소스 기반 자동 조정
+        sys_info = self.performance_manager.system_info
+        total_memory_gb = sys_info.get('total_memory_gb', 8)
+        cpu_cores = sys_info.get('cpu_cores', 4)
+        
+        # 메모리 기반 워커 수 제한
+        max_recommended_workers = min(18, max(2, int(total_memory_gb / 2)))
+        if self.config.max_workers > max_recommended_workers:
+            original = self.config.max_workers
+            self.config.max_workers = max_recommended_workers
+            adjustments.append(f"워커 수 메모리 제한: {original} → {self.config.max_workers} (메모리: {total_memory_gb}GB)")
+        
+        # CPU 기반 워커 수 추천
+        cpu_recommended_workers = min(self.config.max_workers, cpu_cores * 2)
+        if self.config.max_workers > cpu_recommended_workers:
+            original = self.config.max_workers
+            self.config.max_workers = cpu_recommended_workers
+            adjustments.append(f"워커 수 CPU 제한: {original} → {self.config.max_workers} (CPU: {cpu_cores}코어)")
+        
+        # 조정사항 출력
+        if adjustments:
+            print("⚙️  설정값이 자동 조정되었습니다:")
+            for adjustment in adjustments:
+                print(f"   - {adjustment}")
+        else:
+            print("✅ 모든 설정값이 유효합니다.")
+    
+    def _show_help(self):
+        """도움말 표시"""
+        print("\n" + "=" * 60)
+        print("❓ 설정 방식 도움말")
+        print("=" * 60)
+        print("🤖 자동 감지:")
+        print("   - py-cpuinfo를 사용해 CPU 정보를 분석")
+        print("   - 시스템 사양에 맞는 최적 설정 자동 적용")
+        print("   - 가장 편리하지만 py-cpuinfo 설치 필요")
+        print()
+        print("📋 추천 설정:")
+        print("   - performance_profiles.py의 프로필 중 선택")
+        print("   - 저사양, 중사양, 고사양, 최고사양 4가지 옵션")
+        print("   - 시스템 분석 후 추천 프로필 제안")
+        print()
+        print("✋ 수동 설정:")
+        print("   - 워커 수: 2-18개 (동시 실행할 Chrome 인스턴스 수)")
+        print("   - 배치 크기: 한 번에 처리할 데이터 수")
+        print("   - 세밀한 조정 가능하지만 경험 필요")
+        print()
+        print("💡 권장사항:")
+        print("   - 처음 사용: 자동 감지 또는 추천 설정")
+        print("   - 경험자: 수동 설정으로 최적화")
+        print("   - 저사양 PC: 워커 2-4개, 배치 50-100개")
+        print("   - 고사양 PC: 워커 8-16개, 배치 200-500개")
+        print()
+        print("⚠️  주의사항:")
+        print("   - 워커 수가 많을수록 메모리 사용량 증가")
+        print("   - Chrome 138 사용 시 version_main=None 권장")
+        print("   - API 키 없이도 기본 검색 기능 사용 가능")
+        print("=" * 60)
+        print()
 
 # 로깅 설정
 def setup_logging():
@@ -74,6 +465,7 @@ def setup_logging():
     
     return logging.getLogger(__name__)
 
+# 검색 결과 클래스
 @dataclass
 class SearchResult:
     """개별 검색 결과"""
@@ -88,6 +480,7 @@ class SearchResult:
     error_message: str = ""
     search_queries_used: List[str] = field(default_factory=list)
 
+# 개선된 검색 엔진
 class ImprovedSearchEngine:
     """개선된 검색 엔진 - 자연스러운 검색어 적용"""
     
@@ -101,7 +494,7 @@ class ImprovedSearchEngine:
         self.logger = logger or logging.getLogger(__name__)
         
         # 기존 GoogleSearchEngine 활용
-        self.google_search_engine = GoogleSearchEngine(self.logger)
+        # self.google_search_engine = GoogleSearchEngine(self.logger) # 이 부분은 삭제되었으므로 주석 처리
         
         # 기관명 추출 패턴
         self.institution_patterns = [
@@ -122,6 +515,7 @@ class ImprovedSearchEngine:
         
         self.logger.info("🔍 개선된 검색 엔진 초기화 완료")
     
+    # 자연스러운 검색 쿼리 생성 (따옴표 제거)
     def create_natural_queries(self, number: str, number_type: str = "전화") -> List[str]:
         """
         자연스러운 검색 쿼리 생성 (따옴표 제거)
@@ -537,25 +931,25 @@ class ImprovedSearchEngine:
             self.logger.debug(f"기관명 검증 실패: {e}")
             return False
 
+# 강화된 기관명 추출 메인 처리기 v2
 class EnhancedInstitutionProcessor:
-    """강화된 기관명 추출 메인 처리기 v2"""
+    """강화된 기관명 추출 메인 처리기 v2 - undetected_chromedriver 직접 사용"""
     
-    def __init__(self, max_workers: int = 10, batch_size: int = 350):
+    def __init__(self, user_config: UserConfig):
         """
         메인 처리기 초기화
         
         Args:
-            max_workers: 최대 워커 수 (기본값: 10)
-            batch_size: 배치 크기 (기본값: 350)
+            user_config: 사용자 설정 객체
         """
         self.logger = logging.getLogger(__name__)
-        self.max_workers = max_workers
-        self.batch_size = batch_size
+        self.user_config = user_config
+        self.max_workers = user_config.max_workers
+        self.batch_size = user_config.batch_size  # "auto" 또는 숫자
         
         # 기존 모듈들 초기화
         self.performance_manager = PerformanceManager(self.logger)
         self.crawling_settings = CrawlingSettings()
-        self.web_driver_manager = WebDriverManager(self.logger)
         self.phone_validator = PhoneValidator(self.logger)
         self.excel_processor = ExcelProcessor(self.logger)
         self.data_mapper = DataMapper(self.logger)
@@ -568,6 +962,9 @@ class EnhancedInstitutionProcessor:
         self.worker_drivers = {}
         self.lock = threading.Lock()
         
+        # Chrome 옵션 기본 설정 (performance_profiles 기반)
+        self.chrome_options_base = self.performance_manager.get_chrome_options_for_profile()
+        
         # 통계
         self.total_rows = 0
         self.processed_count = 0
@@ -575,9 +972,13 @@ class EnhancedInstitutionProcessor:
         self.fax_success = 0
         
         self.logger.info(f"🚀 개선된 기관명 추출 프로세서 v2 초기화 완료")
-        self.logger.info(f"⚙️  설정: 워커 {max_workers}개, 배치 {batch_size}개")
+        self.logger.info(f"⚙️  설정: 워커 {self.max_workers}개")
+        self.logger.info(f"📦 배치 크기: {self.batch_size}")
+        self.logger.info(f"💾 저장 위치: {user_config.save_directory}")
         self.logger.info(f"🔍 검색어 개선: 자연스러운 형태 적용")
+        self.logger.info(f"🛡️ undetected_chromedriver 직접 사용")
     
+    # Excel 파일 로드 및 전처리
     def load_data(self, filepath: str) -> pd.DataFrame:
         """Excel 파일 로드 및 전처리"""
         try:
@@ -589,6 +990,11 @@ class EnhancedInstitutionProcessor:
             df = self.excel_processor.df
             self.logger.info(f"📊 데이터 로드 완료: {len(df)}행 × {len(df.columns)}열")
             self.logger.info(f"📋 컬럼: {list(df.columns)}")
+            
+            # 배치 크기 자동 계산 (데이터 로드 후)
+            if self.batch_size == "auto":
+                self.batch_size = self._calculate_optimal_batch_size(len(df))
+                self.logger.info(f"📦 배치 크기 자동 계산: {self.batch_size}개")
             
             # 컬럼 확인 및 정보 출력
             if len(df.columns) >= 10:
@@ -612,6 +1018,102 @@ class EnhancedInstitutionProcessor:
         except Exception as e:
             self.logger.error(f"❌ 데이터 로드 실패: {e}")
             raise
+    
+    def _calculate_optimal_batch_size(self, total_rows: int) -> int:
+        """최적 배치 크기 자동 계산"""
+        try:
+            # 기본 공식: 총 데이터 수 / 워커 수
+            calculated_size = max(1, total_rows // self.max_workers)
+            
+            # 최소/최대 제한 적용
+            min_batch = 10
+            max_batch = 500
+            
+            # 데이터 크기에 따른 조정
+            if total_rows < 100:
+                # 작은 데이터셋: 작은 배치
+                optimal_size = min(calculated_size, 20)
+            elif total_rows < 1000:
+                # 중간 데이터셋: 적당한 배치
+                optimal_size = min(max(calculated_size, 30), 100)
+            else:
+                # 큰 데이터셋: 큰 배치 (효율성)
+                optimal_size = min(max(calculated_size, 50), max_batch)
+            
+            # 최종 제한 적용
+            final_size = max(min_batch, min(optimal_size, max_batch))
+            
+            self.logger.info(f"📊 배치 크기 계산: {total_rows}행 ÷ {self.max_workers}워커 = {calculated_size} → 최적화: {final_size}")
+            
+            return final_size
+            
+        except Exception as e:
+            self.logger.warning(f"⚠️ 배치 크기 계산 실패, 기본값 사용: {e}")
+            return 100  # 기본값
+    
+    def _create_undetected_driver(self, worker_id: int) -> Optional[object]:
+        """undetected_chromedriver 직접 생성 (performance_profiles 기반)"""
+        try:
+            # 워커 간 시차 두기 (봇 감지 회피)
+            startup_delay = random.uniform(1.0, 3.0) * (worker_id + 1)
+            time.sleep(startup_delay)
+            
+            # Chrome 옵션 설정
+            chrome_options = uc.ChromeOptions()
+            
+            # performance_profiles에서 가져온 기본 옵션 적용
+            for option in self.chrome_options_base:
+                chrome_options.add_argument(option)
+            
+            # 워커별 추가 설정
+            debug_port = 9222 + (worker_id * 10)
+            chrome_options.add_argument(f'--remote-debugging-port={debug_port}')
+            
+            # 프로필 디렉토리 분리
+            import tempfile
+            profile_dir = tempfile.mkdtemp(prefix=f'uc_worker_{worker_id}_')
+            chrome_options.add_argument(f'--user-data-dir={profile_dir}')
+            
+            # User-Agent 랜덤화
+            user_agents = [
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+            ]
+            chrome_options.add_argument(f'--user-agent={random.choice(user_agents)}')
+            
+            # 봇 감지 방지 실험적 옵션
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option('useAutomationExtension', False)
+            
+            # undetected_chromedriver 생성 (Chrome 138 호환성)
+            driver = uc.Chrome(
+                options=chrome_options,
+                version_main=self.user_config.chrome_version_main  # None for auto-detect
+            )
+            
+            # 타임아웃 설정
+            profile = self.performance_manager.get_current_profile()
+            driver.implicitly_wait(profile.selenium_timeout)
+            driver.set_page_load_timeout(profile.selenium_timeout * 2)
+            
+            # 웹드라이버 감지 방지 스크립트
+            try:
+                driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+                driver.execute_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]})")
+                driver.execute_script("Object.defineProperty(navigator, 'languages', {get: () => ['ko-KR', 'ko']})")
+                driver.execute_script("Object.defineProperty(navigator, 'platform', {get: () => 'Win32'})")
+            except Exception as script_error:
+                self.logger.warning(f"⚠️ 웹드라이버 감지 방지 스크립트 실패: {script_error}")
+            
+            self.logger.info(f"🛡️ 워커 {worker_id}: undetected_chromedriver 생성 완료 (포트: {debug_port})")
+            
+            return driver
+            
+        except Exception as e:
+            self.logger.error(f"❌ 워커 {worker_id}: undetected_chromedriver 생성 실패 - {e}")
+            return None
     
     def process_single_row(self, row_data: Tuple[int, pd.Series], worker_id: int) -> SearchResult:
         """개별 행 처리 (전화번호와 팩스번호 모두)"""
@@ -699,7 +1201,7 @@ class EnhancedInstitutionProcessor:
             return result
     
     def _get_worker_driver(self, worker_id: int):
-        """워커별 드라이버 가져오기 (기존 WebDriverManager 활용)"""
+        """워커별 undetected_chromedriver 가져오기 (직접 생성 방식)"""
         # 기존 드라이버 상태 확인
         if worker_id in self.worker_drivers:
             try:
@@ -715,14 +1217,16 @@ class EnhancedInstitutionProcessor:
                     pass
                 del self.worker_drivers[worker_id]
         
-        # 새 드라이버 생성 (WebDriverManager 활용)
+        # 새 undetected_chromedriver 생성
         max_attempts = 3
         for attempt in range(max_attempts):
             try:
-                driver = self.web_driver_manager.create_bot_evasion_driver(worker_id)
+                self.logger.info(f"🔄 워커 {worker_id}: undetected_chromedriver 생성 시도 ({attempt+1}/{max_attempts})")
+                
+                driver = self._create_undetected_driver(worker_id)
                 if driver:
                     self.worker_drivers[worker_id] = driver
-                    self.logger.info(f"✅ 워커 {worker_id}: 새 드라이버 할당 성공 ({attempt+1}차)")
+                    self.logger.info(f"✅ 워커 {worker_id}: undetected_chromedriver 할당 성공 ({attempt+1}차)")
                     return driver
                 else:
                     self.logger.warning(f"⚠️ 워커 {worker_id}: 드라이버 생성 실패 ({attempt+1}차)")
@@ -735,7 +1239,7 @@ class EnhancedInstitutionProcessor:
                 self.logger.info(f"⏱️ 워커 {worker_id}: {wait_time}초 대기 후 재시도")
                 time.sleep(wait_time)
         
-        self.logger.error(f"❌ 워커 {worker_id}: 모든 드라이버 생성 시도 실패")
+        self.logger.error(f"❌ 워커 {worker_id}: 모든 undetected_chromedriver 생성 시도 실패")
         return None
     
     def process_file(self, input_filepath: str) -> str:
@@ -826,17 +1330,18 @@ class EnhancedInstitutionProcessor:
             output_file = f"enhanced_failed_data_v2_{timestamp}.xlsx"
             
             # ExcelProcessor로 저장
-            save_success = self.excel_processor.save_excel(df, output_file)
+            save_path = os.path.join(self.user_config.save_directory, output_file)
+            save_success = self.excel_processor.save_excel(df, save_path)
             if not save_success:
                 # 백업 저장 방법
-                df.to_excel(output_file, index=False)
-                self.logger.info(f"📁 백업 방법으로 저장 완료: {output_file}")
+                df.to_excel(save_path, index=False)
+                self.logger.info(f"📁 백업 방법으로 저장 완료: {save_path}")
             
             # 최종 통계 출력
             self._print_final_statistics()
             
-            self.logger.info(f"🎉 모든 처리 완료! 결과 파일: {output_file}")
-            return output_file
+            self.logger.info(f"�� 모든 처리 완료! 결과 파일: {save_path}")
+            return save_path
             
         except Exception as e:
             self.logger.error(f"❌ 파일 처리 실패: {e}")
@@ -893,6 +1398,10 @@ class EnhancedInstitutionProcessor:
 
 def main():
     """메인 실행 함수"""
+    # 사용자 설정 메뉴 및 설정 관리자 초기화
+    config_manager = ConfigManager()
+    user_config = config_manager.show_config_menu()
+    
     # 로깅 설정
     logger = setup_logging()
     
@@ -908,7 +1417,7 @@ def main():
             raise FileNotFoundError(f"입력 파일을 찾을 수 없습니다: {input_file}")
         
         # 프로세서 초기화 및 실행
-        processor = EnhancedInstitutionProcessor(max_workers=10, batch_size=350)
+        processor = EnhancedInstitutionProcessor(user_config)
         result_file = processor.process_file(input_file)
         
         logger.info(f"🎉 시스템 완료! 결과 파일: {result_file}")
