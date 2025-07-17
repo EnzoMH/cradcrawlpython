@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 parallel_phone_fax_finder.py
-병렬 처리 전화번호/팩스번호 기반 해당기관 검색 시스템
+병렬 처리 전화번호/팩스번호 기반 해당기관 검색 시스템 - 고급 봇 우회 버전
 """
 
 import os
@@ -14,6 +14,9 @@ import random
 import re
 import multiprocessing
 import traceback
+import socket
+import tempfile
+import hashlib
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -29,6 +32,223 @@ from dotenv import load_dotenv
 # Utils 모듈 import
 from utils.worker_manager import WorkerManager
 from utils.system_monitor import SystemMonitor
+
+class AdvancedPortManager:
+    """고급 포트 관리 시스템 - 동적 로테이션"""
+    
+    def __init__(self):
+        # 포트 범위를 더 넓게 설정 (봇 감지 회피)
+        self.base_ports = [9222, 9333, 9444, 9555, 9666, 9777, 9888, 9999]
+        self.used_ports = set()
+        self.port_rotation_count = 0
+        self.max_port_reuse = 3  # 포트 재사용 제한
+        
+    def get_rotated_port(self, worker_id: int) -> int:
+        """워커별 동적 포트 할당"""
+        # 포트 풀에서 순환 선택
+        base_idx = (worker_id + self.port_rotation_count) % len(self.base_ports)
+        base_port = self.base_ports[base_idx]
+        
+        # 최대 100개 포트 시도 (더 안전한 포트 확보)
+        for offset in range(100):
+            port = base_port + offset
+            
+            # 포트 사용 가능성 확인
+            if self._is_port_available(port) and port not in self.used_ports:
+                self.used_ports.add(port)
+                return port
+        
+        # 모든 포트가 사용 중인 경우 강제 할당
+        fallback_port = base_port + worker_id + 1000 + random.randint(0, 500)
+        self.used_ports.add(fallback_port)
+        return fallback_port
+    
+    def _is_port_available(self, port: int) -> bool:
+        """포트 사용 가능 여부 확인"""
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(1)
+                result = s.connect_ex(('localhost', port))
+                return result != 0  # 포트가 사용 중이 아님
+        except:
+            return False
+    
+    def release_port(self, port: int):
+        """포트 해제"""
+        self.used_ports.discard(port)
+    
+    def rotate_ports(self):
+        """포트 로테이션 카운터 증가"""
+        self.port_rotation_count += 1
+
+class StealthWebDriverManager:
+    """스텔스 WebDriver 관리 클래스 - 고급 봇 우회"""
+    
+    def __init__(self, logger=None):
+        """스텔스 WebDriver 관리자 초기화"""
+        self.logger = logger or logging.getLogger(__name__)
+        self.port_manager = AdvancedPortManager()
+        
+        # 최신 User-Agent 풀 (2024년 기준)
+        self.user_agents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.76',
+        ]
+        
+        # 화면 해상도 풀 (일반적인 해상도들)
+        self.screen_sizes = [
+            (1920, 1080), (1366, 768), (1536, 864), (1440, 900),
+            (1600, 900), (1280, 720), (1920, 1200), (2560, 1440)
+        ]
+    
+    def create_stealth_driver(self, worker_id: int = 0) -> object:
+        """스텔스 드라이버 생성 - 최신 봇 우회 기법 적용"""
+        try:
+            # 워커별 시작 지연 (봇 감지 회피)
+            startup_delay = random.uniform(1.0, 3.0) * (worker_id + 1)
+            time.sleep(startup_delay)
+            
+            self.logger.info(f"🛡️ 워커 {worker_id}: 스텔스 드라이버 생성 중...")
+            
+            # Chrome 옵션 설정
+            chrome_options = uc.ChromeOptions()
+            
+            # 🔥 최신 봇 감지 우회 옵션 (2024년 기준)
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+            chrome_options.add_argument('--disable-extensions')
+            chrome_options.add_argument('--mute-audio')
+            chrome_options.add_argument('--no-first-run')
+            chrome_options.add_argument('--disable-infobars')
+            chrome_options.add_argument('--disable-notifications')
+            
+            # 🚫 고급 봇 감지 회피 옵션 (새로운 추가 항목들)
+            chrome_options.add_argument('--disable-web-security')
+            chrome_options.add_argument('--disable-features=VizDisplayCompositor')
+            chrome_options.add_argument('--disable-ipc-flooding-protection')
+            chrome_options.add_argument('--disable-background-timer-throttling')
+            chrome_options.add_argument('--disable-backgrounding-occluded-windows')
+            chrome_options.add_argument('--disable-renderer-backgrounding')
+            chrome_options.add_argument('--disable-features=TranslateUI')
+            chrome_options.add_argument('--disable-default-apps')
+            chrome_options.add_argument('--disable-sync')
+            chrome_options.add_argument('--disable-plugins')
+            chrome_options.add_argument('--disable-component-extensions')
+            
+            # 🎭 핑거프린트 무작위화
+            selected_ua = random.choice(self.user_agents)
+            selected_size = random.choice(self.screen_sizes)
+            
+            chrome_options.add_argument(f'--user-agent={selected_ua}')
+            chrome_options.add_argument(f'--window-size={selected_size[0]},{selected_size[1]}')
+            
+            # 🔧 Chrome 138+ 호환성 개선
+            chrome_options.add_argument('--no-crash-dialog')
+            chrome_options.add_argument('--disable-crash-reporter')
+            chrome_options.add_argument('--disable-hang-monitor')
+            chrome_options.add_argument('--disable-prompt-on-repost')
+            chrome_options.add_argument('--allow-running-insecure-content')
+            chrome_options.add_argument('--disable-logging')
+            chrome_options.add_argument('--disable-logging-redirect')
+            chrome_options.add_argument('--log-level=3')
+            
+            # 💾 메모리 최적화 (AMD Ryzen 5 5500U 환경 고려)
+            chrome_options.add_argument('--memory-pressure-off')
+            chrome_options.add_argument('--max_old_space_size=512')
+            chrome_options.add_argument('--aggressive-cache-discard')
+            chrome_options.add_argument('--max-unused-resource-memory-usage-percentage=10')
+            chrome_options.add_argument('--disable-background-mode')
+            
+            # 🌐 동적 포트 할당 (핵심 봇 우회 기법)
+            debug_port = self.port_manager.get_rotated_port(worker_id)
+            chrome_options.add_argument(f'--remote-debugging-port={debug_port}')
+            
+            # 📁 워커별 독립 프로필 디렉토리
+            profile_dir = tempfile.mkdtemp(prefix=f'stealth_worker_{worker_id}_')
+            chrome_options.add_argument(f'--user-data-dir={profile_dir}')
+            
+            # 🔐 고급 스텔스 옵션
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option('useAutomationExtension', False)
+            
+            # 🎯 Canvas/WebGL 핑거프린트 변조
+            chrome_options.add_argument('--disable-canvas-aa')
+            chrome_options.add_argument('--disable-2d-canvas-clip-aa')
+            chrome_options.add_argument('--disable-gl-drawing-for-tests')
+            
+            # 🛡️ 추가 보안 레이어
+            chrome_options.add_argument('--disable-software-rasterizer')
+            chrome_options.add_argument('--disable-background-networking')
+            chrome_options.add_argument('--disable-component-update')
+            chrome_options.add_argument('--disable-domain-reliability')
+            chrome_options.add_argument('--disable-client-side-phishing-detection')
+            
+            # undetected_chromedriver 생성 (최신 버전 지원)
+            driver = uc.Chrome(
+                options=chrome_options,
+                version_main=None,  # 자동 버전 감지
+                driver_executable_path=None,  # 자동 다운로드
+                browser_executable_path=None,  # 기본 Chrome 사용
+                use_subprocess=True,  # 안정성 향상
+                log_level=3  # 로그 최소화
+            )
+            
+            # 🔮 JavaScript 레벨 스텔스 적용
+            driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+                "source": """
+                    // WebDriver 속성 숨기기
+                    Object.defineProperty(navigator, 'webdriver', {
+                        get: () => undefined,
+                    });
+                    
+                    // Chrome 객체 속성 숨기기
+                    window.chrome = {
+                        runtime: {},
+                        loadTimes: function() {},
+                        csi: function() {},
+                        app: {}
+                    };
+                    
+                    // 플러그인 배열 수정
+                    Object.defineProperty(navigator, 'plugins', {
+                        get: () => [1, 2, 3, 4, 5],
+                    });
+                    
+                    // 언어 배열 수정
+                    Object.defineProperty(navigator, 'languages', {
+                        get: () => ['ko-KR', 'ko', 'en-US', 'en'],
+                    });
+                    
+                    // Permission API 우회
+                    const originalQuery = window.navigator.permissions.query;
+                    window.navigator.permissions.query = (parameters) => (
+                        parameters.name === 'notifications' ?
+                        Promise.resolve({ state: Notification.permission }) :
+                        originalQuery(parameters)
+                    );
+                """
+            })
+            
+            self.logger.info(f"✅ 워커 {worker_id}: 스텔스 드라이버 생성 완료 (포트: {debug_port})")
+            return driver
+            
+        except Exception as e:
+            self.logger.error(f"❌ 워커 {worker_id}: 스텔스 드라이버 생성 실패 - {e}")
+            return None
+    
+    def cleanup_driver(self, driver, worker_id: int):
+        """드라이버 정리"""
+        try:
+            if driver:
+                driver.quit()
+                self.logger.info(f"🧹 워커 {worker_id}: 드라이버 정리 완료")
+        except Exception as e:
+            self.logger.error(f"❌ 워커 {worker_id}: 드라이버 정리 실패 - {e}")
 
 # 로깅 설정하는 함수
 def setup_logger(name="ParallelPhoneFaxFinder"):
@@ -49,7 +269,7 @@ def setup_logger(name="ParallelPhoneFaxFinder"):
 
 def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = None) -> List[Dict]:
     """
-    배치 데이터 처리하는 워커 함수
+    배치 데이터 처리하는 워커 함수 - 스텔스 모드
     
     Args:
         batch_data: 처리할 데이터 배치
@@ -60,15 +280,15 @@ def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = 
         List[Dict]: 처리된 결과 리스트
     """
     try:
-        logger = setup_logger(f"worker_{worker_id}")
-        logger.info(f"🔧 워커 {worker_id} 시작: {len(batch_data)}개 데이터 처리")
+        logger = setup_logger(f"stealth_worker_{worker_id}")
+        logger.info(f"🛡️ 스텔스 워커 {worker_id} 시작: {len(batch_data)}개 데이터 처리")
         
-        # WorkerManager를 사용한 WebDriver 생성
-        worker_manager = WorkerManager(logger)
-        driver = worker_manager.create_worker_driver(worker_id)
+        # StealthWebDriverManager를 사용한 스텔스 드라이버 생성
+        stealth_manager = StealthWebDriverManager(logger)
+        driver = stealth_manager.create_stealth_driver(worker_id)
         
         if not driver:
-            logger.error(f"❌ 워커 {worker_id}: WebDriver 생성 실패")
+            logger.error(f"❌ 스텔스 워커 {worker_id}: 드라이버 생성 실패")
             return []
         
         # AI 모델 초기화 (사용 가능한 경우)
@@ -81,32 +301,70 @@ def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = 
             except Exception as e:
                 logger.warning(f"⚠️ 워커 {worker_id}: AI 모델 초기화 실패 - {e}")
         
-        # 검색 패턴 정의
+        # 🎯 고급 검색 패턴 정의 (다양한 검색 전략)
         search_patterns = {
             'phone': [
                 '"{phone_number}"',
                 '{phone_number} 전화번호',
                 '{phone_number} 연락처',
                 '{phone_number} 기관',
-                '전화 {phone_number}'
+                '전화 {phone_number}',
+                '{phone_number} 대표번호',
+                '{phone_number} 문의처',
+                '{phone_number} 사무실',
+                '연락처 {phone_number}',
+                '{phone_number} 공식',
+                '{phone_number} site:kr',
+                '{phone_number} 관공서',
+                '{phone_number} 센터'
             ],
             'fax': [
                 '"{fax_number}"',
                 '{fax_number} 팩스',
                 '{fax_number} 팩스번호',
                 '{fax_number} 기관',
-                '팩스 {fax_number}'
+                '팩스 {fax_number}',
+                '{fax_number} FAX',
+                '{fax_number} 전송',
+                '{fax_number} 사무실',
+                'FAX {fax_number}',
+                '{fax_number} site:kr',
+                '{fax_number} 관공서',
+                '{fax_number} 센터',
+                '{fax_number} 공식'
             ]
         }
         
-        # 기관명 추출 패턴
+        # 🏢 확장된 기관명 추출 패턴 (더 정확한 기관 인식)
         institution_patterns = [
-            r'([가-힣]+(?:동|구|시|군|읍|면)\s*(?:주민센터|사무소))',
-            r'([가-힣]+(?:구청|시청|군청|도청))',
-            r'([가-힣]+(?:대학교|대학|학교|병원|의료원|보건소))',
-            r'([가-힣]+(?:복지관|센터|도서관|체육관))',
-            r'([가-힣]+(?:협회|단체|재단|법인|조합|공사|공단))',
-            r'([가-힣\s]{2,20}(?:주민센터|사무소|청|병원|학교|센터))',
+            # 행정기관
+            r'([가-힣]+(?:동|구|시|군|읍|면)\s*(?:주민센터|행정복지센터|사무소|동사무소))',
+            r'([가-힣]+(?:구청|시청|군청|도청|청사))',
+            r'([가-힣]+(?:구|시|군|도)\s*(?:청|청사))',
+            
+            # 교육기관
+            r'([가-힣]+(?:대학교|대학|학교|초등학교|중학교|고등학교|유치원))',
+            r'([가-힣]+(?:교육청|교육지원청|교육지원센터))',
+            
+            # 의료기관
+            r'([가-힣]+(?:병원|의료원|보건소|의원|클리닉|한의원))',
+            r'([가-힣]+(?:보건|의료)\s*(?:센터|소))',
+            
+            # 복지/문화시설
+            r'([가-힣]+(?:복지관|문화센터|도서관|체육관|체육센터|수영장))',
+            r'([가-힣]+(?:복지|문화|체육|여성|청소년)\s*(?:센터|관))',
+            
+            # 공공기관
+            r'([가-힣]+(?:협회|단체|재단|법인|조합|공사|공단|공기업))',
+            r'([가-힣]+(?:관리사무소|관리소|관리공단))',
+            
+            # 일반 패턴 (더 유연한 매칭)
+            r'([가-힣\s]{2,25}(?:주민센터|행정복지센터|사무소|청|병원|학교|센터|관|소))',
+            r'([가-힣\s]{3,20}(?:대학교|대학|공사|공단|재단|법인))',
+            
+            # 특수 기관
+            r'([가-힣]+(?:경찰서|소방서|우체국|세무서|법원|검찰청))',
+            r'([가-힣]+(?:상공회의소|상공회|농협|수협|신협))'
         ]
         
         results = []
@@ -150,21 +408,22 @@ def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = 
                 
                 results.append(result)
                 
-                # 요청 지연 (봇 감지 방지)
-                time.sleep(random.uniform(3, 5))
+                # 🛡️ 스텔스 요청 지연 (인간 행동 패턴 시뮬레이션)
+                stealth_delay = random.uniform(4, 7)  # 더 긴 지연으로 봇 감지 회피
+                time.sleep(stealth_delay)
                 
             except Exception as e:
                 logger.error(f"❌ 워커 {worker_id} 행 처리 실패 {idx}: {e}")
                 continue
         
-        # 정리
-        worker_manager.cleanup_driver(driver, worker_id)
+        # 정리 - 스텔스 매니저 사용
+        stealth_manager.cleanup_driver(driver, worker_id)
         
-        logger.info(f"✅ 워커 {worker_id} 완료: {len(results)}개 결과")
+        logger.info(f"✅ 스텔스 워커 {worker_id} 완료: {len(results)}개 결과")
         return results
         
     except Exception as e:
-        logger.error(f"❌ 워커 {worker_id} 전체 실패: {e}")
+        logger.error(f"❌ 스텔스 워커 {worker_id} 전체 실패: {e}")
         traceback.print_exc()
         return []
 
@@ -184,7 +443,7 @@ def normalize_phone_number(phone_number: str) -> str:
 
 def search_google_for_institution(driver, number: str, number_type: str, search_patterns: Dict, 
                                  institution_patterns: List, ai_model, logger) -> Optional[str]:
-    """구글에서 전화번호/팩스번호로 기관 검색하는 메소드"""
+    """구글에서 전화번호/팩스번호로 기관 검색하는 메소드 - 스텔스 모드"""
     try:
         patterns = search_patterns.get(number_type, [])
         
@@ -195,14 +454,34 @@ def search_google_for_institution(driver, number: str, number_type: str, search_
             else:  # fax
                 search_query = pattern.format(fax_number=number)
             
-            logger.info(f"🔍 {number_type} 검색 중: {search_query}")
+            logger.info(f"🕵️ {number_type} 스텔스 검색 중: {search_query}")
             
-            # 구글 검색
+            # 🎭 인간 행동 시뮬레이션 - 검색 전 지연
+            human_delay = random.uniform(1.5, 3.5)
+            time.sleep(human_delay)
+            
+            # 구글 검색 (User-Agent는 이미 스텔스 드라이버에서 설정됨)
             search_url = f"https://www.google.com/search?q={search_query.replace(' ', '+')}"
-            driver.get(search_url)
             
-            # 랜덤 지연
-            time.sleep(random.uniform(2, 4))
+            # 🚀 페이지 로드 방식 개선
+            try:
+                driver.get(search_url)
+                
+                # 🔄 페이지 로드 완료 대기 (더 안정적)
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.TAG_NAME, "body"))
+                )
+                
+                # 🎯 추가 인간 행동 시뮬레이션 - 스크롤
+                driver.execute_script("window.scrollTo(0, Math.floor(Math.random() * 500));")
+                
+            except TimeoutException:
+                logger.warning(f"⚠️ 페이지 로드 타임아웃: {search_query}")
+                continue
+            
+            # 🤖 봇 감지 회피를 위한 추가 지연
+            detection_avoidance_delay = random.uniform(2.5, 4.5)
+            time.sleep(detection_avoidance_delay)
             
             # 페이지 소스 가져오기
             page_source = driver.page_source
@@ -215,13 +494,14 @@ def search_google_for_institution(driver, number: str, number_type: str, search_
                 logger.info(f"✅ {number_type} 기관명 발견: {institution_name}")
                 return institution_name
             
-            # 다음 패턴 시도 전 지연
-            time.sleep(random.uniform(1, 2))
+            # 다음 패턴 시도 전 더 긴 지연 (봇 감지 회피)
+            pattern_delay = random.uniform(2.0, 4.0)
+            time.sleep(pattern_delay)
         
         return None
         
     except Exception as e:
-        logger.error(f"❌ 구글 검색 실패: {number} ({number_type}) - {e}")
+        logger.error(f"❌ 스텔스 구글 검색 실패: {number} ({number_type}) - {e}")
         return None
 
 def extract_institution_from_page(soup: BeautifulSoup, number: str, institution_patterns: List, 
@@ -251,17 +531,41 @@ def extract_institution_from_page(soup: BeautifulSoup, number: str, institution_
         return None
 
 def is_valid_institution_name(name: str) -> bool:
-    """유효한 기관명인지 확인하는 메소드"""
+    """유효한 기관명인지 확인하는 메소드 - 확장 버전"""
     if not name or len(name) < 2:
         return False
     
-    # 유효한 기관명 키워드
+    # 🏛️ 확장된 유효한 기관명 키워드
     valid_keywords = [
-        '주민센터', '사무소', '청', '구청', '시청', '군청', '도청',
-        '병원', '의료원', '보건소', '학교', '대학', '대학교',
-        '센터', '복지관', '도서관', '체육관', '공원',
-        '협회', '단체', '재단', '법인', '조합', '공사', '공단'
+        # 행정기관
+        '주민센터', '행정복지센터', '사무소', '동사무소', '청', '구청', '시청', '군청', '도청', '청사',
+        
+        # 교육기관  
+        '학교', '초등학교', '중학교', '고등학교', '대학', '대학교', '유치원', '교육청', '교육지원청', '교육지원센터',
+        
+        # 의료기관
+        '병원', '의료원', '보건소', '의원', '클리닉', '한의원', '보건센터', '의료센터',
+        
+        # 복지/문화시설
+        '센터', '복지관', '도서관', '체육관', '체육센터', '수영장', '문화센터', '여성센터', '청소년센터',
+        
+        # 공공기관
+        '협회', '단체', '재단', '법인', '조합', '공사', '공단', '공기업', '관리사무소', '관리소', '관리공단',
+        
+        # 특수기관
+        '경찰서', '소방서', '우체국', '세무서', '법원', '검찰청', '상공회의소', '상공회', '농협', '수협', '신협'
     ]
+    
+    # ❌ 제외할 키워드 (잘못된 인식 방지)
+    invalid_keywords = [
+        '번호', '전화', '팩스', 'fax', '연락처', '문의', '검색', '결과', '사이트', 'site',
+        '홈페이지', 'www', 'http', 'com', 'co.kr', '광고', '상품', '서비스'
+    ]
+    
+    # 제외 키워드 확인
+    name_lower = name.lower()
+    if any(invalid in name_lower for invalid in invalid_keywords):
+        return False
     
     return any(keyword in name for keyword in valid_keywords)
 
@@ -304,17 +608,18 @@ class ParallelPhoneFaxFinder:
         # 환경 변수 로드
         load_dotenv()
         
-        # 병렬 처리 설정 (Intel i5-4210M 환경 최적화)
-        self.max_workers = 4  # 2코어 4스레드
-        self.batch_size = 50   # 워커당 처리할 데이터 수
+        # 병렬 처리 설정 (AMD Ryzen 5 5500U 환경 최적화)
+        self.max_workers = 10  # 6코어 12스레드 활용
+        self.batch_size = 350   # 워커당 처리할 데이터 수
         
         # 통계
         self.total_processed = 0
         self.phone_success_count = 0
         self.fax_success_count = 0
         
-        self.logger.info("🔍 병렬 전화번호/팩스번호 기관 찾기 시스템 초기화 완료")
-        self.logger.info(f"⚙️ 병렬 설정: {self.max_workers}개 워커, 배치 크기: {self.batch_size}")
+        self.logger.info("🛡️ 스텔스 병렬 전화번호/팩스번호 기관 찾기 시스템 초기화 완료")
+        self.logger.info(f"🚀 AMD Ryzen 5 5500U 최적화: {self.max_workers}개 워커, 배치 크기: {self.batch_size}")
+        self.logger.info("🔥 고급 봇 감지 우회 기능 활성화")
     
     def load_excel_data(self, file_path: str) -> pd.DataFrame:
         """엑셀 데이터 로드하는 메소드"""
