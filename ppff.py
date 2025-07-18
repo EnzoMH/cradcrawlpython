@@ -698,17 +698,33 @@ def setup_logger(name="ParallelPhoneFaxFinder"):
     
     return logging.getLogger(name)
 
+# ================================
+# 백업된 기존 워커 함수 (2025-01-18 백업)
+# 메소드 로직 50% 이상 변경으로 백업 정책 적용
+# ================================
+"""
+def process_batch_worker_original_backup(batch_data: List[Dict], worker_id: int, api_key: str = None) -> List[Dict]:
+    # 배치 데이터 처리하는 워커 함수 - 스텔스 모드 (백업된 원본)
+    # Args:
+    #     batch_data: 처리할 데이터 배치
+    #     worker_id: 워커 ID  
+    #     api_key: Gemini API 키 (선택사항)
+    # Returns:
+    #     List[Dict]: 처리된 결과 리스트
+    # (기존 구현은 원본 데이터 컬럼 정보가 손실되는 문제가 있어 새로운 버전으로 대체)
+"""
+
 def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = None) -> List[Dict]:
     """
-    배치 데이터 처리하는 워커 함수 - 스텔스 모드
+    배치 데이터 처리하는 워커 함수 - 행 추적 및 원본 데이터 보존 버전
     
     Args:
-        batch_data: 처리할 데이터 배치
+        batch_data: 처리할 데이터 배치 (행 ID 포함)
         worker_id: 워커 ID
         api_key: Gemini API 키 (선택사항)
         
     Returns:
-        List[Dict]: 처리된 결과 리스트
+        List[Dict]: 처리된 결과 리스트 (원본 데이터 + 검색 결과)
     """
     try:
         logger = setup_logger(f"stealth_worker_{worker_id}")
@@ -802,6 +818,10 @@ def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = 
         
         for idx, row_data in enumerate(batch_data):
             try:
+                # 🎯 행 추적 정보 추출
+                row_id = row_data.get('고유_행ID', f'UNKNOWN_{idx}')
+                original_row_num = row_data.get('원본_행번호', idx)
+                
                 phone_number = row_data.get('전화번호', '')
                 fax_number = row_data.get('팩스번호', '')
                 
@@ -809,7 +829,7 @@ def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = 
                 normalized_phone = normalize_phone_number(phone_number) if phone_number and phone_number != 'nan' else ''
                 normalized_fax = normalize_phone_number(fax_number) if fax_number and fax_number != 'nan' else ''
                 
-                logger.info(f"📞 워커 {worker_id} 처리 중 ({idx+1}/{len(batch_data)}): 전화({normalized_phone}), 팩스({normalized_fax})")
+                logger.info(f"📞 워커 {worker_id} 처리 중 ({idx+1}/{len(batch_data)}) [행ID:{row_id}]: 전화({normalized_phone}), 팩스({normalized_fax})")
                 
                 # 전화번호 기관 검색
                 phone_institution = ''
@@ -827,15 +847,19 @@ def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = 
                         institution_patterns, ai_model, logger
                     )
                 
-                # 결과 저장
-                result = {
-                    '팩스번호': normalized_fax,
-                    '해당기관': fax_institution if fax_institution else '미발견',
-                    '전화번호': normalized_phone,
-                    '해당기관.1': phone_institution if phone_institution else '미발견',
+                # 🔄 결과 저장 - 원본 데이터 전체 보존 + 검색 결과 추가
+                result = row_data.copy()  # 원본 데이터 전체 복사
+                
+                # 검색 결과 컬럼 추가/업데이트
+                result.update({
+                    '전화번호_정규화': normalized_phone,
+                    '팩스번호_정규화': normalized_fax,
+                    '전화번호_검색기관': phone_institution if phone_institution else '미발견',
+                    '팩스번호_검색기관': fax_institution if fax_institution else '미발견',
                     '처리워커': f"워커_{worker_id}",
-                    '처리시간': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                }
+                    '처리시간': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    '검색상태': '완료'
+                })
                 
                 results.append(result)
                 
@@ -1288,10 +1312,17 @@ class ParallelPhoneFaxFinder:
             return pd.DataFrame()
     
     def split_data_into_batches(self, df: pd.DataFrame) -> List[List[Dict]]:
-        """데이터를 배치로 분할하는 메소드"""
+        """데이터를 배치로 분할하는 메소드 - 행 추적 시스템 포함"""
         try:
-            # DataFrame을 딕셔너리 리스트로 변환
-            data_list = df.to_dict('records')
+            # 🎯 행 추적을 위해 인덱스 리셋 및 고유 ID 추가
+            df_with_index = df.reset_index(drop=True)
+            df_with_index['원본_행번호'] = df_with_index.index
+            df_with_index['고유_행ID'] = df_with_index['원본_행번호'].apply(lambda x: f"ROW_{x:06d}")
+            
+            # DataFrame을 딕셔너리 리스트로 변환 (행 정보 포함)
+            data_list = df_with_index.to_dict('records')
+            
+            self.logger.info(f"📋 행 추적 시스템 적용: {len(data_list)}개 행에 고유 ID 부여")
             
             # 배치로 분할
             batches = []
@@ -1301,7 +1332,10 @@ class ParallelPhoneFaxFinder:
             
             self.logger.info(f"📦 데이터 분할 완료: {len(batches)}개 배치")
             for i, batch in enumerate(batches):
-                self.logger.info(f"   배치 {i+1}: {len(batch)}개 데이터")
+                batch_row_ids = [row['고유_행ID'] for row in batch[:3]]  # 처음 3개만 표시
+                if len(batch) > 3:
+                    batch_row_ids.append(f"... 외 {len(batch)-3}개")
+                self.logger.info(f"   배치 {i+1}: {len(batch)}개 데이터 [{', '.join(batch_row_ids)}]")
             
             return batches
             
@@ -1373,42 +1407,105 @@ class ParallelPhoneFaxFinder:
             return []
     
     def save_results_to_desktop(self, results: List[Dict]) -> str:
-        """결과를 데스크톱에 저장하는 메소드"""
+        """결과를 데스크톱에 저장하는 메소드 - 원본 데이터 + 검색 결과 통합 버전"""
         try:
-            # 데스크톱 경로 가져오기
-            desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+            # rawdatafile 폴더에 저장 (기존 데이터와 함께 관리)
+            save_directory = "rawdatafile"
+            if not os.path.exists(save_directory):
+                os.makedirs(save_directory)
             
             # 파일명 생성
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"병렬_전화팩스기관검색결과_{timestamp}.xlsx"
-            filepath = os.path.join(desktop_path, filename)
+            filename = f"통합_전화팩스기관검색결과_{timestamp}.xlsx"
+            filepath = os.path.join(save_directory, filename)
             
-            # DataFrame 생성 및 저장
+            # DataFrame 생성
             df_results = pd.DataFrame(results)
             
+            # 🎯 컬럼 순서 정리 (가독성 향상)
+            if not df_results.empty:
+                # 중요 컬럼들을 앞으로 배치
+                priority_columns = [
+                    '고유_행ID', '원본_행번호', '기관명', '주소', 
+                    '전화번호', '전화번호_정규화', '전화번호_검색기관',
+                    '팩스번호', '팩스번호_정규화', '팩스번호_검색기관',
+                    '처리워커', '처리시간', '검색상태'
+                ]
+                
+                # 존재하는 컬럼만 선택
+                existing_priority = [col for col in priority_columns if col in df_results.columns]
+                remaining_columns = [col for col in df_results.columns if col not in existing_priority]
+                
+                # 컬럼 순서 재정렬
+                df_results = df_results[existing_priority + remaining_columns]
+            
+            # 🔄 다중 시트로 저장 (결과 + 통계)
             with pd.ExcelWriter(filepath, engine='openpyxl') as writer:
-                df_results.to_excel(writer, index=False, sheet_name='병렬전화팩스기관검색결과')
+                # 메인 결과 저장
+                df_results.to_excel(writer, index=False, sheet_name='통합검색결과')
+                
+                # 📊 통계 시트 생성
+                self._create_statistics_sheet(writer, df_results)
             
             self.logger.info(f"💾 결과 저장 완료: {filepath}")
             
-            # 통계 정보
+            # 🎯 개선된 통계 정보 (새로운 컬럼 구조에 맞춤)
             total_processed = len(results)
-            phone_successful = len([r for r in results if r['해당기관.1'] != '미발견'])
-            fax_successful = len([r for r in results if r['해당기관'] != '미발견'])
             
-            phone_rate = (phone_successful / total_processed) * 100 if total_processed > 0 else 0
-            fax_rate = (fax_successful / total_processed) * 100 if total_processed > 0 else 0
+            # 전화번호 검색 성공률
+            phone_successful = len([r for r in results if r.get('전화번호_검색기관', '미발견') != '미발견'])
+            phone_total = len([r for r in results if r.get('전화번호_정규화', '')])
+            
+            # 팩스번호 검색 성공률  
+            fax_successful = len([r for r in results if r.get('팩스번호_검색기관', '미발견') != '미발견'])
+            fax_total = len([r for r in results if r.get('팩스번호_정규화', '')])
+            
+            phone_rate = (phone_successful / phone_total) * 100 if phone_total > 0 else 0
+            fax_rate = (fax_successful / fax_total) * 100 if fax_total > 0 else 0
             
             self.logger.info(f"📊 최종 처리 통계:")
-            self.logger.info(f"   - 총 처리: {total_processed}개")
-            self.logger.info(f"   - 전화번호 성공: {phone_successful}개 ({phone_rate:.1f}%)")
-            self.logger.info(f"   - 팩스번호 성공: {fax_successful}개 ({fax_rate:.1f}%)")
+            self.logger.info(f"   - 총 처리: {total_processed}개 행")
+            self.logger.info(f"   - 전화번호 대상: {phone_total}개, 성공: {phone_successful}개 ({phone_rate:.1f}%)")
+            self.logger.info(f"   - 팩스번호 대상: {fax_total}개, 성공: {fax_successful}개 ({fax_rate:.1f}%)")
+            self.logger.info(f"   - 전체 성공률: {((phone_successful + fax_successful) / (phone_total + fax_total) * 100):.1f}%" if (phone_total + fax_total) > 0 else "   - 전체 성공률: 0.0%")
             
             return filepath
             
         except Exception as e:
             self.logger.error(f"❌ 결과 저장 실패: {e}")
             return ""
+    
+    def _create_statistics_sheet(self, writer, df_results: pd.DataFrame):
+        """통계 시트 생성하는 보조 메소드"""
+        try:
+            # 📊 통계 데이터 준비
+            stats_data = []
+            
+            total_rows = len(df_results)
+            phone_total = len(df_results[df_results['전화번호_정규화'].notna() & (df_results['전화번호_정규화'] != '')])
+            fax_total = len(df_results[df_results['팩스번호_정규화'].notna() & (df_results['팩스번호_정규화'] != '')])
+            
+            phone_success = len(df_results[df_results['전화번호_검색기관'] != '미발견'])
+            fax_success = len(df_results[df_results['팩스번호_검색기관'] != '미발견'])
+            
+            stats_data.extend([
+                ['구분', '총 개수', '성공 개수', '성공률(%)'],
+                ['전체 행', total_rows, phone_success + fax_success, f"{((phone_success + fax_success) / (phone_total + fax_total) * 100):.1f}" if (phone_total + fax_total) > 0 else "0.0"],
+                ['전화번호', phone_total, phone_success, f"{(phone_success / phone_total * 100):.1f}" if phone_total > 0 else "0.0"],
+                ['팩스번호', fax_total, fax_success, f"{(fax_success / fax_total * 100):.1f}" if fax_total > 0 else "0.0"],
+                ['', '', '', ''],
+                ['처리 정보', '', '', ''],
+                ['처리 시작 시간', df_results['처리시간'].min() if '처리시간' in df_results.columns else 'N/A', '', ''],
+                ['처리 완료 시간', df_results['처리시간'].max() if '처리시간' in df_results.columns else 'N/A', '', ''],
+                ['사용된 워커 수', len(df_results['처리워커'].unique()) if '처리워커' in df_results.columns else 'N/A', '', '']
+            ])
+            
+            # 통계 DataFrame 생성 및 저장
+            df_stats = pd.DataFrame(stats_data)
+            df_stats.to_excel(writer, index=False, header=False, sheet_name='처리통계')
+            
+        except Exception as e:
+            self.logger.warning(f"⚠️ 통계 시트 생성 실패: {e}")
     
     def run(self, excel_path: str) -> bool:
         """전체 병렬 프로세스 실행하는 메소드"""
