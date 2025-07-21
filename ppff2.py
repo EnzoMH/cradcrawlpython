@@ -89,7 +89,7 @@ INPUT_FILE = r"C:\Users\MyoengHo Shin\pjt\cradcrawlpython\rawdatafile\failed_dat
 OUTPUT_FILE_NAME = "크롤링 3차 데이터_250720.xlsx"
 
 # 검색 설정
-MAX_WORKERS = 10
+MAX_WORKERS = 8  # 기본 8개로 변경
 BATCH_SIZE = 350
 CHECKPOINT_INTERVAL = 100
 MEMORY_THRESHOLD = 90  # %
@@ -98,9 +98,9 @@ MEMORY_THRESHOLD = 90  # %
 PORT_RANGE_START = 1024
 PORT_RANGE_END = 65535
 
-# 검색 엔진 우선순위
-SEARCH_ENGINES = ["Google", "Naver", "Daum"]
-DRIVER_PRIORITIES = ["Undetected", "Exceptional", "Selenium"]
+# 검색 엔진 우선순위 (HTTP 위주로 변경)
+SEARCH_ENGINES = ["Naver", "Daum", "Google"]
+DRIVER_PRIORITIES = ["Exceptional", "Selenium"]  # Undetected 제거
 
 # AI 검증 기준
 AI_SIMILARITY_THRESHOLD = 90  # %
@@ -285,7 +285,7 @@ class ProxyRotator:
             self.logger.warning(f"⚠️ 프록시 로드 실패: {e}")
     
     def get_rotation_config(self, worker_id: int) -> Dict:
-        """워커별 로테이션 설정 반환"""
+        """워커별 로테이션 설정 반환 (최적화됨)"""
         config = {
             "user_agent": self.user_agents[self.current_ua_index % len(self.user_agents)],
             "dns_server": self.dns_servers[self.current_dns_index % len(self.dns_servers)],
@@ -293,8 +293,8 @@ class ProxyRotator:
             "headers": self._generate_random_headers()
         }
         
-        # 프록시 사용 (50% 확률)
-        if self.proxy_list and random.choice([True, False]):
+        # 프록시 사용 (30% 확률로 줄임 - 안정성 향상)
+        if self.proxy_list and random.random() < 0.3:
             config["proxy"] = self.proxy_list[self.current_proxy_index % len(self.proxy_list)]
             self.current_proxy_index += 1
         
@@ -497,7 +497,7 @@ class MultiEngineSearcher:
             return {'success': False, 'error': str(e)}
     
     def _search_google(self, number: str, number_type: str, expected_institution: str, worker_id: int) -> Dict:
-        """Google 검색 (Undetected→Exceptional→Selenium 순서)"""
+        """Google 검색 (Exceptional→Selenium 순서, Undetected 제거)"""
         try:
             for driver_type in DRIVER_PRIORITIES:
                 try:
@@ -508,7 +508,7 @@ class MultiEngineSearcher:
                     # 검색 패턴 시도
                     patterns = self.search_patterns[number_type]
                     
-                    for pattern in patterns[:3]:  # 상위 3개 패턴만 사용
+                    for pattern in patterns[:2]:  # 상위 2개 패턴만 사용 (속도 향상)
                         search_query = pattern.format(**{f'{number_type}_number': number})
                         
                         try:
@@ -546,7 +546,7 @@ class MultiEngineSearcher:
             return {'success': False, 'error': str(e)}
     
     def _search_naver_http(self, number: str, number_type: str, expected_institution: str, worker_id: int) -> Dict:
-        """Naver HTTP 검색 (브라우저 없이)"""
+        """Naver HTTP 검색 (브라우저 없이, 최적화됨)"""
         try:
             self.logger.info(f"🌍 워커 {worker_id}: Naver HTTP 검색 시작")
             
@@ -558,24 +558,24 @@ class MultiEngineSearcher:
             session.headers.update(rotation_config['headers'])
             session.headers['User-Agent'] = rotation_config['user_agent']
             
-            # 프록시 설정
-            if rotation_config['proxy']:
+            # 프록시 설정 (50% 확률로만 사용)
+            if rotation_config['proxy'] and random.choice([True, False]):
                 session.proxies = {
                     'http': f"http://{rotation_config['proxy']}",
                     'https': f"http://{rotation_config['proxy']}"
                 }
             
-            # 검색 패턴 시도
+            # 검색 패턴 시도 (2개만)
             patterns = self.search_patterns[number_type]
             
-            for pattern in patterns[:3]:
+            for pattern in patterns[:2]:  # 상위 2개 패턴만 사용
                 search_query = pattern.format(**{f'{number_type}_number': number})
                 
                 try:
                     # Naver 검색 URL
                     search_url = f"https://search.naver.com/search.naver?query={requests.utils.quote(search_query)}"
                     
-                    response = session.get(search_url, timeout=30)
+                    response = session.get(search_url, timeout=15)  # 타임아웃 단축
                     response.raise_for_status()
                     
                     # 결과 파싱
@@ -599,8 +599,8 @@ class MultiEngineSearcher:
                                 'driver_used': 'HTTP'
                             }
                     
-                    # 패턴 간 지연
-                    time.sleep(random.uniform(2.0, 4.0))
+                    # 패턴 간 지연 단축
+                    time.sleep(random.uniform(1.0, 2.0))
                     
                 except Exception as pattern_error:
                     self.logger.debug(f"Naver 패턴 검색 실패: {search_query} - {pattern_error}")
@@ -613,7 +613,7 @@ class MultiEngineSearcher:
             return {'success': False, 'error': str(e)}
     
     def _search_daum(self, number: str, number_type: str, expected_institution: str, worker_id: int) -> Dict:
-        """Daum 검색 (HTTP 방식)"""
+        """Daum 검색 (HTTP 방식, 최적화됨)"""
         try:
             self.logger.info(f"🌍 워커 {worker_id}: Daum 검색 시작")
             
@@ -625,17 +625,17 @@ class MultiEngineSearcher:
             session.headers.update(rotation_config['headers'])
             session.headers['User-Agent'] = rotation_config['user_agent']
             
-            # 검색 패턴 시도
+            # 검색 패턴 시도 (2개만)
             patterns = self.search_patterns[number_type]
             
-            for pattern in patterns[:3]:
+            for pattern in patterns[:2]:  # 상위 2개 패턴만 사용
                 search_query = pattern.format(**{f'{number_type}_number': number})
                 
                 try:
                     # Daum 검색 URL
                     search_url = f"https://search.daum.net/search?q={requests.utils.quote(search_query)}"
                     
-                    response = session.get(search_url, timeout=30)
+                    response = session.get(search_url, timeout=15)  # 타임아웃 단축
                     response.raise_for_status()
                     
                     # 결과 파싱
@@ -659,8 +659,8 @@ class MultiEngineSearcher:
                                 'driver_used': 'HTTP'
                             }
                     
-                    # 패턴 간 지연
-                    time.sleep(random.uniform(2.0, 4.0))
+                    # 패턴 간 지연 단축
+                    time.sleep(random.uniform(1.0, 2.0))
                     
                 except Exception as pattern_error:
                     self.logger.debug(f"Daum 패턴 검색 실패: {search_query} - {pattern_error}")
@@ -669,7 +669,7 @@ class MultiEngineSearcher:
             return {'success': False, 'error': 'Daum 검색 결과 없음'}
             
         except Exception as e:
-            self.logger.error(f"❌ 워커 {worker_id}: Daum 검색 실패 - {e}")
+            self.logger.error(f"❌ 워커 {worker_id}: Daum 검색 실패: {e}")
             return {'success': False, 'error': str(e)}
     
     def _get_or_create_driver(self, driver_type: str, worker_id: int):
@@ -699,88 +699,46 @@ class MultiEngineSearcher:
                 return None
     
     def _create_driver(self, driver_type: str, worker_id: int):
-        """드라이버 생성"""
+        """드라이버 생성 (Undetected 제거)"""
         try:
             rotation_config = self.proxy_rotator.get_rotation_config(worker_id)
             port = self.port_manager.get_random_port(worker_id)
             
-            if driver_type == "Undetected":
-                return self._create_undetected_driver(worker_id, port, rotation_config)
-            elif driver_type == "Exceptional":
+            if driver_type == "Exceptional":
                 return self._create_exceptional_driver(worker_id, port, rotation_config)
             elif driver_type == "Selenium":
                 return self._create_selenium_driver(worker_id, port, rotation_config)
             else:
+                self.logger.warning(f"⚠️ 워커 {worker_id}: 알 수 없는 드라이버 타입 - {driver_type}")
                 return None
                 
         except Exception as e:
             self.logger.error(f"❌ 워커 {worker_id}: {driver_type} 드라이버 생성 오류 - {e}")
             return None
     
-    def _create_undetected_driver(self, worker_id: int, port: int, rotation_config: Dict):
-        """Undetected Chrome 드라이버 생성"""
-        try:
-            chrome_options = uc.ChromeOptions()
-            
-            # 기본 옵션
-            chrome_options.add_argument('--no-sandbox')
-            chrome_options.add_argument('--disable-dev-shm-usage')
-            chrome_options.add_argument('--disable-gpu')
-            chrome_options.add_argument('--window-size=1366,768')
-            chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-            chrome_options.add_argument('--disable-extensions')
-            chrome_options.add_argument('--mute-audio')
-            chrome_options.add_argument('--no-first-run')
-            chrome_options.add_argument('--disable-infobars')
-            chrome_options.add_argument('--disable-notifications')
-            chrome_options.add_argument(f'--remote-debugging-port={port}')
-            
-            # User-Agent 설정
-            chrome_options.add_argument(f'--user-agent={rotation_config["user_agent"]}')
-            
-            # 프로필 디렉토리
-            profile_dir = tempfile.mkdtemp(prefix=f'uc_worker_{worker_id}_')
-            chrome_options.add_argument(f'--user-data-dir={profile_dir}')
-            
-            # 봇 감지 방지
-            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            chrome_options.add_experimental_option('useAutomationExtension', False)
-            
-            # 드라이버 생성
-            driver = uc.Chrome(options=chrome_options, version_main=None)
-            driver.implicitly_wait(10)
-            driver.set_page_load_timeout(30)
-            
-            # JavaScript 스텔스 적용
-            driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-            
-            return driver
-            
-        except Exception as e:
-            self.logger.error(f"❌ 워커 {worker_id}: Undetected Chrome 생성 실패 - {e}")
-            return None
-    
     def _create_exceptional_driver(self, worker_id: int, port: int, rotation_config: Dict):
-        """Exceptional Chrome 드라이버 생성 (일반 Chrome)"""
+        """Exceptional Chrome 드라이버 생성 (일반 Chrome, 최적화됨)"""
         try:
             from selenium.webdriver.chrome.options import Options as ChromeOptions
             
             chrome_options = ChromeOptions()
             
-            # 기본 옵션
+            # 기본 옵션 (최적화)
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-dev-shm-usage')
             chrome_options.add_argument('--disable-gpu')
             chrome_options.add_argument('--window-size=1366,768')
             chrome_options.add_argument('--disable-blink-features=AutomationControlled')
             chrome_options.add_argument('--disable-extensions')
+            chrome_options.add_argument('--disable-images')  # 이미지 로딩 비활성화
+            chrome_options.add_argument('--disable-javascript')  # JS 비활성화로 속도 향상
             chrome_options.add_argument(f'--remote-debugging-port={port}')
             chrome_options.add_argument(f'--user-agent={rotation_config["user_agent"]}')
             
             # 드라이버 생성
             driver = webdriver.Chrome(options=chrome_options)
-            driver.implicitly_wait(10)
-            driver.set_page_load_timeout(30)
+            driver.implicitly_wait(5)  # 대기 시간 단축
+            driver.set_page_load_timeout(15)  # 타임아웃 단축
             
             return driver
             
@@ -789,7 +747,7 @@ class MultiEngineSearcher:
             return None
     
     def _create_selenium_driver(self, worker_id: int, port: int, rotation_config: Dict):
-        """일반 Selenium 드라이버 생성"""
+        """일반 Selenium 드라이버 생성 (헤드리스, 최적화됨)"""
         try:
             from selenium.webdriver.chrome.options import Options as ChromeOptions
             
@@ -798,11 +756,13 @@ class MultiEngineSearcher:
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-dev-shm-usage')
             chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--disable-images')  # 이미지 로딩 비활성화
+            chrome_options.add_argument('--disable-javascript')  # JS 비활성화로 속도 향상
             chrome_options.add_argument(f'--user-agent={rotation_config["user_agent"]}')
             
             driver = webdriver.Chrome(options=chrome_options)
-            driver.implicitly_wait(10)
-            driver.set_page_load_timeout(30)
+            driver.implicitly_wait(5)  # 대기 시간 단축
+            driver.set_page_load_timeout(15)  # 타임아웃 단축
             
             return driver
             
@@ -811,33 +771,31 @@ class MultiEngineSearcher:
             return None
     
     def _perform_google_search(self, driver, search_query: str, worker_id: int) -> Optional[str]:
-        """Google 검색 실행"""
+        """Google 검색 실행 (최적화됨)"""
         try:
             # Google 메인 페이지로 이동
             driver.get('https://www.google.com')
-            time.sleep(random.uniform(1.0, 2.0))
+            time.sleep(random.uniform(0.5, 1.0))  # 지연 시간 단축
             
-            # 검색창 찾기
-            search_box = WebDriverWait(driver, 10).until(
+            # 검색창 찾기 (타임아웃 단축)
+            search_box = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.NAME, 'q'))
             )
             
-            # 인간형 타이핑 시뮬레이션
+            # 빠른 타이핑 (인간형 시뮬레이션 간소화)
             search_box.clear()
-            for char in search_query:
-                search_box.send_keys(char)
-                time.sleep(random.uniform(0.05, 0.15))
+            search_box.send_keys(search_query)
             
             # 검색 실행
             search_box.send_keys(Keys.RETURN)
             
-            # 결과 대기
-            WebDriverWait(driver, 15).until(
+            # 결과 대기 (타임아웃 단축)
+            WebDriverWait(driver, 8).until(
                 EC.presence_of_element_located((By.ID, 'search'))
             )
             
-            # 페이지 분석
-            time.sleep(random.uniform(2.0, 4.0))
+            # 페이지 분석 (대기 시간 단축)
+            time.sleep(random.uniform(1.0, 2.0))
             page_source = driver.page_source
             
             # 기관명 추출
@@ -2165,8 +2123,8 @@ def process_worker_batch(batch_data: List[Dict], worker_id: int) -> List[Dict]:
                 results.append(row_result)
                 logger.info(f"📋 워커 {worker_id}: 행 {row_number} 완료")
                 
-                # 처리 간 지연 (봇 감지 회피)
-                time.sleep(random.uniform(1.0, 2.0))
+                # 처리 간 지연 (봇 감지 회피, 시간 단축)
+                time.sleep(random.uniform(0.5, 1.0))
                 
             except Exception as row_error:
                 logger.error(f"❌ 워커 {worker_id} 행 처리 실패: {row_error}")
