@@ -179,24 +179,32 @@ class StealthWebDriverManager:
             # 🌏 한국 언어 설정
             firefox_options.set_preference("intl.accept_languages", "ko-KR,ko,en-US,en")
             firefox_options.set_preference("browser.startup.homepage", "about:blank")
+            firefox_options.set_preference("browser.startup.page", 0)  # 빈 페이지로 시작
             
             # 🔒 보안 및 개인정보 설정
             firefox_options.set_preference("privacy.trackingprotection.enabled", False)
             firefox_options.set_preference("geo.enabled", False)
             firefox_options.set_preference("media.navigator.enabled", False)
             
-            # 📏 화면 크기 설정 (Firefox는 창 크기를 직접 설정)
-            firefox_options.set_preference("browser.startup.windowwidth", 1366)
-            firefox_options.set_preference("browser.startup.windowheight", 768)
+            # 📏 화면 크기 설정 제거 (URL 오류 방지)
+            # firefox_options.set_preference("browser.startup.windowwidth", 1366)  # 제거됨 - URL 오류 원인
+            # firefox_options.set_preference("browser.startup.windowheight", 768)  # 제거됨 - URL 오류 원인
             
             # Firefox 드라이버 생성 (프로필 디렉토리 없이)
             driver = webdriver.Firefox(options=firefox_options)
             
-            # 창 크기 직접 설정 (더 안전한 방법)
+            # 창 크기 직접 설정 (Firefox URL 오류 해결 - 유일한 방법)
             try:
                 driver.set_window_size(1366, 768)
+                self.logger.info(f"✅ 워커 {worker_id}: Firefox 창 크기 설정 완료 (1366x768)")
             except Exception as resize_error:
-                self.logger.warning(f"⚠️ 창 크기 설정 실패: {resize_error}")
+                self.logger.warning(f"⚠️ 워커 {worker_id}: Firefox 창 크기 설정 실패 - {resize_error}")
+                # 기본 크기로도 시도
+                try:
+                    driver.set_window_size(1280, 720)
+                    self.logger.info(f"✅ 워커 {worker_id}: Firefox 기본 창 크기 설정 완료 (1280x720)")
+                except:
+                    self.logger.warning(f"⚠️ 워커 {worker_id}: Firefox 모든 창 크기 설정 실패, 기본값 사용")
             
             # 타임아웃 설정
             driver.implicitly_wait(10)
@@ -565,6 +573,16 @@ class StealthWebDriverManager:
     def _apply_firefox_stealth(self, driver):
         """Firefox 전용 스텔스 적용"""
         try:
+            # Firefox 드라이버 초기 페이지 정리 (URL 오류 방지)
+            try:
+                current_url = driver.current_url
+                if "1366,768" in current_url or "about:" not in current_url:
+                    self.logger.info("🔧 Firefox URL 오류 감지, about:blank로 리다이렉트")
+                    driver.get("about:blank")
+                    time.sleep(0.5)
+            except Exception as url_error:
+                self.logger.debug(f"Firefox URL 확인 중 오류 (무시): {url_error}")
+            
             # Firefox 전용 스텔스 JavaScript
             firefox_stealth_script = """
             // Firefox 전용 봇 감지 우회
@@ -702,17 +720,7 @@ def setup_logger(name="ParallelPhoneFaxFinder"):
 # 백업된 기존 워커 함수 (2025-01-18 백업)
 # 메소드 로직 50% 이상 변경으로 백업 정책 적용
 # ================================
-"""
-def process_batch_worker_original_backup(batch_data: List[Dict], worker_id: int, api_key: str = None) -> List[Dict]:
-    # 배치 데이터 처리하는 워커 함수 - 스텔스 모드 (백업된 원본)
-    # Args:
-    #     batch_data: 처리할 데이터 배치
-    #     worker_id: 워커 ID  
-    #     api_key: Gemini API 키 (선택사항)
-    # Returns:
-    #     List[Dict]: 처리된 결과 리스트
-    # (기존 구현은 원본 데이터 컬럼 정보가 손실되는 문제가 있어 새로운 버전으로 대체)
-"""
+
 
 def process_batch_worker(batch_data: List[Dict], worker_id: int, api_key: str = None) -> List[Dict]:
     """

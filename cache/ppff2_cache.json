@@ -1,0 +1,5633 @@
+{
+  "031-770-3126": {
+    "result": {
+      "success": true,
+      "institution": "양서면사무소",
+      "confidence": 95.0,
+      "match_result": "O",
+      "engine_used": "Google",
+      "driver_used": "Exceptional"
+    },
+    "timestamp": 1753065151.9525514,
+    "cached_at": "2025-07-21T11:32:31.952551"
+  },
+  "031-770-3101": {
+    "result": {
+      "success": true,
+      "institution": "양서면사무소",
+      "confidence": 95.0,
+      "match_result": "O",
+      "engine_used": "Google",
+      "driver_used": "Exceptional"
+    },
+    "timestamp": 1753065164.7704651,
+    "cached_at": "2025-07-21T11:32:44.770464"
+  },
+  "031-770-3156": {
+    "result": {
+      "success": true,
+      "institution": "옥천면사무소",
+      "confidence": 95.0,
+      "match_result": "O",
+      "engine_used": "Google",
+      "driver_used": "Exceptional"
+    },
+    "timestamp": 1753065188.1891506,
+    "cached_at": "2025-07-21T11:33:08.189150"
+  },
+  "031-770-3131": {
+    "result": {
+      "success": true,
+      "institution": "옥천면사무소",
+      "confidence": 95.0,
+      "match_result": "O",
+      "engine_used": "Google",
+      "driver_used": "Exceptional"
+    },
+    "timestamp": 1753065200.8488057,
+    "cached_at": "2025-07-21T11:33:20.848805"
+  },
+  "031-770-3186": {
+    "result": {
+      "success": true,
+      "institution": "양서면사무소",
+      "confidence": 91.66666666666667,
+      "match_result": "O",
+      "engine_used": "Google",
+      "driver_used": "Exceptional"
+    },
+    "timestamp": 1753065223.977395,
+    "cached_at": "2025-07-21T11:33:43.977395"
+  },
+  "031-770-3161": {
+    "result": {
+      "success": true,
+      "institution": "양서면사무소",
+      "confidence": 91.66666666666667,
+      "match_result": "O",
+      "engine_used": "Google",
+      "driver_used": "Exceptional"
+    },
+    "timestamp": 1753065235.6258996,
+    "cached_at": "2025-07-21T11:33:55.625899"
+  },
+  "031-770-3216": {
+    "result": {
+      "success": false,
+      "institution": "검색 실패",
+      "confidence": 0.0,
+      "match_result": "검색 실패",
+      "engine_used": "None",
+      "driver_used": "None",
+      "error": "모든 검색 엔진 실패"
+    },
+    "timestamp": 1753065419.552394,
+    "cached_at": "2025-07-21T11:36:59.552393"
+  },
+  "031-770-3191": {
+    "result": {
+      "success": true,
+      "institution": "단월면사무소",
+      "confidence": 95.0,
+      "match_result": "O",
+      "engine_used": "Google",
+      "driver_used": "Exceptional"
+    },
+    "timestamp": 1753065428.20527,
+    "cached_at": "2025-07-21T11:37:08.205270"
+  },
+  "031-770-3246": {
+    "result": {
+      "success": true,
+      "institution": "청운면사무소",
+      "confidence": 95.0,
+      "match_result": "O",
+      "engine_used": "Google",
+      "driver_used": "Exceptional"
+    },
+    "timestamp": 1753065449.3704407,
+    "cached_at": "2025-07-21T11:37:29.370440"
+  },
+  "031-770-3221": {
+    "result": {
+      "success": true,
+      "institution": "청운면사무소",
+      "confidence": 95.0,
+      "match_result": "O",
+      "engine_used": "Google",
+      "driver_used": "Exceptional"
+    },
+    "timestamp": 1753065460.5364072,
+    "cached_at": "2025-07-21T11:37:40.536407"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2898638,
+    "cached_at": "2025-07-21T11:53:15.289864"
+  },
+  "031-709-8111": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.1524692,
+    "cached_at": "2025-07-21T11:53:18.152469"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2908645,
+    "cached_at": "2025-07-21T11:53:15.290864"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2918658,
+    "cached_at": "2025-07-21T11:53:15.291865"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2928658,
+    "cached_at": "2025-07-21T11:53:15.292865"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2928658,
+    "cached_at": "2025-07-21T11:53:15.292865"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2938666,
+    "cached_at": "2025-07-21T11:53:15.293866"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.294868,
+    "cached_at": "2025-07-21T11:53:15.294868"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2958686,
+    "cached_at": "2025-07-21T11:53:15.295868"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2968705,
+    "cached_at": "2025-07-21T11:53:15.296870"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2968705,
+    "cached_at": "2025-07-21T11:53:15.296870"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.2978714,
+    "cached_at": "2025-07-21T11:53:15.297871"
+  },
+  "031-729-5609": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.298871,
+    "cached_at": "2025-07-21T11:53:15.298871"
+  },
+  "031-729-5650": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.299873,
+    "cached_at": "2025-07-21T11:53:15.299873"
+  },
+  "031-760-1438": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.548831,
+    "cached_at": "2025-07-21T11:53:18.548830"
+  },
+  "031-481-5601": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.057383,
+    "cached_at": "2025-07-21T11:53:18.057383"
+  },
+  "031-481-5612": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.303876,
+    "cached_at": "2025-07-21T11:53:15.303875"
+  },
+  "031-481-5663": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.303876,
+    "cached_at": "2025-07-21T11:53:15.303875"
+  },
+  "031-481-5602": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3048773,
+    "cached_at": "2025-07-21T11:53:15.304877"
+  },
+  "031-481-5603": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3068798,
+    "cached_at": "2025-07-21T11:53:15.306879"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3078794,
+    "cached_at": "2025-07-21T11:53:15.307879"
+  },
+  "031-481-5613": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3088803,
+    "cached_at": "2025-07-21T11:53:15.308880"
+  },
+  "031-481-5604": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.309881,
+    "cached_at": "2025-07-21T11:53:15.309881"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.311883,
+    "cached_at": "2025-07-21T11:53:15.311883"
+  },
+  "031-481-5605": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.312885,
+    "cached_at": "2025-07-21T11:53:15.312885"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.313886,
+    "cached_at": "2025-07-21T11:53:15.313885"
+  },
+  "031-481-5606": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3148868,
+    "cached_at": "2025-07-21T11:53:15.314886"
+  },
+  "031-345-2700": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.025443,
+    "cached_at": "2025-07-21T11:53:17.025443"
+  },
+  "031-481-5668": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3499186,
+    "cached_at": "2025-07-21T11:53:15.349918"
+  },
+  "031-481-5609": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3208919,
+    "cached_at": "2025-07-21T11:53:15.320891"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3218923,
+    "cached_at": "2025-07-21T11:53:15.321892"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3228934,
+    "cached_at": "2025-07-21T11:53:15.322893"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3238947,
+    "cached_at": "2025-07-21T11:53:15.323894"
+  },
+  "031-481-5671": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.324895,
+    "cached_at": "2025-07-21T11:53:15.324895"
+  },
+  "031-481-5611": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.325896,
+    "cached_at": "2025-07-21T11:53:15.325896"
+  },
+  "031-481-6661": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3268967,
+    "cached_at": "2025-07-21T11:53:15.326896"
+  },
+  "031-481-6601": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3278975,
+    "cached_at": "2025-07-21T11:53:15.327897"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3288991,
+    "cached_at": "2025-07-21T11:53:15.328899"
+  },
+  "031-481-6602": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.51607,
+    "cached_at": "2025-07-21T11:53:15.516069"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3319018,
+    "cached_at": "2025-07-21T11:53:15.331901"
+  },
+  "031-887-3411": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.7049723,
+    "cached_at": "2025-07-21T11:53:18.704972"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3339033,
+    "cached_at": "2025-07-21T11:53:15.333903"
+  },
+  "031-481-6611": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3349051,
+    "cached_at": "2025-07-21T11:53:15.334905"
+  },
+  "031-481-6604": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3369057,
+    "cached_at": "2025-07-21T11:53:15.336905"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3409107,
+    "cached_at": "2025-07-21T11:53:15.340910"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3419108,
+    "cached_at": "2025-07-21T11:53:15.341910"
+  },
+  "031-481-6613": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3429117,
+    "cached_at": "2025-07-21T11:53:15.342911"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3449135,
+    "cached_at": "2025-07-21T11:53:15.344913"
+  },
+  "031-409-7963": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.358926,
+    "cached_at": "2025-07-21T11:53:15.358926"
+  },
+  "031-790-6632": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.2925966,
+    "cached_at": "2025-07-21T11:53:18.292596"
+  },
+  "031-481-6670": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3559248,
+    "cached_at": "2025-07-21T11:53:15.355924"
+  },
+  "031-481-6610": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.356925,
+    "cached_at": "2025-07-21T11:53:15.356924"
+  },
+  "031-481-6612": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.360929,
+    "cached_at": "2025-07-21T11:53:15.360929"
+  },
+  "031-593-9052": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3619297,
+    "cached_at": "2025-07-21T11:53:15.361929"
+  },
+  "031-521-6236": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3639317,
+    "cached_at": "2025-07-21T11:53:15.363931"
+  },
+  "031-577-9484": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.365934,
+    "cached_at": "2025-07-21T11:53:15.365933"
+  },
+  "031-590-2612": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3669333,
+    "cached_at": "2025-07-21T11:53:15.366933"
+  },
+  "031-840-2828": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.0814052,
+    "cached_at": "2025-07-21T11:53:18.081405"
+  },
+  "031-590-2656": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.403968,
+    "cached_at": "2025-07-21T11:53:15.403968"
+  },
+  "031-590-2647": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3719385,
+    "cached_at": "2025-07-21T11:53:15.371938"
+  },
+  "031-590-2604": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3729386,
+    "cached_at": "2025-07-21T11:53:15.372938"
+  },
+  "031-590-4892": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4059684,
+    "cached_at": "2025-07-21T11:53:15.405968"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3789442,
+    "cached_at": "2025-07-21T11:53:15.378944"
+  },
+  "031-821-3685": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3799453,
+    "cached_at": "2025-07-21T11:53:15.379945"
+  },
+  "031-590-2582": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4069695,
+    "cached_at": "2025-07-21T11:53:15.406969"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.3829484,
+    "cached_at": "2025-07-21T11:53:15.382948"
+  },
+  "031-558-1366": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.38495,
+    "cached_at": "2025-07-21T11:53:15.384949"
+  },
+  "031-515-6623": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3989632,
+    "cached_at": "2025-07-21T11:53:15.398963"
+  },
+  "031-590-2609": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3879528,
+    "cached_at": "2025-07-21T11:53:15.387952"
+  },
+  "031-550-2603": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.8602037,
+    "cached_at": "2025-07-21T11:53:17.860203"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.392957,
+    "cached_at": "2025-07-21T11:53:15.392956"
+  },
+  "031-591-4600": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3939583,
+    "cached_at": "2025-07-21T11:53:15.393958"
+  },
+  "031-729-7909": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3959603,
+    "cached_at": "2025-07-21T11:53:15.395960"
+  },
+  "031-590-8873": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.3969617,
+    "cached_at": "2025-07-21T11:53:15.396961"
+  },
+  "031-828-2114": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.0485542,
+    "cached_at": "2025-07-21T11:53:16.048554"
+  },
+  "031-522-4783": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4019659,
+    "cached_at": "2025-07-21T11:53:15.401965"
+  },
+  "031-790-6399": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.6591096,
+    "cached_at": "2025-07-21T11:53:16.659109"
+  },
+  "031-443-3602": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4159782,
+    "cached_at": "2025-07-21T11:53:15.415978"
+  },
+  "031-390-8583": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.1845877,
+    "cached_at": "2025-07-21T11:53:17.184587"
+  },
+  "031-390-8565": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4219835,
+    "cached_at": "2025-07-21T11:53:15.421983"
+  },
+  "031-390-8581": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4450047,
+    "cached_at": "2025-07-21T11:53:15.445004"
+  },
+  "031-909-9000": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.427989,
+    "cached_at": "2025-07-21T11:53:15.427989"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.4309924,
+    "cached_at": "2025-07-21T11:53:15.430992"
+  },
+  "031-468-1113": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4339945,
+    "cached_at": "2025-07-21T11:53:15.433994"
+  },
+  "031-390-3607": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.014433,
+    "cached_at": "2025-07-21T11:53:17.014433"
+  },
+  "031-463-7601": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4390004,
+    "cached_at": "2025-07-21T11:53:15.439000"
+  },
+  "031-467-1200": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4730299,
+    "cached_at": "2025-07-21T11:53:15.473029"
+  },
+  "031-463-0709": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4470065,
+    "cached_at": "2025-07-21T11:53:15.447006"
+  },
+  "031-469-9031": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.45101,
+    "cached_at": "2025-07-21T11:53:15.451010"
+  },
+  "031-345-3298": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.2445524,
+    "cached_at": "2025-07-21T11:53:18.244552"
+  },
+  "031-463-0780": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4550133,
+    "cached_at": "2025-07-21T11:53:15.455013"
+  },
+  "031-677-6203": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.633998,
+    "cached_at": "2025-07-21T11:53:17.633997"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.4630206,
+    "cached_at": "2025-07-21T11:53:15.463020"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.4650226,
+    "cached_at": "2025-07-21T11:53:15.465022"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.467024,
+    "cached_at": "2025-07-21T11:53:15.467024"
+  },
+  "031-427-1773": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4760325,
+    "cached_at": "2025-07-21T11:53:15.476032"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.478035,
+    "cached_at": "2025-07-21T11:53:15.478035"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.480037,
+    "cached_at": "2025-07-21T11:53:15.480036"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.4830399,
+    "cached_at": "2025-07-21T11:53:15.483039"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.4850416,
+    "cached_at": "2025-07-21T11:53:15.485041"
+  },
+  "031-443-0113": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4890444,
+    "cached_at": "2025-07-21T11:53:15.489044"
+  },
+  "031-496-3900": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.4910467,
+    "cached_at": "2025-07-21T11:53:15.491046"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.4930487,
+    "cached_at": "2025-07-21T11:53:15.493048"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.4950504,
+    "cached_at": "2025-07-21T11:53:15.495050"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.4970522,
+    "cached_at": "2025-07-21T11:53:15.497052"
+  },
+  "031-389-8200": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.534086,
+    "cached_at": "2025-07-21T11:53:15.534085"
+  },
+  "031-422-1113": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.503057,
+    "cached_at": "2025-07-21T11:53:15.503056"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5050592,
+    "cached_at": "2025-07-21T11:53:15.505059"
+  },
+  "031-423-0113": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.5080624,
+    "cached_at": "2025-07-21T11:53:15.508062"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5100636,
+    "cached_at": "2025-07-21T11:53:15.510063"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.512066,
+    "cached_at": "2025-07-21T11:53:15.512065"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5140676,
+    "cached_at": "2025-07-21T11:53:15.514067"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5190728,
+    "cached_at": "2025-07-21T11:53:15.519072"
+  },
+  "031-390-8519": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.544096,
+    "cached_at": "2025-07-21T11:53:15.544095"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5260792,
+    "cached_at": "2025-07-21T11:53:15.526079"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5280807,
+    "cached_at": "2025-07-21T11:53:15.528080"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5300834,
+    "cached_at": "2025-07-21T11:53:15.530083"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.532085,
+    "cached_at": "2025-07-21T11:53:15.532084"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.537088,
+    "cached_at": "2025-07-21T11:53:15.537088"
+  },
+  "031-729-7747": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.53909,
+    "cached_at": "2025-07-21T11:53:15.539089"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5420928,
+    "cached_at": "2025-07-21T11:53:15.542092"
+  },
+  "031-729-5959": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.435728,
+    "cached_at": "2025-07-21T11:53:18.435728"
+  },
+  "031-730-6200": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.5511012,
+    "cached_at": "2025-07-21T11:53:15.551101"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5551047,
+    "cached_at": "2025-07-21T11:53:15.555104"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5581071,
+    "cached_at": "2025-07-21T11:53:15.558107"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.56111,
+    "cached_at": "2025-07-21T11:53:15.561109"
+  },
+  "031-227-0701": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.5631123,
+    "cached_at": "2025-07-21T11:53:15.563112"
+  },
+  "031-358-2973": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.566115,
+    "cached_at": "2025-07-21T11:53:15.566114"
+  },
+  "031-369-2801": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.5691183,
+    "cached_at": "2025-07-21T11:53:15.569118"
+  },
+  "031-366-0313": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.571119,
+    "cached_at": "2025-07-21T11:53:15.571119"
+  },
+  "031-369-3472": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.5741227,
+    "cached_at": "2025-07-21T11:53:15.574122"
+  },
+  "031-369-2638": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.5771248,
+    "cached_at": "2025-07-21T11:53:15.577124"
+  },
+  "031-369-2741": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.5801284,
+    "cached_at": "2025-07-21T11:53:15.580128"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5831306,
+    "cached_at": "2025-07-21T11:53:15.583130"
+  },
+  "031-369-2721": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.587134,
+    "cached_at": "2025-07-21T11:53:15.587134"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.591138,
+    "cached_at": "2025-07-21T11:53:15.591137"
+  },
+  "031-369-2731": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.5951416,
+    "cached_at": "2025-07-21T11:53:15.595141"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.5991466,
+    "cached_at": "2025-07-21T11:53:15.599146"
+  },
+  "031-828-2119": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.0355418,
+    "cached_at": "2025-07-21T11:53:16.035541"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6131577,
+    "cached_at": "2025-07-21T11:53:15.613157"
+  },
+  "031-369-2771": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.6151593,
+    "cached_at": "2025-07-21T11:53:15.615159"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.619163,
+    "cached_at": "2025-07-21T11:53:15.619163"
+  },
+  "031-369-2781": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.621165,
+    "cached_at": "2025-07-21T11:53:15.621165"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6241674,
+    "cached_at": "2025-07-21T11:53:15.624167"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6271703,
+    "cached_at": "2025-07-21T11:53:15.627170"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6301744,
+    "cached_at": "2025-07-21T11:53:15.630174"
+  },
+  "031-369-2821": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.632176,
+    "cached_at": "2025-07-21T11:53:15.632175"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6381805,
+    "cached_at": "2025-07-21T11:53:15.638180"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6411834,
+    "cached_at": "2025-07-21T11:53:15.641183"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.643186,
+    "cached_at": "2025-07-21T11:53:15.643186"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6461883,
+    "cached_at": "2025-07-21T11:53:15.646188"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6491911,
+    "cached_at": "2025-07-21T11:53:15.649191"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6521935,
+    "cached_at": "2025-07-21T11:53:15.652193"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6541955,
+    "cached_at": "2025-07-21T11:53:15.654195"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6571975,
+    "cached_at": "2025-07-21T11:53:15.657197"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6602006,
+    "cached_at": "2025-07-21T11:53:15.660200"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6632032,
+    "cached_at": "2025-07-21T11:53:15.663203"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6662064,
+    "cached_at": "2025-07-21T11:53:15.666206"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6682081,
+    "cached_at": "2025-07-21T11:53:15.668208"
+  },
+  "031-372-6637": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.671211,
+    "cached_at": "2025-07-21T11:53:15.671210"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6742136,
+    "cached_at": "2025-07-21T11:53:15.674213"
+  },
+  "031-369-4600": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.6772172,
+    "cached_at": "2025-07-21T11:53:15.677217"
+  },
+  "031-369-1811": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.6832216,
+    "cached_at": "2025-07-21T11:53:15.683221"
+  },
+  "031-729-6709": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.6862245,
+    "cached_at": "2025-07-21T11:53:15.686224"
+  },
+  "031-369-4947": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.689227,
+    "cached_at": "2025-07-21T11:53:15.689226"
+  },
+  "031-369-4019": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.69223,
+    "cached_at": "2025-07-21T11:53:15.692229"
+  },
+  "031-369-4070": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.7002373,
+    "cached_at": "2025-07-21T11:53:15.700237"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.6972342,
+    "cached_at": "2025-07-21T11:53:15.697234"
+  },
+  "031-729-6649": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.4928687,
+    "cached_at": "2025-07-21T11:53:17.492868"
+  },
+  "031-369-4413": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.7062428,
+    "cached_at": "2025-07-21T11:53:15.706242"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.709245,
+    "cached_at": "2025-07-21T11:53:15.709245"
+  },
+  "031-290-0865": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.7122486,
+    "cached_at": "2025-07-21T11:53:15.712248"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7152507,
+    "cached_at": "2025-07-21T11:53:15.715250"
+  },
+  "031-369-5670": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.7182534,
+    "cached_at": "2025-07-21T11:53:15.718253"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7212563,
+    "cached_at": "2025-07-21T11:53:15.721256"
+  },
+  "031-369-4882": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.7242587,
+    "cached_at": "2025-07-21T11:53:15.724258"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7272615,
+    "cached_at": "2025-07-21T11:53:15.727261"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7302644,
+    "cached_at": "2025-07-21T11:53:15.730264"
+  },
+  "031-656-1363": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.7332673,
+    "cached_at": "2025-07-21T11:53:15.733267"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7362697,
+    "cached_at": "2025-07-21T11:53:15.736269"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7392724,
+    "cached_at": "2025-07-21T11:53:15.739272"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7432761,
+    "cached_at": "2025-07-21T11:53:15.743276"
+  },
+  "031-233-3010": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.7472796,
+    "cached_at": "2025-07-21T11:53:15.747279"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7522845,
+    "cached_at": "2025-07-21T11:53:15.752284"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7562888,
+    "cached_at": "2025-07-21T11:53:15.756288"
+  },
+  "031-681-2181": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.7632942,
+    "cached_at": "2025-07-21T11:53:15.763294"
+  },
+  "031-747-0119": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.839184,
+    "cached_at": "2025-07-21T11:53:17.839184"
+  },
+  "031-610-8603": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.924441,
+    "cached_at": "2025-07-21T11:53:15.924441"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7803097,
+    "cached_at": "2025-07-21T11:53:15.780309"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7863154,
+    "cached_at": "2025-07-21T11:53:15.786315"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.7913196,
+    "cached_at": "2025-07-21T11:53:15.791319"
+  },
+  "031-650-0200": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.8944135,
+    "cached_at": "2025-07-21T11:53:15.894413"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.8023298,
+    "cached_at": "2025-07-21T11:53:15.802329"
+  },
+  "031-790-6614": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.4277208,
+    "cached_at": "2025-07-21T11:53:18.427720"
+  },
+  "031-729-6630": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.6959639,
+    "cached_at": "2025-07-21T11:53:18.695964"
+  },
+  "031-610-8605": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.8243508,
+    "cached_at": "2025-07-21T11:53:15.824350"
+  },
+  "031-743-8300": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.8273525,
+    "cached_at": "2025-07-21T11:53:15.827352"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.8303566,
+    "cached_at": "2025-07-21T11:53:15.830356"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.8383634,
+    "cached_at": "2025-07-21T11:53:15.838363"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.8413656,
+    "cached_at": "2025-07-21T11:53:15.841365"
+  },
+  "031-852-7811": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.845369,
+    "cached_at": "2025-07-21T11:53:15.845369"
+  },
+  "031-790-6602": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.2845895,
+    "cached_at": "2025-07-21T11:53:18.284589"
+  },
+  "031-791-5318": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.3006039,
+    "cached_at": "2025-07-21T11:53:18.300603"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.8623846,
+    "cached_at": "2025-07-21T11:53:15.862384"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.8653874,
+    "cached_at": "2025-07-21T11:53:15.865387"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.8693912,
+    "cached_at": "2025-07-21T11:53:15.869391"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.8723938,
+    "cached_at": "2025-07-21T11:53:15.872393"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.8763974,
+    "cached_at": "2025-07-21T11:53:15.876397"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.880401,
+    "cached_at": "2025-07-21T11:53:15.880401"
+  },
+  "031-765-6040": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.9924126,
+    "cached_at": "2025-07-21T11:53:16.992412"
+  },
+  "031-760-2632": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.8874073,
+    "cached_at": "2025-07-21T11:53:15.887407"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.9014204,
+    "cached_at": "2025-07-21T11:53:15.901420"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.905424,
+    "cached_at": "2025-07-21T11:53:15.905424"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.9094276,
+    "cached_at": "2025-07-21T11:53:15.909427"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.91243,
+    "cached_at": "2025-07-21T11:53:15.912430"
+  },
+  "031-790-6114": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.3936894,
+    "cached_at": "2025-07-21T11:53:18.393689"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.9204388,
+    "cached_at": "2025-07-21T11:53:15.920438"
+  },
+  "031-870-6998": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.9274442,
+    "cached_at": "2025-07-21T11:53:15.927444"
+  },
+  "031-870-6971": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.9314477,
+    "cached_at": "2025-07-21T11:53:15.931447"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.9344501,
+    "cached_at": "2025-07-21T11:53:15.934450"
+  },
+  "031-870-7238": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.938454,
+    "cached_at": "2025-07-21T11:53:15.938453"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.9424577,
+    "cached_at": "2025-07-21T11:53:15.942457"
+  },
+  "031-828-2433": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.0135224,
+    "cached_at": "2025-07-21T11:53:16.013522"
+  },
+  "031-870-7191": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.9674804,
+    "cached_at": "2025-07-21T11:53:15.967480"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.9714842,
+    "cached_at": "2025-07-21T11:53:15.971484"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.9744868,
+    "cached_at": "2025-07-21T11:53:15.974486"
+  },
+  "031-871-1158": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.9784906,
+    "cached_at": "2025-07-21T11:53:15.978490"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066395.9935038,
+    "cached_at": "2025-07-21T11:53:15.993503"
+  },
+  "031-870-7778": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066395.9975078,
+    "cached_at": "2025-07-21T11:53:15.997507"
+  },
+  "031-870-7910": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.0295365,
+    "cached_at": "2025-07-21T11:53:16.029536"
+  },
+  "031-870-7410": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.044551,
+    "cached_at": "2025-07-21T11:53:16.044551"
+  },
+  "031-380-5400": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.130539,
+    "cached_at": "2025-07-21T11:53:17.130539"
+  },
+  "031-310-3782": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.1365445,
+    "cached_at": "2025-07-21T11:53:17.136544"
+  },
+  "031-319-0582": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.0635679,
+    "cached_at": "2025-07-21T11:53:16.063568"
+  },
+  "031-310-4332": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.0685725,
+    "cached_at": "2025-07-21T11:53:16.068572"
+  },
+  "031-760-1488": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.9093375,
+    "cached_at": "2025-07-21T11:53:16.909337"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.0775807,
+    "cached_at": "2025-07-21T11:53:16.077580"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.087589,
+    "cached_at": "2025-07-21T11:53:16.087589"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.0915937,
+    "cached_at": "2025-07-21T11:53:16.091593"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.0965984,
+    "cached_at": "2025-07-21T11:53:16.096598"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.1056073,
+    "cached_at": "2025-07-21T11:53:16.105607"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.1096091,
+    "cached_at": "2025-07-21T11:53:16.109609"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.115615,
+    "cached_at": "2025-07-21T11:53:16.115615"
+  },
+  "031-380-5402": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.2587454,
+    "cached_at": "2025-07-21T11:53:16.258745"
+  },
+  "031-310-4524": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.1246228,
+    "cached_at": "2025-07-21T11:53:16.124622"
+  },
+  "031-310-4554": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.1346326,
+    "cached_at": "2025-07-21T11:53:16.134632"
+  },
+  "031-310-4573": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.1436412,
+    "cached_at": "2025-07-21T11:53:16.143641"
+  },
+  "031-310-4647": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.162658,
+    "cached_at": "2025-07-21T11:53:16.162658"
+  },
+  "031-498-4404": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.2387269,
+    "cached_at": "2025-07-21T11:53:16.238727"
+  },
+  "031-310-6902": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.1886823,
+    "cached_at": "2025-07-21T11:53:16.188682"
+  },
+  "031-310-6789": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.2056973,
+    "cached_at": "2025-07-21T11:53:16.205697"
+  },
+  "031-310-4664": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.2237134,
+    "cached_at": "2025-07-21T11:53:16.223713"
+  },
+  "031-906-1365": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.2527406,
+    "cached_at": "2025-07-21T11:53:16.252740"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.2647502,
+    "cached_at": "2025-07-21T11:53:16.264750"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.2747607,
+    "cached_at": "2025-07-21T11:53:16.274760"
+  },
+  "031-940-5401": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.2797642,
+    "cached_at": "2025-07-21T11:53:16.279764"
+  },
+  "031-940-8571": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.2837684,
+    "cached_at": "2025-07-21T11:53:16.283768"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.2887728,
+    "cached_at": "2025-07-21T11:53:16.288772"
+  },
+  "031-940-8122": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.293777,
+    "cached_at": "2025-07-21T11:53:16.293777"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.298782,
+    "cached_at": "2025-07-21T11:53:16.298782"
+  },
+  "031-940-8041": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.3027854,
+    "cached_at": "2025-07-21T11:53:16.302785"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.30779,
+    "cached_at": "2025-07-21T11:53:16.307790"
+  },
+  "031-940-8021": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.3127944,
+    "cached_at": "2025-07-21T11:53:16.312794"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.3177986,
+    "cached_at": "2025-07-21T11:53:16.317798"
+  },
+  "031-940-8141": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.3228047,
+    "cached_at": "2025-07-21T11:53:16.322804"
+  },
+  "031-948-4921": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.326807,
+    "cached_at": "2025-07-21T11:53:16.326807"
+  },
+  "031-940-8081": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.331812,
+    "cached_at": "2025-07-21T11:53:16.331811"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.3368165,
+    "cached_at": "2025-07-21T11:53:16.336816"
+  },
+  "031-940-8061": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.341821,
+    "cached_at": "2025-07-21T11:53:16.341820"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.3458247,
+    "cached_at": "2025-07-21T11:53:16.345824"
+  },
+  "031-940-8188": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.3508296,
+    "cached_at": "2025-07-21T11:53:16.350829"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.3558333,
+    "cached_at": "2025-07-21T11:53:16.355833"
+  },
+  "031-940-8161": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.3598378,
+    "cached_at": "2025-07-21T11:53:16.359837"
+  },
+  "031-820-7602": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.3658435,
+    "cached_at": "2025-07-21T11:53:16.365843"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.3708477,
+    "cached_at": "2025-07-21T11:53:16.370847"
+  },
+  "031-943-3005": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.4008749,
+    "cached_at": "2025-07-21T11:53:16.400874"
+  },
+  "031-820-7652": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.380858,
+    "cached_at": "2025-07-21T11:53:16.380857"
+  },
+  "031-820-7745": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.3938682,
+    "cached_at": "2025-07-21T11:53:16.393868"
+  },
+  "031-820-7390": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.4078808,
+    "cached_at": "2025-07-21T11:53:16.407880"
+  },
+  "031-935-0417": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.4409108,
+    "cached_at": "2025-07-21T11:53:16.440910"
+  },
+  "031-940-8221": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.434906,
+    "cached_at": "2025-07-21T11:53:16.434906"
+  },
+  "031-940-8753": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.4489183,
+    "cached_at": "2025-07-21T11:53:16.448918"
+  },
+  "031-980-2667": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.4549239,
+    "cached_at": "2025-07-21T11:53:16.454923"
+  },
+  "031-980-5302": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.4599285,
+    "cached_at": "2025-07-21T11:53:16.459928"
+  },
+  "031-980-5186": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.530993,
+    "cached_at": "2025-07-21T11:53:16.530992"
+  },
+  "031-980-5147": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.5159793,
+    "cached_at": "2025-07-21T11:53:16.515979"
+  },
+  "031-998-8358": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.4799466,
+    "cached_at": "2025-07-21T11:53:16.479946"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.4849508,
+    "cached_at": "2025-07-21T11:53:16.484950"
+  },
+  "031-998-4006": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.4909565,
+    "cached_at": "2025-07-21T11:53:16.490956"
+  },
+  "031-980-5327": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.49496,
+    "cached_at": "2025-07-21T11:53:16.494960"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.4999647,
+    "cached_at": "2025-07-21T11:53:16.499964"
+  },
+  "031-980-5343": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.50597,
+    "cached_at": "2025-07-21T11:53:16.505970"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.5109756,
+    "cached_at": "2025-07-21T11:53:16.510975"
+  },
+  "031-980-5221": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.5359988,
+    "cached_at": "2025-07-21T11:53:16.535998"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.5410025,
+    "cached_at": "2025-07-21T11:53:16.541002"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.547008,
+    "cached_at": "2025-07-21T11:53:16.547008"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.552012,
+    "cached_at": "2025-07-21T11:53:16.552012"
+  },
+  "031-731-4587": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.557017,
+    "cached_at": "2025-07-21T11:53:16.557017"
+  },
+  "031-989-0343": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.5620227,
+    "cached_at": "2025-07-21T11:53:16.562022"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.5680268,
+    "cached_at": "2025-07-21T11:53:16.568026"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.5740325,
+    "cached_at": "2025-07-21T11:53:16.574032"
+  },
+  "031-980-5381": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.5790367,
+    "cached_at": "2025-07-21T11:53:16.579036"
+  },
+  "031-983-6650": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.5850427,
+    "cached_at": "2025-07-21T11:53:16.585042"
+  },
+  "031-980-5813": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.5910478,
+    "cached_at": "2025-07-21T11:53:16.591047"
+  },
+  "031-511-4411": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.597054,
+    "cached_at": "2025-07-21T11:53:16.597054"
+  },
+  "031-980-5201": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.6020575,
+    "cached_at": "2025-07-21T11:53:16.602057"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.6170716,
+    "cached_at": "2025-07-21T11:53:16.617071"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.6220758,
+    "cached_at": "2025-07-21T11:53:16.622075"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.633086,
+    "cached_at": "2025-07-21T11:53:16.633085"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.6380913,
+    "cached_at": "2025-07-21T11:53:16.638091"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.644096,
+    "cached_at": "2025-07-21T11:53:16.644095"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.6501014,
+    "cached_at": "2025-07-21T11:53:16.650101"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.6541054,
+    "cached_at": "2025-07-21T11:53:16.654105"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.6641147,
+    "cached_at": "2025-07-21T11:53:16.664114"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.6691182,
+    "cached_at": "2025-07-21T11:53:16.669118"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.674124,
+    "cached_at": "2025-07-21T11:53:16.674124"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.6791284,
+    "cached_at": "2025-07-21T11:53:16.679128"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.684133,
+    "cached_at": "2025-07-21T11:53:16.684133"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.690138,
+    "cached_at": "2025-07-21T11:53:16.690138"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.6951425,
+    "cached_at": "2025-07-21T11:53:16.695142"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7001472,
+    "cached_at": "2025-07-21T11:53:16.700147"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.705152,
+    "cached_at": "2025-07-21T11:53:16.705151"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7101564,
+    "cached_at": "2025-07-21T11:53:16.710156"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.715161,
+    "cached_at": "2025-07-21T11:53:16.715161"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7211664,
+    "cached_at": "2025-07-21T11:53:16.721166"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7261713,
+    "cached_at": "2025-07-21T11:53:16.726171"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7311757,
+    "cached_at": "2025-07-21T11:53:16.731175"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7371812,
+    "cached_at": "2025-07-21T11:53:16.737181"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7421858,
+    "cached_at": "2025-07-21T11:53:16.742185"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7481918,
+    "cached_at": "2025-07-21T11:53:16.748191"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7531955,
+    "cached_at": "2025-07-21T11:53:16.753195"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7582002,
+    "cached_at": "2025-07-21T11:53:16.758200"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.764206,
+    "cached_at": "2025-07-21T11:53:16.764205"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7692106,
+    "cached_at": "2025-07-21T11:53:16.769210"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7742155,
+    "cached_at": "2025-07-21T11:53:16.774215"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7802205,
+    "cached_at": "2025-07-21T11:53:16.780220"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.786226,
+    "cached_at": "2025-07-21T11:53:16.786226"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7912304,
+    "cached_at": "2025-07-21T11:53:16.791230"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.7972357,
+    "cached_at": "2025-07-21T11:53:16.797235"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.8022408,
+    "cached_at": "2025-07-21T11:53:16.802240"
+  },
+  "031-760-4898": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.81325,
+    "cached_at": "2025-07-21T11:53:16.813250"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.819255,
+    "cached_at": "2025-07-21T11:53:16.819255"
+  },
+  "031-760-2093": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.825261,
+    "cached_at": "2025-07-21T11:53:16.825261"
+  },
+  "031-798-2611": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.8312666,
+    "cached_at": "2025-07-21T11:53:16.831266"
+  },
+  "031-760-4940": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.8372712,
+    "cached_at": "2025-07-21T11:53:16.837271"
+  },
+  "031-760-1441": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.8432775,
+    "cached_at": "2025-07-21T11:53:16.843277"
+  },
+  "031-768-7181": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.849283,
+    "cached_at": "2025-07-21T11:53:16.849283"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.855289,
+    "cached_at": "2025-07-21T11:53:16.855289"
+  },
+  "031-760-4972": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.8612943,
+    "cached_at": "2025-07-21T11:53:16.861294"
+  },
+  "031-760-1443": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.8662987,
+    "cached_at": "2025-07-21T11:53:16.866298"
+  },
+  "031-760-4984": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.8723042,
+    "cached_at": "2025-07-21T11:53:16.872304"
+  },
+  "031-760-1436": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.8773093,
+    "cached_at": "2025-07-21T11:53:16.877309"
+  },
+  "031-760-2622": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.8853161,
+    "cached_at": "2025-07-21T11:53:16.885316"
+  },
+  "031-762-1020": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.9013302,
+    "cached_at": "2025-07-21T11:53:16.901330"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066396.9183457,
+    "cached_at": "2025-07-21T11:53:16.918345"
+  },
+  "031-760-1575": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.9323585,
+    "cached_at": "2025-07-21T11:53:16.932358"
+  },
+  "031-760-1444": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.9403663,
+    "cached_at": "2025-07-21T11:53:16.940366"
+  },
+  "031-760-4501": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.9473722,
+    "cached_at": "2025-07-21T11:53:16.947372"
+  },
+  "031-760-1903": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.9593837,
+    "cached_at": "2025-07-21T11:53:16.959383"
+  },
+  "031-760-2050": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.9864073,
+    "cached_at": "2025-07-21T11:53:16.986407"
+  },
+  "031-760-1965": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066396.9974174,
+    "cached_at": "2025-07-21T11:53:16.997417"
+  },
+  "031-760-1446": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.003423,
+    "cached_at": "2025-07-21T11:53:17.003422"
+  },
+  "031-760-4545": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0084274,
+    "cached_at": "2025-07-21T11:53:17.008427"
+  },
+  "031-390-8500": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0204382,
+    "cached_at": "2025-07-21T11:53:17.020438"
+  },
+  "031-390-8501": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0314484,
+    "cached_at": "2025-07-21T11:53:17.031448"
+  },
+  "031-390-8582": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0364528,
+    "cached_at": "2025-07-21T11:53:17.036452"
+  },
+  "031-390-8502": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0424585,
+    "cached_at": "2025-07-21T11:53:17.042458"
+  },
+  "031-390-8503": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0534687,
+    "cached_at": "2025-07-21T11:53:17.053468"
+  },
+  "031-497-7091": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0594745,
+    "cached_at": "2025-07-21T11:53:17.059474"
+  },
+  "031-390-8505": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0644803,
+    "cached_at": "2025-07-21T11:53:17.064480"
+  },
+  "031-390-8585": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0704842,
+    "cached_at": "2025-07-21T11:53:17.070484"
+  },
+  "031-390-0426": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0764897,
+    "cached_at": "2025-07-21T11:53:17.076489"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.0814946,
+    "cached_at": "2025-07-21T11:53:17.081494"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.0875003,
+    "cached_at": "2025-07-21T11:53:17.087500"
+  },
+  "031-390-8587": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0935044,
+    "cached_at": "2025-07-21T11:53:17.093504"
+  },
+  "031-390-8507": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.0995107,
+    "cached_at": "2025-07-21T11:53:17.099510"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.1055162,
+    "cached_at": "2025-07-21T11:53:17.105516"
+  },
+  "031-390-8548": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.1115212,
+    "cached_at": "2025-07-21T11:53:17.111521"
+  },
+  "031-390-8589": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.1185288,
+    "cached_at": "2025-07-21T11:53:17.118528"
+  },
+  "031-390-8509": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.1245341,
+    "cached_at": "2025-07-21T11:53:17.124534"
+  },
+  "031-394-8838": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.14255,
+    "cached_at": "2025-07-21T11:53:17.142549"
+  },
+  "031-390-3682": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.1485555,
+    "cached_at": "2025-07-21T11:53:17.148555"
+  },
+  "031-729-2782": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.1785824,
+    "cached_at": "2025-07-21T11:53:17.178582"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.1905932,
+    "cached_at": "2025-07-21T11:53:17.190593"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.1965992,
+    "cached_at": "2025-07-21T11:53:17.196599"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.2026045,
+    "cached_at": "2025-07-21T11:53:17.202604"
+  },
+  "031-370-6320": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.2336326,
+    "cached_at": "2025-07-21T11:53:17.233632"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.2396398,
+    "cached_at": "2025-07-21T11:53:17.239639"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.2456434,
+    "cached_at": "2025-07-21T11:53:17.245643"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.2516484,
+    "cached_at": "2025-07-21T11:53:17.251648"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.2576547,
+    "cached_at": "2025-07-21T11:53:17.257654"
+  },
+  "031-641-3001": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.263661,
+    "cached_at": "2025-07-21T11:53:17.263660"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.2696652,
+    "cached_at": "2025-07-21T11:53:17.269665"
+  },
+  "031-633-0461": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.275671,
+    "cached_at": "2025-07-21T11:53:17.275671"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.2816758,
+    "cached_at": "2025-07-21T11:53:17.281675"
+  },
+  "031-632-7001": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.2876828,
+    "cached_at": "2025-07-21T11:53:17.287682"
+  },
+  "031-888-7612": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.2936878,
+    "cached_at": "2025-07-21T11:53:17.293687"
+  },
+  "031-632-4001": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.2996929,
+    "cached_at": "2025-07-21T11:53:17.299692"
+  },
+  "031-637-5876": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.3056989,
+    "cached_at": "2025-07-21T11:53:17.305698"
+  },
+  "031-632-9001": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.3127053,
+    "cached_at": "2025-07-21T11:53:17.312705"
+  },
+  "031-267-4339": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.3187103,
+    "cached_at": "2025-07-21T11:53:17.318710"
+  },
+  "031-632-2001": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.3257167,
+    "cached_at": "2025-07-21T11:53:17.325716"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.3317232,
+    "cached_at": "2025-07-21T11:53:17.331723"
+  },
+  "031-632-1001": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.3377273,
+    "cached_at": "2025-07-21T11:53:17.337727"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.3447347,
+    "cached_at": "2025-07-21T11:53:17.344734"
+  },
+  "031-632-3001": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.3507392,
+    "cached_at": "2025-07-21T11:53:17.350739"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.3577454,
+    "cached_at": "2025-07-21T11:53:17.357745"
+  },
+  "031-641-6001": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.3707573,
+    "cached_at": "2025-07-21T11:53:17.370757"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.3837693,
+    "cached_at": "2025-07-21T11:53:17.383769"
+  },
+  "031-641-8001": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.3957803,
+    "cached_at": "2025-07-21T11:53:17.395780"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.4057891,
+    "cached_at": "2025-07-21T11:53:17.405789"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.4127955,
+    "cached_at": "2025-07-21T11:53:17.412795"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.4198022,
+    "cached_at": "2025-07-21T11:53:17.419802"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.4278092,
+    "cached_at": "2025-07-21T11:53:17.427809"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.4358172,
+    "cached_at": "2025-07-21T11:53:17.435817"
+  },
+  "031-633-9003": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.4428232,
+    "cached_at": "2025-07-21T11:53:17.442823"
+  },
+  "031-631-2891": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.45083,
+    "cached_at": "2025-07-21T11:53:17.450830"
+  },
+  "031-633-9007": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.4588375,
+    "cached_at": "2025-07-21T11:53:17.458837"
+  },
+  "031-654-3065": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.4658437,
+    "cached_at": "2025-07-21T11:53:17.465843"
+  },
+  "031-678-3610": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.47285,
+    "cached_at": "2025-07-21T11:53:17.472850"
+  },
+  "031-678-3681": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.4858625,
+    "cached_at": "2025-07-21T11:53:17.485862"
+  },
+  "031-678-3710": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.498874,
+    "cached_at": "2025-07-21T11:53:17.498873"
+  },
+  "031-671-2348": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.6610215,
+    "cached_at": "2025-07-21T11:53:17.661021"
+  },
+  "031-678-3740": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.5128868,
+    "cached_at": "2025-07-21T11:53:17.512886"
+  },
+  "031-678-3770": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.5258985,
+    "cached_at": "2025-07-21T11:53:17.525898"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.5329049,
+    "cached_at": "2025-07-21T11:53:17.532904"
+  },
+  "031-678-3800": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.5389106,
+    "cached_at": "2025-07-21T11:53:17.538910"
+  },
+  "031-250-3333": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.5529234,
+    "cached_at": "2025-07-21T11:53:17.552923"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.5599303,
+    "cached_at": "2025-07-21T11:53:17.559930"
+  },
+  "031-678-3860": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.5669358,
+    "cached_at": "2025-07-21T11:53:17.566935"
+  },
+  "031-678-3890": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.5819502,
+    "cached_at": "2025-07-21T11:53:17.581950"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.5979645,
+    "cached_at": "2025-07-21T11:53:17.597964"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.6049705,
+    "cached_at": "2025-07-21T11:53:17.604970"
+  },
+  "031-678-3950": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.610977,
+    "cached_at": "2025-07-21T11:53:17.610977"
+  },
+  "031-678-3989": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.6179833,
+    "cached_at": "2025-07-21T11:53:17.617983"
+  },
+  "031-678-3980": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.6269908,
+    "cached_at": "2025-07-21T11:53:17.626990"
+  },
+  "031-678-4010": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.6410036,
+    "cached_at": "2025-07-21T11:53:17.641003"
+  },
+  "031-678-4030": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.6540155,
+    "cached_at": "2025-07-21T11:53:17.654015"
+  },
+  "031-678-4050": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.6670272,
+    "cached_at": "2025-07-21T11:53:17.667027"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.6740339,
+    "cached_at": "2025-07-21T11:53:17.674033"
+  },
+  "031-820-5702": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.6810403,
+    "cached_at": "2025-07-21T11:53:17.681040"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.6880467,
+    "cached_at": "2025-07-21T11:53:17.688046"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.6940515,
+    "cached_at": "2025-07-21T11:53:17.694051"
+  },
+  "031-390-8584": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.701058,
+    "cached_at": "2025-07-21T11:53:17.701057"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.7080646,
+    "cached_at": "2025-07-21T11:53:17.708064"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.7290845,
+    "cached_at": "2025-07-21T11:53:17.729084"
+  },
+  "031-820-5790": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.7360902,
+    "cached_at": "2025-07-21T11:53:17.736090"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.7420957,
+    "cached_at": "2025-07-21T11:53:17.742095"
+  },
+  "031-820-5801": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.749102,
+    "cached_at": "2025-07-21T11:53:17.749102"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.7561088,
+    "cached_at": "2025-07-21T11:53:17.756108"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.763115,
+    "cached_at": "2025-07-21T11:53:17.763115"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.7701216,
+    "cached_at": "2025-07-21T11:53:17.770121"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.7841344,
+    "cached_at": "2025-07-21T11:53:17.784134"
+  },
+  "031-867-3354": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.7911403,
+    "cached_at": "2025-07-21T11:53:17.791140"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.7981467,
+    "cached_at": "2025-07-21T11:53:17.798146"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.8051531,
+    "cached_at": "2025-07-21T11:53:17.805153"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.8121595,
+    "cached_at": "2025-07-21T11:53:17.812159"
+  },
+  "031-250-2773": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.8181648,
+    "cached_at": "2025-07-21T11:53:17.818164"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.8251712,
+    "cached_at": "2025-07-21T11:53:17.825171"
+  },
+  "031-550-2601": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.8321779,
+    "cached_at": "2025-07-21T11:53:17.832177"
+  },
+  "031-550-2602": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.8461905,
+    "cached_at": "2025-07-21T11:53:17.846190"
+  },
+  "031-550-2450": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.8531978,
+    "cached_at": "2025-07-21T11:53:17.853197"
+  },
+  "031-565-6524": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.86821,
+    "cached_at": "2025-07-21T11:53:17.868210"
+  },
+  "031-550-2605": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.8892312,
+    "cached_at": "2025-07-21T11:53:17.889231"
+  },
+  "031-562-6947": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.8822234,
+    "cached_at": "2025-07-21T11:53:17.882223"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.8972368,
+    "cached_at": "2025-07-21T11:53:17.897236"
+  },
+  "031-550-8484": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.904243,
+    "cached_at": "2025-07-21T11:53:17.904243"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.9112499,
+    "cached_at": "2025-07-21T11:53:17.911249"
+  },
+  "031-550-2607": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.9182558,
+    "cached_at": "2025-07-21T11:53:17.918255"
+  },
+  "031-550-3710": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.925262,
+    "cached_at": "2025-07-21T11:53:17.925262"
+  },
+  "031-550-2608": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.9322686,
+    "cached_at": "2025-07-21T11:53:17.932268"
+  },
+  "031-542-1506": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.9472833,
+    "cached_at": "2025-07-21T11:53:17.947283"
+  },
+  "031-538-2299": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.9542885,
+    "cached_at": "2025-07-21T11:53:17.954288"
+  },
+  "031-538-4200": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.961295,
+    "cached_at": "2025-07-21T11:53:17.961294"
+  },
+  "031-533-8281": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.969302,
+    "cached_at": "2025-07-21T11:53:17.969302"
+  },
+  "031-538-4250": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.9763086,
+    "cached_at": "2025-07-21T11:53:17.976308"
+  },
+  "031-544-4983": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.9833148,
+    "cached_at": "2025-07-21T11:53:17.983314"
+  },
+  "031-538-2135": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066397.9903212,
+    "cached_at": "2025-07-21T11:53:17.990321"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066397.9983299,
+    "cached_at": "2025-07-21T11:53:17.998329"
+  },
+  "031-538-4398": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.0073376,
+    "cached_at": "2025-07-21T11:53:18.007337"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066398.0163474,
+    "cached_at": "2025-07-21T11:53:18.016347"
+  },
+  "031-538-4400": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.0253532,
+    "cached_at": "2025-07-21T11:53:18.025353"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066398.0333617,
+    "cached_at": "2025-07-21T11:53:18.033361"
+  },
+  "031-538-4462": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.0413682,
+    "cached_at": "2025-07-21T11:53:18.041368"
+  },
+  "031-321-7793": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.0733972,
+    "cached_at": "2025-07-21T11:53:18.073397"
+  },
+  "031-538-4600": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.0884116,
+    "cached_at": "2025-07-21T11:53:18.088411"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066398.096418,
+    "cached_at": "2025-07-21T11:53:18.096417"
+  },
+  "031-538-4652": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.1044257,
+    "cached_at": "2025-07-21T11:53:18.104425"
+  },
+  "031-530-8653": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.1134334,
+    "cached_at": "2025-07-21T11:53:18.113433"
+  },
+  "031-760-1543": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.1214406,
+    "cached_at": "2025-07-21T11:53:18.121440"
+  },
+  "031-538-4750": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.1284482,
+    "cached_at": "2025-07-21T11:53:18.128448"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066398.1364548,
+    "cached_at": "2025-07-21T11:53:18.136455"
+  },
+  "031-538-4800": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.1444616,
+    "cached_at": "2025-07-21T11:53:18.144461"
+  },
+  "031-345-3138": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.1594756,
+    "cached_at": "2025-07-21T11:53:18.159475"
+  },
+  "031-345-3121": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.166482,
+    "cached_at": "2025-07-21T11:53:18.166481"
+  },
+  "031-345-3168": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.1794934,
+    "cached_at": "2025-07-21T11:53:18.179493"
+  },
+  "031-345-3141": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.1875014,
+    "cached_at": "2025-07-21T11:53:18.187501"
+  },
+  "031-345-3198": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.196509,
+    "cached_at": "2025-07-21T11:53:18.196509"
+  },
+  "031-345-3171": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.205517,
+    "cached_at": "2025-07-21T11:53:18.205517"
+  },
+  "031-345-3238": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.212524,
+    "cached_at": "2025-07-21T11:53:18.212524"
+  },
+  "031-345-3211": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.2205312,
+    "cached_at": "2025-07-21T11:53:18.220531"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066398.2285385,
+    "cached_at": "2025-07-21T11:53:18.228538"
+  },
+  "031-345-3241": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.2365463,
+    "cached_at": "2025-07-21T11:53:18.236546"
+  },
+  "031-345-3271": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.2515595,
+    "cached_at": "2025-07-21T11:53:18.251559"
+  },
+  "031-790-6631": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.2605672,
+    "cached_at": "2025-07-21T11:53:18.260567"
+  },
+  "031-790-6601": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.2695754,
+    "cached_at": "2025-07-21T11:53:18.269575"
+  },
+  "031-790-6634": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.3076105,
+    "cached_at": "2025-07-21T11:53:18.307610"
+  },
+  "031-790-6604": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.3156185,
+    "cached_at": "2025-07-21T11:53:18.315618"
+  },
+  "031-790-6635": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.3236246,
+    "cached_at": "2025-07-21T11:53:18.323624"
+  },
+  "031-790-6605": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.3316324,
+    "cached_at": "2025-07-21T11:53:18.331632"
+  },
+  "031-790-6636": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.3386385,
+    "cached_at": "2025-07-21T11:53:18.338638"
+  },
+  "031-790-6606": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.3466463,
+    "cached_at": "2025-07-21T11:53:18.346646"
+  },
+  "031-790-6641": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.354653,
+    "cached_at": "2025-07-21T11:53:18.354653"
+  },
+  "031-790-6611": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.36166,
+    "cached_at": "2025-07-21T11:53:18.361659"
+  },
+  "031-791-0679": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.369667,
+    "cached_at": "2025-07-21T11:53:18.369667"
+  },
+  "031-790-6612": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.3776746,
+    "cached_at": "2025-07-21T11:53:18.377674"
+  },
+  "031-795-6579": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.385682,
+    "cached_at": "2025-07-21T11:53:18.385682"
+  },
+  "031-790-6638": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.4026973,
+    "cached_at": "2025-07-21T11:53:18.402697"
+  },
+  "031-790-6608": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.410704,
+    "cached_at": "2025-07-21T11:53:18.410703"
+  },
+  "031-790-6539": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.4197128,
+    "cached_at": "2025-07-21T11:53:18.419712"
+  },
+  "031-790-6613": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.445736,
+    "cached_at": "2025-07-21T11:53:18.445736"
+  },
+  "031-790-6642": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.4557457,
+    "cached_at": "2025-07-21T11:53:18.455745"
+  },
+  "031-790-6609": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.4657545,
+    "cached_at": "2025-07-21T11:53:18.465754"
+  },
+  "031-790-6640": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.4747632,
+    "cached_at": "2025-07-21T11:53:18.474763"
+  },
+  "031-790-6610": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.4827697,
+    "cached_at": "2025-07-21T11:53:18.482769"
+  },
+  "031-887-3839": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.4907773,
+    "cached_at": "2025-07-21T11:53:18.490777"
+  },
+  "031-887-3832": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.4997864,
+    "cached_at": "2025-07-21T11:53:18.499786"
+  },
+  "031-887-3817": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.5087934,
+    "cached_at": "2025-07-21T11:53:18.508793"
+  },
+  "031-887-3812": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.517802,
+    "cached_at": "2025-07-21T11:53:18.517801"
+  },
+  "031-887-3857": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.5268102,
+    "cached_at": "2025-07-21T11:53:18.526810"
+  },
+  "031-887-3856": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.5368192,
+    "cached_at": "2025-07-21T11:53:18.536819"
+  },
+  "031-887-3874": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.5578377,
+    "cached_at": "2025-07-21T11:53:18.557837"
+  },
+  "031-887-3897": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.5678473,
+    "cached_at": "2025-07-21T11:53:18.567847"
+  },
+  "031-887-3893": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.5778565,
+    "cached_at": "2025-07-21T11:53:18.577856"
+  },
+  "031-887-3919": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.5868642,
+    "cached_at": "2025-07-21T11:53:18.586864"
+  },
+  "031-887-3913": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.635909,
+    "cached_at": "2025-07-21T11:53:18.635909"
+  },
+  "NaN": {
+    "result": {
+      "success": false,
+      "institution": "",
+      "match_result": "",
+      "confidence": 0.0
+    },
+    "timestamp": 1753066398.6108866,
+    "cached_at": "2025-07-21T11:53:18.610886"
+  },
+  "031-887-3932": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.6228974,
+    "cached_at": "2025-07-21T11:53:18.622897"
+  },
+  "031-887-3481": {
+    "result": {
+      "success": true,
+      "institution": "서울시 강남구청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.648921,
+    "cached_at": "2025-07-21T11:53:18.648921"
+  },
+  "031-887-2048": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.6599314,
+    "cached_at": "2025-07-21T11:53:18.659931"
+  },
+  "031-887-3982": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.6709406,
+    "cached_at": "2025-07-21T11:53:18.670940"
+  },
+  "031-887-3767": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.6799493,
+    "cached_at": "2025-07-21T11:53:18.679949"
+  },
+  "031-887-3773": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.6879568,
+    "cached_at": "2025-07-21T11:53:18.687956"
+  },
+  "031-887-3978": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.7139807,
+    "cached_at": "2025-07-21T11:53:18.713980"
+  },
+  "031-887-3971": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.723989,
+    "cached_at": "2025-07-21T11:53:18.723988"
+  },
+  "031-770-3036": {
+    "result": {
+      "success": true,
+      "institution": "경기도 의정부시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.7329986,
+    "cached_at": "2025-07-21T11:53:18.732998"
+  },
+  "031-770-3001": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.7410045,
+    "cached_at": "2025-07-21T11:53:18.741004"
+  },
+  "031-770-3066": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.7500143,
+    "cached_at": "2025-07-21T11:53:18.750014"
+  },
+  "031-770-3040": {
+    "result": {
+      "success": true,
+      "institution": "서울시 서초구 서초동 주민센터",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.7590225,
+    "cached_at": "2025-07-21T11:53:18.759022"
+  },
+  "031-770-3096": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.7670286,
+    "cached_at": "2025-07-21T11:53:18.767028"
+  },
+  "031-770-3071": {
+    "result": {
+      "success": true,
+      "institution": "경기도 수원시청",
+      "match_result": "O",
+      "confidence": 90.0
+    },
+    "timestamp": 1753066398.7750359,
+    "cached_at": "2025-07-21T11:53:18.775035"
+  }
+}
