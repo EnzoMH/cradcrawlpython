@@ -61,7 +61,7 @@ class WebDriverManager:
         self.used_ports.add(fallback_port)
         return fallback_port
     
-    def create_bot_evasion_driver(self, worker_id: int = 0) -> object:
+    def create_bot_evasion_driver(self, worker_id: int = 0, port: int = None) -> object:
         """봇 우회를 위한 고급 드라이버 생성"""
         import random
         import time
@@ -126,7 +126,12 @@ class WebDriverManager:
             chrome_options.add_argument('--disable-background-mode')
             
             # 🌐 포트 분배 (봇 우회 핵심)
-            debug_port = self.get_available_port(worker_id)
+            if port:
+                debug_port = port
+                self.logger.debug(f"🔌 워커 {worker_id}: 지정된 포트 {port} 사용")
+            else:
+                debug_port = self.get_available_port(worker_id)
+                self.logger.debug(f"🔌 워커 {worker_id}: 자동 할당 포트 {debug_port} 사용")
             chrome_options.add_argument(f'--remote-debugging-port={debug_port}')
             
             # 🎭 User-Agent 랜덤화 (봇 감지 회피)
@@ -207,14 +212,15 @@ class WebDriverManager:
             
             # 포트 사용 실패시 해제
             try:
-                debug_port = self.get_available_port(worker_id)
-                if debug_port in self.used_ports:
+                if port and port in self.used_ports:
+                    self.used_ports.remove(port)
+                elif debug_port in self.used_ports:
                     self.used_ports.remove(debug_port)
             except:
                 pass
             
             # 안전한 fallback 드라이버 생성 시도
-            return self._create_fallback_driver(worker_id)
+            return self._create_fallback_driver(worker_id, port)
     
     def _cleanup_uc_cache(self, worker_id: int):
         """undetected_chromedriver 캐시 정리"""
@@ -250,7 +256,7 @@ class WebDriverManager:
         except Exception as e:
             self.logger.debug(f"UC 캐시 정리 과정 오류 (무시): {e}")
     
-    def _create_fallback_driver(self, worker_id: int = 0):
+    def _create_fallback_driver(self, worker_id: int = 0, port: int = None):
         """안전한 fallback 드라이버 생성"""
         try:
             self.logger.warning(f"🔄 워커 {worker_id} fallback 드라이버 생성 시도")
@@ -261,14 +267,14 @@ class WebDriverManager:
             
             # 환경별 다른 전략 시도
             strategies = [
-                self._try_minimal_chrome,
-                self._try_headless_chrome, 
-                self._try_basic_chrome
+                lambda wid: self._try_minimal_chrome(wid, port),
+                lambda wid: self._try_headless_chrome(wid, port), 
+                lambda wid: self._try_basic_chrome(wid, port)
             ]
             
             for strategy_idx, strategy in enumerate(strategies):
                 try:
-                    self.logger.info(f"🔧 워커 {worker_id} 전략 {strategy_idx + 1} 시도: {strategy.__name__}")
+                    self.logger.info(f"🔧 워커 {worker_id} 전략 {strategy_idx + 1} 시도")
                     driver = strategy(worker_id)
                     if driver:
                         self.logger.info(f"✅ 워커 {worker_id} 전략 {strategy_idx + 1} 성공")
@@ -284,7 +290,7 @@ class WebDriverManager:
             self.logger.error(f"❌ 워커 {worker_id} fallback 드라이버 생성 실패: {e}")
             return None
     
-    def _try_minimal_chrome(self, worker_id: int):
+    def _try_minimal_chrome(self, worker_id: int, assigned_port: int = None):
         """최소 옵션 Chrome 시도"""
         import tempfile
         
@@ -308,8 +314,11 @@ class WebDriverManager:
         profile_dir = tempfile.mkdtemp(prefix=f'chrome_minimal_{worker_id}_')
         chrome_options.add_argument(f'--user-data-dir={profile_dir}')
         
-        # 안전한 포트
-        port = 9222 + worker_id + 15000
+        # 포트 설정 (지정된 포트 우선 사용)
+        if assigned_port:
+            port = assigned_port
+        else:
+            port = 9222 + worker_id + 15000
         chrome_options.add_argument(f'--remote-debugging-port={port}')
         
         # 실험적 옵션 제거로 안정성 향상
@@ -320,7 +329,7 @@ class WebDriverManager:
         self.logger.info(f"✅ 워커 {worker_id}: minimal Chrome 드라이버 생성 완료 (포트: {port})")
         return driver
     
-    def _try_headless_chrome(self, worker_id: int):
+    def _try_headless_chrome(self, worker_id: int, assigned_port: int = None):
         """헤드리스 Chrome 시도"""
         import tempfile
         
@@ -346,7 +355,11 @@ class WebDriverManager:
         profile_dir = tempfile.mkdtemp(prefix=f'chrome_headless_{worker_id}_')
         chrome_options.add_argument(f'--user-data-dir={profile_dir}')
         
-        port = 9222 + worker_id + 20000
+        # 포트 설정 (지정된 포트 우선 사용)
+        if assigned_port:
+            port = assigned_port
+        else:
+            port = 9222 + worker_id + 20000
         chrome_options.add_argument(f'--remote-debugging-port={port}')
         
         driver = uc.Chrome(options=chrome_options, version_main=None)
@@ -356,7 +369,7 @@ class WebDriverManager:
         self.logger.info(f"✅ 워커 {worker_id}: headless Chrome 드라이버 생성 완료 (포트: {port})")
         return driver
     
-    def _try_basic_chrome(self, worker_id: int):
+    def _try_basic_chrome(self, worker_id: int, assigned_port: int = None):
         """기본 Chrome 시도 (최후의 수단)"""
         import tempfile
         
@@ -378,7 +391,11 @@ class WebDriverManager:
         profile_dir = tempfile.mkdtemp(prefix=f'chrome_basic_{worker_id}_')
         chrome_options.add_argument(f'--user-data-dir={profile_dir}')
         
-        port = 9222 + worker_id + 25000  
+        # 포트 설정 (지정된 포트 우선 사용)
+        if assigned_port:
+            port = assigned_port
+        else:
+            port = 9222 + worker_id + 25000
         chrome_options.add_argument(f'--remote-debugging-port={port}')
         
         # 실험적 옵션 없이
