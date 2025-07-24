@@ -437,6 +437,48 @@ class Valid3ValidationManager:
             
             return self.web_driver_managers[worker_id]
     
+    def cleanup_worker_driver(self, worker_id: int):
+        """워커별 드라이버 완전 정리"""
+        try:
+            with self.driver_lock:
+                if worker_id in self.web_driver_managers:
+                    web_manager = self.web_driver_managers[worker_id]
+                    # WebDriverManager의 정리 메서드 호출 (있는 경우)
+                    if hasattr(web_manager, 'cleanup_all_drivers'):
+                        web_manager.cleanup_all_drivers()
+                    elif hasattr(web_manager, 'cleanup'):
+                        web_manager.cleanup()
+                    
+                    # 딕셔너리에서 제거
+                    del self.web_driver_managers[worker_id]
+                    self.logger.debug(f"🧹 워커 {worker_id} WebDriverManager 완전 정리")
+        except Exception as e:
+            self.logger.debug(f"⚠️ 워커 {worker_id} 정리 중 오류 (무시): {e}")
+    
+    def force_kill_all_chrome_processes(self):
+        """크롬 프로세스 강제 종료 (비상용)"""
+        try:
+            import subprocess
+            import platform
+            
+            if platform.system() == "Windows":
+                # Windows에서 모든 크롬 관련 프로세스 종료
+                subprocess.run(['taskkill', '/f', '/im', 'chrome.exe'], 
+                             capture_output=True, text=True)
+                subprocess.run(['taskkill', '/f', '/im', 'chromedriver.exe'], 
+                             capture_output=True, text=True)
+                self.logger.info("🧹 Windows 크롬 프로세스 강제 종료")
+            else:
+                # Linux/Mac에서 크롬 관련 프로세스 종료
+                subprocess.run(['pkill', '-f', 'chrome'], 
+                             capture_output=True, text=True)
+                subprocess.run(['pkill', '-f', 'chromedriver'], 
+                             capture_output=True, text=True)
+                self.logger.info("🧹 Linux/Mac 크롬 프로세스 강제 종료")
+                
+        except Exception as e:
+            self.logger.debug(f"⚠️ 크롬 프로세스 강제 종료 실패: {e}")
+    
     def validate_stage2(self, fax_number: str, institution_name: str, worker_id: int = 0) -> Tuple[bool, str, str]:
         """2차 검증: Google 검색으로 팩스번호의 진짜 기관명 확인 (Valid2_fixed와 동일)"""
         try:
@@ -554,17 +596,25 @@ class Valid3ValidationManager:
                     return False, message, ""
                 
             finally:
-                # 드라이버 정리 (개선된 방식)
+                # 드라이버 정리 (강화된 방식)
                 if driver:
                     try:
-                        driver.quit()
-                        self.logger.debug(f"🧹 워커 {worker_id} 드라이버 정리 완료")
-                    except Exception as e:
-                        self.logger.debug(f"⚠️ 워커 {worker_id} 드라이버 정리 중 오류 (무시): {e}")
-                        try:
+                        # 모든 윈도우 닫기
+                        for handle in driver.window_handles:
+                            driver.switch_to.window(handle)
                             driver.close()
-                        except:
-                            pass
+                    except:
+                        pass
+                    
+                    try:
+                        # 드라이버 완전 종료
+                        driver.quit()
+                        self.logger.debug(f"🧹 워커 {worker_id} 2차 검증 드라이버 정리 완료")
+                    except Exception as e:
+                        self.logger.debug(f"⚠️ 워커 {worker_id} 2차 드라이버 정리 중 오류: {e}")
+                    
+                    finally:
+                        driver = None
                         
         except Exception as e:
             error_msg = f"2차 검증 오류: {e}"
@@ -678,17 +728,25 @@ class Valid3ValidationManager:
                     return False, message, extracted_links, crawled_data, confidence_score
                 
             finally:
-                # 드라이버 정리 (개선된 방식)
+                # 드라이버 정리 (강화된 방식)
                 if driver:
                     try:
+                        # 모든 윈도우 닫기
+                        for handle in driver.window_handles:
+                            driver.switch_to.window(handle)
+                            driver.close()
+                    except:
+                        pass
+                    
+                    try:
+                        # 드라이버 완전 종료
                         driver.quit()
                         self.logger.debug(f"🧹 워커 {worker_id} 3차 검증용 드라이버 정리 완료")
                     except Exception as e:
-                        self.logger.debug(f"⚠️ 워커 {worker_id} 3차 드라이버 정리 중 오류 (무시): {e}")
-                        try:
-                            driver.close()
-                        except:
-                            pass
+                        self.logger.debug(f"⚠️ 워커 {worker_id} 3차 드라이버 정리 중 오류: {e}")
+                    
+                    finally:
+                        driver = None
                         
         except Exception as e:
             error_msg = f"3차 검증 오류: {e}"
@@ -1358,7 +1416,7 @@ class Valid3ValidationManager:
     def process_all_data(self) -> bool:
         """전체 데이터 병렬 처리 (대용량 데이터용)"""
         try:
-            if not self.input_data is not None:
+            if self.input_data is None:
                 self.logger.error("❌ 데이터가 로드되지 않았습니다")
                 return False
             
@@ -1388,6 +1446,9 @@ class Valid3ValidationManager:
                 all_results.extend(batch_results)
                 processed_count += len(batch_results)
                 
+                # 배치 완료 후 모든 워커의 드라이버 정리
+                self._cleanup_all_worker_drivers()
+                
                 # 진행률 출력
                 progress = (processed_count / total_rows) * 100
                 self.logger.info(f"📊 전체 진행률: {processed_count}/{total_rows} ({progress:.1f}%)")
@@ -1404,11 +1465,16 @@ class Valid3ValidationManager:
             self.validation_results = all_results
             self._print_final_statistics()
             
+            # 최종 정리: 모든 드라이버 강제 종료
+            self._cleanup_all_worker_drivers()
+            
             return True
             
         except Exception as e:
             self.logger.error(f"❌ 대용량 데이터 처리 실패: {e}")
             self.logger.error(traceback.format_exc())
+            # 오류 발생 시에도 드라이버 정리
+            self._cleanup_all_worker_drivers()
             return False
     
     def _process_batch_parallel(self, batch_data: pd.DataFrame, batch_start: int) -> List[ValidationResult]:
@@ -1481,19 +1547,27 @@ class Valid3ValidationManager:
         except Exception as e:
             self.logger.error(f"❌ 중간 저장 실패: {e}")
     
+    def _cleanup_all_worker_drivers(self):
+        """모든 워커의 드라이버 강제 정리"""
+        try:
+            worker_ids = list(self.web_driver_managers.keys())
+            for worker_id in worker_ids:
+                self.cleanup_worker_driver(worker_id)
+            
+            self.logger.info(f"🧹 모든 워커 드라이버 정리 완료: {len(worker_ids)}개")
+            
+            # 크롬 프로세스 강제 종료 (필요시)
+            if len(worker_ids) > 0:
+                self.force_kill_all_chrome_processes()
+                
+        except Exception as e:
+            self.logger.error(f"❌ 모든 워커 드라이버 정리 실패: {e}")
+    
     def _cleanup_memory(self):
         """메모리 정리 (개선된 방식)"""
         try:
-            # 워커별 드라이버 정리
-            with self.driver_lock:
-                for worker_id, web_manager in list(self.web_driver_managers.items()):
-                    try:
-                        # WebDriverManager의 정리 메서드 호출 (있는 경우)
-                        if hasattr(web_manager, 'cleanup'):
-                            web_manager.cleanup()
-                        self.logger.debug(f"🧹 워커 {worker_id} 메모리 정리")
-                    except Exception as e:
-                        self.logger.debug(f"⚠️ 워커 {worker_id} 정리 중 오류 (무시): {e}")
+            # 모든 워커 드라이버 강제 정리
+            self._cleanup_all_worker_drivers()
                         
             # Python 가비지 컬렉션
             import gc
@@ -1965,9 +2039,23 @@ def main_production():
                     print(f"💾 중간 결과 저장: {saved_file}")
         except:
             pass
+        # 드라이버 정리
+        try:
+            if 'manager' in locals():
+                manager._cleanup_all_worker_drivers()
+                print("🧹 크롬 드라이버 정리 완료")
+        except:
+            pass
     except Exception as e:
         print(f"\n❌ 오류 발생: {e}")
         traceback.print_exc()
+        # 드라이버 정리
+        try:
+            if 'manager' in locals():
+                manager._cleanup_all_worker_drivers()
+                print("🧹 크롬 드라이버 정리 완료")
+        except:
+            pass
 
 def main():
     """메인 실행 함수"""
@@ -2078,9 +2166,23 @@ def main():
         
     except KeyboardInterrupt:
         print("\n⚠️ 사용자에 의해 중단되었습니다.")
+        # 드라이버 정리
+        try:
+            if 'manager' in locals():
+                manager._cleanup_all_worker_drivers()
+                print("🧹 크롬 드라이버 정리 완료")
+        except:
+            pass
     except Exception as e:
         print(f"\n❌ 오류 발생: {e}")
         traceback.print_exc()
+        # 드라이버 정리
+        try:
+            if 'manager' in locals():
+                manager._cleanup_all_worker_drivers()
+                print("🧹 크롬 드라이버 정리 완료")
+        except:
+            pass
 
 def main():
     """기본 메인 함수 (main_production 호출)"""
