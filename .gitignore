@@ -9,7 +9,7 @@
 *.csv
 
 # 예외: 특정 파일들은 추적
-
+!failed_data_250724.xlsx
 
 # Python 캐시 파일들
 *.pyc

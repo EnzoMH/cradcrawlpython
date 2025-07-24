@@ -139,8 +139,9 @@ class WebDriverManager:
             chrome_options.add_argument(f'--user-agent={random.choice(user_agents)}')
             
             # 🔐 추가 봇 우회 옵션 (Chrome 호환성 개선)
-            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            chrome_options.add_experimental_option('useAutomationExtension', False)
+            # excludeSwitches는 Chrome 최신 버전에서 호환성 문제로 제거
+            # chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            # chrome_options.add_experimental_option('useAutomationExtension', False)
             # detach 옵션 제거 (Chrome 호환성 문제)
             
             # 📁 프로필 디렉토리 분리 (워커별)
@@ -158,7 +159,27 @@ class WebDriverManager:
                 )
             except Exception as path_error:
                 self.logger.warning(f"⚠️ 기본 경로로 드라이버 생성 실패, 재시도: {path_error}")
-                # 재시도 with 다른 설정
+                # ChromeOptions 재생성 (재사용 방지)
+                chrome_options = uc.ChromeOptions()
+                
+                # 기본 옵션만 다시 추가 (간소화)
+                basic_options = [
+                    '--no-sandbox',
+                    '--disable-dev-shm-usage', 
+                    '--disable-gpu',
+                    '--window-size=1366,768',
+                    '--disable-logging',
+                    '--log-level=3'
+                ]
+                
+                for option in basic_options:
+                    chrome_options.add_argument(option)
+                
+                # 포트 재설정
+                port = 9222 + worker_id + 5000
+                chrome_options.add_argument(f'--remote-debugging-port={port}')
+                
+                # 재시도 with 새로운 설정
                 time.sleep(random.uniform(1.0, 3.0))
                 self.driver = uc.Chrome(options=chrome_options, version_main=None)
             
@@ -265,6 +286,8 @@ class WebDriverManager:
     
     def _try_minimal_chrome(self, worker_id: int):
         """최소 옵션 Chrome 시도"""
+        import tempfile
+        
         chrome_options = uc.ChromeOptions()
         
         # 절대 최소 옵션
@@ -274,24 +297,33 @@ class WebDriverManager:
             '--disable-gpu',
             '--disable-logging',
             '--log-level=3',
-            '--disable-extensions'
+            '--disable-extensions',
+            '--disable-javascript'  # 속도 향상
         ]
         
         for option in minimal_options:
             chrome_options.add_argument(option)
         
+        # 워커별 독립적인 프로필 디렉토리
+        profile_dir = tempfile.mkdtemp(prefix=f'chrome_minimal_{worker_id}_')
+        chrome_options.add_argument(f'--user-data-dir={profile_dir}')
+        
         # 안전한 포트
         port = 9222 + worker_id + 15000
         chrome_options.add_argument(f'--remote-debugging-port={port}')
         
+        # 실험적 옵션 제거로 안정성 향상
         driver = uc.Chrome(options=chrome_options, version_main=None)
         driver.implicitly_wait(15)
         driver.set_page_load_timeout(30)
         
+        self.logger.info(f"✅ 워커 {worker_id}: minimal Chrome 드라이버 생성 완료 (포트: {port})")
         return driver
     
     def _try_headless_chrome(self, worker_id: int):
         """헤드리스 Chrome 시도"""
+        import tempfile
+        
         chrome_options = uc.ChromeOptions()
         
         # 헤드리스 모드로 더 안전하게
@@ -302,11 +334,17 @@ class WebDriverManager:
             '--disable-gpu',
             '--window-size=1366,768',
             '--disable-logging',
-            '--log-level=3'
+            '--log-level=3',
+            '--disable-javascript',  # 속도 향상
+            '--disable-images'       # 리소스 절약
         ]
         
         for option in headless_options:
             chrome_options.add_argument(option)
+        
+        # 워커별 독립적인 프로필 디렉토리
+        profile_dir = tempfile.mkdtemp(prefix=f'chrome_headless_{worker_id}_')
+        chrome_options.add_argument(f'--user-data-dir={profile_dir}')
         
         port = 9222 + worker_id + 20000
         chrome_options.add_argument(f'--remote-debugging-port={port}')
@@ -315,21 +353,30 @@ class WebDriverManager:
         driver.implicitly_wait(20)
         driver.set_page_load_timeout(40)
         
+        self.logger.info(f"✅ 워커 {worker_id}: headless Chrome 드라이버 생성 완료 (포트: {port})")
         return driver
     
     def _try_basic_chrome(self, worker_id: int):
         """기본 Chrome 시도 (최후의 수단)"""
+        import tempfile
+        
         chrome_options = uc.ChromeOptions()
         
         # 기본 설정만
         basic_options = [
             '--no-sandbox',
             '--disable-dev-shm-usage',
-            '--window-size=800,600'
+            '--window-size=800,600',
+            '--disable-logging',
+            '--log-level=3'
         ]
         
         for option in basic_options:
             chrome_options.add_argument(option)
+        
+        # 워커별 독립적인 프로필 디렉토리
+        profile_dir = tempfile.mkdtemp(prefix=f'chrome_basic_{worker_id}_')
+        chrome_options.add_argument(f'--user-data-dir={profile_dir}')
         
         port = 9222 + worker_id + 25000  
         chrome_options.add_argument(f'--remote-debugging-port={port}')
@@ -339,6 +386,7 @@ class WebDriverManager:
         driver.implicitly_wait(30)
         driver.set_page_load_timeout(60)
         
+        self.logger.info(f"✅ 워커 {worker_id}: basic Chrome 드라이버 생성 완료 (포트: {port})")
         return driver
     
     def recover_driver(self):
