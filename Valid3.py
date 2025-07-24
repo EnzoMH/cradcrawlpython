@@ -77,7 +77,7 @@ OUTPUT_FILE_PREFIX = "Valid3_검증결과"
 # 검증 설정 (대용량 데이터 최적화)
 MAX_WORKERS = 6  # 대용량 처리를 위해 6개 워커로 증가
 BATCH_SIZE = 200  # 배치 크기 증가 (100 → 200)
-SEARCH_RESULTS_LIMIT = 3  # 검색 결과 링크 수 (속도 vs 정확도)
+SEARCH_RESULTS_LIMIT = 5  # 검색 결과 링크 수 (search_logic.txt 요구사항: 5개까지)
 CONFIDENCE_THRESHOLD = 60  # 신뢰도 임계값 완화 (80% → 60%)
 
 # 대용량 데이터 처리 설정
@@ -733,14 +733,23 @@ class Valid3ValidationManager:
                         # 페이지 로드 대기
                         wait = WebDriverWait(driver, GOOGLE_SEARCH_TIMEOUT)
                         
-                        # 검색창 찾기 (최적화된 순서)
+                        # 검색창 찾기 (강화된 선택자 및 대기시간)
                         search_box = None
-                        selectors = ['textarea[name="q"]', '#APjFqb', 'input[name="q"]']
+                        selectors = [
+                            'textarea[name="q"]', 
+                            '#APjFqb', 
+                            'input[name="q"]',
+                            'input[type="text"][title*="검색"]',
+                            'textarea[title*="검색"]',
+                            '*[name="q"]',
+                            '#tsf input',
+                            '.gLFyf'
+                        ]
                         
                         for selector in selectors:
                             try:
-                                quick_wait = WebDriverWait(driver, 3)
-                                search_box = quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
+                                enhanced_wait = WebDriverWait(driver, 8)  # 3초 → 8초로 증가
+                                search_box = enhanced_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
                                 self.logger.debug(f"✅ 검색창 발견: {selector}")
                                 break
                             except TimeoutException:
@@ -749,31 +758,62 @@ class Valid3ValidationManager:
                         
                         if not search_box:
                             self.logger.warning(f"⚠️ 쿼리 {query_idx + 1}: 검색창을 찾을 수 없음")
+                            # 디버깅: 현재 페이지 상태 로깅
+                            self.logger.debug(f"현재 URL: {driver.current_url}")
+                            self.logger.debug(f"현재 제목: {driver.title}")
+                            # 페이지에서 찾을 수 있는 입력 요소들 로깅
+                            try:
+                                input_elements = driver.find_elements(By.TAG_NAME, 'input')
+                                textarea_elements = driver.find_elements(By.TAG_NAME, 'textarea')
+                                self.logger.debug(f"페이지에서 발견된 input 요소: {len(input_elements)}개")
+                                self.logger.debug(f"페이지에서 발견된 textarea 요소: {len(textarea_elements)}개")
+                            except:
+                                pass
                             continue
                         
                         # 검색어 입력 (속도 최적화된 타이핑)
                         self.logger.debug("⌨️ 검색어 입력 중...")
                         search_box.clear()
                         
-                        # 매크로 방지: 인간적인 타이핑 시뮬레이션
-                        for char in search_query:
-                            search_box.send_keys(char)
-                            time.sleep(random.uniform(0.05, 0.15))  # 더 인간적인 타이핑
+                        # 매크로 방지: 최적화된 타이핑 시뮬레이션
+                        # 빠른 입력 (타임아웃 문제 해결)
+                        search_box.send_keys(search_query)
                         
-                        # 매크로 방지: 검색 전 지연
-                        time.sleep(random.uniform(0.5, 1.5))
+                        # 매크로 방지: 검색 전 짧은 지연
+                        time.sleep(random.uniform(0.3, 0.8))  # 기존 0.5-1.5초에서 단축
                         
                         # 검색 실행
                         search_box.send_keys(Keys.RETURN)
                         self.logger.debug("🔍 검색 실행됨 (매크로 방지 지연 적용)")
                         
-                        # 검색 결과 대기 (빠른 타임아웃)
+                        # 검색 결과 대기 (강화된 대기시간 및 선택자)
                         try:
-                            quick_wait = WebDriverWait(driver, 3)
-                            quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#search')))
-                            self.logger.debug("✅ 검색 결과 로드 완료")
+                            result_wait = WebDriverWait(driver, 10)  # 3초 → 10초로 증가
+                            # 여러 선택자로 검색 결과 확인
+                            search_result_selectors = ['#search', '.g', '#rso', '.srg']
+                            
+                            result_found = False
+                            for result_selector in search_result_selectors:
+                                try:
+                                    result_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, result_selector)))
+                                    self.logger.debug(f"✅ 검색 결과 로드 완료: {result_selector}")
+                                    result_found = True
+                                    break
+                                except TimeoutException:
+                                    continue
+                            
+                            if not result_found:
+                                self.logger.warning("⚠️ 모든 검색 결과 선택자 실패")
+                                # 현재 URL과 제목 로깅 (디버깅용)
+                                self.logger.debug(f"현재 URL: {driver.current_url}")
+                                self.logger.debug(f"현재 제목: {driver.title}")
+                                continue
+                                
                         except TimeoutException:
-                            self.logger.warning("⚠️ 검색 결과 로드 타임아웃 (3초)")
+                            self.logger.warning(f"⚠️ 검색 결과 로드 타임아웃 (10초) - 쿼리: {search_query}")
+                            # 추가 디버깅 정보
+                            self.logger.debug(f"현재 URL: {driver.current_url}")
+                            self.logger.debug(f"현재 제목: {driver.title}")
                             continue
                         
                         # 검색 결과 텍스트 추출
@@ -913,14 +953,23 @@ class Valid3ValidationManager:
                         # Google 검색 페이지 접속
                         driver.get("https://www.google.com")
                         
-                        # 검색창 찾기 및 검색 실행 (간소화)
+                        # 검색창 찾기 및 검색 실행 (강화된 버전)
                         search_box = None
-                        selectors = ['textarea[name="q"]', '#APjFqb', 'input[name="q"]']
+                        selectors = [
+                            'textarea[name="q"]', 
+                            '#APjFqb', 
+                            'input[name="q"]',
+                            'input[type="text"][title*="검색"]',
+                            'textarea[title*="검색"]',
+                            '*[name="q"]',
+                            '#tsf input',
+                            '.gLFyf'
+                        ]
                         
                         for selector in selectors:
                             try:
-                                quick_wait = WebDriverWait(driver, 3)
-                                search_box = quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
+                                enhanced_wait = WebDriverWait(driver, 8)  # 3초 → 8초로 증가
+                                search_box = enhanced_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
                                 break
                             except TimeoutException:
                                 continue
@@ -929,40 +978,78 @@ class Valid3ValidationManager:
                             self.logger.warning(f"⚠️ 3차 검증 쿼리 {query_idx + 1}: 검색창을 찾을 수 없음")
                             continue
                         
-                        # 검색어 입력 및 실행 (매크로 방지)
+                        # 검색어 입력 및 실행 (최적화된 매크로 방지)
                         search_box.clear()
-                        for char in search_query:
-                            search_box.send_keys(char)
-                            time.sleep(random.uniform(0.05, 0.15))  # 인간적인 타이핑
+                        search_box.send_keys(search_query)  # 빠른 입력으로 변경
                         
-                        # 매크로 방지: 검색 전 지연
-                        time.sleep(random.uniform(0.3, 1.0))
+                        # 매크로 방지: 검색 전 짧은 지연
+                        time.sleep(random.uniform(0.3, 0.7))  # 기존 0.3-1.0초에서 단축
                         
                         search_box.send_keys(Keys.RETURN)
                         self.logger.debug(f"🔍 3차 검증 쿼리 {query_idx + 1} 검색 실행됨 (매크로 방지)")
                         
-                        # 검색 결과 대기
+                        # 검색 결과 대기 (강화된 버전)
                         try:
-                            quick_wait = WebDriverWait(driver, 3)
-                            quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#search')))
+                            result_wait = WebDriverWait(driver, 10)  # 3초 → 10초로 증가
+                            # 여러 선택자로 검색 결과 확인
+                            search_result_selectors = ['#search', '.g', '#rso', '.srg']
+                            
+                            result_found = False
+                            for result_selector in search_result_selectors:
+                                try:
+                                    result_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, result_selector)))
+                                    self.logger.debug(f"✅ 3차 검증 쿼리 {query_idx + 1} 검색 결과 로드: {result_selector}")
+                                    result_found = True
+                                    break
+                                except TimeoutException:
+                                    continue
+                            
+                            if not result_found:
+                                self.logger.warning(f"⚠️ 3차 검증 쿼리 {query_idx + 1}: 모든 검색 결과 선택자 실패")
+                                continue
+                                
                         except TimeoutException:
-                            self.logger.warning(f"⚠️ 3차 검증 쿼리 {query_idx + 1}: 검색 결과 로드 타임아웃 (3초)")
+                            self.logger.warning(f"⚠️ 3차 검증 쿼리 {query_idx + 1}: 검색 결과 로드 타임아웃 (10초)")
                             continue
                         
-                        # 검색 결과 링크 추출 (SEARCH_RESULTS_LIMIT개까지)
+                        # 검색 결과 링크 추출 (SEARCH_RESULTS_LIMIT개까지) - 강화된 버전
                         try:
-                            link_elements = driver.find_elements(By.CSS_SELECTOR, '#search a[href]')
+                            # 여러 선택자로 링크 추출 시도
+                            link_selectors = [
+                                '#search a[href]',
+                                '.g a[href]', 
+                                '#rso a[href]',
+                                '.r a[href]',
+                                'a[href*="http"]:not([href*="google.com"])'
+                            ]
                             
                             query_links = []
-                            for element in link_elements[:SEARCH_RESULTS_LIMIT]:
-                                href = element.get_attribute('href')
-                                if href and href.startswith('http') and 'google.com' not in href:
-                                    if href not in extracted_links:  # 중복 방지
-                                        extracted_links.append(href)
-                                        query_links.append(href)
-                                        self.logger.debug(f"🔗 쿼리 {query_idx + 1} 링크: {href}")
+                            links_found = False
                             
-                            self.logger.info(f"📎 쿼리 {query_idx + 1}에서 {len(query_links)}개 새 링크 추출")
+                            for link_selector in link_selectors:
+                                try:
+                                    link_elements = driver.find_elements(By.CSS_SELECTOR, link_selector)
+                                    self.logger.debug(f"🔗 선택자 '{link_selector}'로 {len(link_elements)}개 링크 발견")
+                                    
+                                    if link_elements:
+                                        links_found = True
+                                        for element in link_elements[:SEARCH_RESULTS_LIMIT]:
+                                            href = element.get_attribute('href')
+                                            if href and href.startswith('http') and 'google.com' not in href:
+                                                if href not in extracted_links:  # 중복 방지
+                                                    extracted_links.append(href)
+                                                    query_links.append(href)
+                                                    self.logger.debug(f"🔗 쿼리 {query_idx + 1} 링크: {href[:60]}...")
+                                        break  # 링크를 찾았으면 중단
+                                        
+                                except Exception as selector_error:
+                                    self.logger.debug(f"⚠️ 선택자 '{link_selector}' 실패: {selector_error}")
+                                    continue
+                            
+                            if links_found:
+                                self.logger.info(f"📎 쿼리 {query_idx + 1}에서 {len(query_links)}개 새 링크 추출 (총 {len(extracted_links)}개)")
+                            else:
+                                self.logger.warning(f"⚠️ 쿼리 {query_idx + 1}: 모든 링크 선택자에서 링크 추출 실패")
                             
                         except Exception as e:
                             self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 링크 추출 오류: {e}")
@@ -2471,10 +2558,6 @@ def main():
                 print("🧹 크롬 드라이버 정리 완료")
         except:
             pass
-
-def main():
-    """기본 메인 함수 (main_production 호출)"""
-    main_production()
 
 if __name__ == "__main__":
     main() 
