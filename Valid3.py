@@ -480,9 +480,11 @@ class Valid3ValidationManager:
             self.logger.debug(f"⚠️ 크롬 프로세스 강제 종료 실패: {e}")
     
     def validate_stage2(self, fax_number: str, institution_name: str, worker_id: int = 0) -> Tuple[bool, str, str]:
-        """2차 검증: Google 검색으로 팩스번호의 진짜 기관명 확인 (Valid2_fixed와 동일)"""
+        """2차 검증: Google 검색으로 팩스번호의 진짜 기관명 확인 (드라이버 재사용 최적화)"""
         try:
-            self.logger.debug(f"🔍 2차 검증 시작: 팩스:{fax_number}, 기관:{institution_name}")
+            # 워커 ID를 MAX_WORKERS 범위로 제한
+            worker_id = worker_id % MAX_WORKERS
+            self.logger.debug(f"🔍 2차 검증 시작: 팩스:{fax_number}, 기관:{institution_name}, 워커:{worker_id}")
             
             # 1차 검증을 통과한 경우만 진행
             if not fax_number or fax_number in ['nan', 'None', '', '#N/A']:
@@ -493,18 +495,19 @@ class Valid3ValidationManager:
             # WebDriverManager 획득
             web_manager = self.get_driver_for_worker(worker_id)
             
-            # Google 검색 쿼리 생성
-            search_query = f'{fax_number} 팩스번호 어느기관'
-            self.logger.debug(f"🔍 검색 쿼리: {search_query}")
+            # 다중 Google 검색 쿼리 생성 (더 많은 결과 확보)
+            search_queries = [
+                f'{fax_number} 팩스번호 어느기관',
+                f'{fax_number} 어디 팩스번호'
+            ]
+            self.logger.debug(f"🔍 검색 쿼리들: {search_queries}")
             
-            # 드라이버 생성 및 검색 실행
+            # 드라이버 생성 및 다중 검색 실행
             driver = None
+            all_search_results = []
+            
             try:
-                self.logger.debug(f"🛡️ 워커 {worker_id} 드라이버 생성 중...")
-                
-                # 워커별 포트 할당
-                port = web_manager.get_available_port(worker_id)
-                self.logger.debug(f"🔌 워커 {worker_id} 할당 포트: {port}")
+                self.logger.debug(f"🛡️ 워커 {worker_id} 드라이버 획득 중...")
                 
                 driver = web_manager.create_bot_evasion_driver()
                 
@@ -513,86 +516,103 @@ class Valid3ValidationManager:
                     self.logger.error(f"❌ {message}")
                     return False, message, ""
                 
-                self.logger.debug(f"✅ 워커 {worker_id} 드라이버 생성 완료 (포트: {port})")
+                self.logger.debug(f"✅ 워커 {worker_id} 드라이버 생성 완료")
                 
-                # Google 검색 페이지 접속
-                self.logger.debug("🌐 Google 검색 페이지 접속 중...")
-                driver.get("https://www.google.com")
-                
-                # 페이지 로드 대기
-                wait = WebDriverWait(driver, GOOGLE_SEARCH_TIMEOUT)
-                
-                # 검색창 찾기 (최적화된 순서)
-                search_box = None
-                selectors = ['textarea[name="q"]', '#APjFqb', 'input[name="q"]']
-                
-                for selector in selectors:
+                # 각 검색 쿼리에 대해 검색 실행
+                for query_idx, search_query in enumerate(search_queries):
+                    self.logger.debug(f"🔍 검색 쿼리 {query_idx + 1}/{len(search_queries)}: {search_query}")
+                    
                     try:
-                        quick_wait = WebDriverWait(driver, 3)
-                        search_box = quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
-                        self.logger.debug(f"✅ 검색창 발견: {selector}")
-                        break
-                    except TimeoutException:
-                        self.logger.debug(f"⚠️ 검색창 선택자 실패: {selector}")
+                        # Google 검색 페이지 접속
+                        self.logger.debug("🌐 Google 검색 페이지 접속 중...")
+                        driver.get("https://www.google.com")
+                        
+                        # 페이지 로드 대기
+                        wait = WebDriverWait(driver, GOOGLE_SEARCH_TIMEOUT)
+                        
+                        # 검색창 찾기 (최적화된 순서)
+                        search_box = None
+                        selectors = ['textarea[name="q"]', '#APjFqb', 'input[name="q"]']
+                        
+                        for selector in selectors:
+                            try:
+                                quick_wait = WebDriverWait(driver, 3)
+                                search_box = quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
+                                self.logger.debug(f"✅ 검색창 발견: {selector}")
+                                break
+                            except TimeoutException:
+                                self.logger.debug(f"⚠️ 검색창 선택자 실패: {selector}")
+                                continue
+                        
+                        if not search_box:
+                            self.logger.warning(f"⚠️ 쿼리 {query_idx + 1}: 검색창을 찾을 수 없음")
+                            continue
+                        
+                        # 검색어 입력 (속도 최적화된 타이핑)
+                        self.logger.debug("⌨️ 검색어 입력 중...")
+                        search_box.clear()
+                        
+                        # 속도 우선: 딜레이 단축
+                        for char in search_query:
+                            search_box.send_keys(char)
+                            time.sleep(random.uniform(0.02, 0.05))
+                        
+                        # 검색 실행
+                        search_box.send_keys(Keys.RETURN)
+                        self.logger.debug("🔍 검색 실행됨")
+                        
+                        # 검색 결과 대기 (빠른 타임아웃)
+                        try:
+                            quick_wait = WebDriverWait(driver, 3)
+                            quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#search')))
+                            self.logger.debug("✅ 검색 결과 로드 완료")
+                        except TimeoutException:
+                            self.logger.warning("⚠️ 검색 결과 로드 타임아웃 (3초)")
+                            continue
+                        
+                        # 검색 결과 텍스트 추출
+                        try:
+                            results = driver.find_elements(By.CSS_SELECTOR, 'h3')[:3]
+                            snippets = driver.find_elements(By.CSS_SELECTOR, '.VwiC3b')[:3]
+                            
+                            search_results = []
+                            for i, result in enumerate(results):
+                                title = result.text.strip()
+                                snippet = snippets[i].text.strip() if i < len(snippets) else ""
+                                search_results.append(f"{title}: {snippet}")
+                            
+                            search_result_text = " | ".join(search_results)
+                            
+                            if search_result_text:
+                                all_search_results.append(f"쿼리{query_idx + 1}: {search_result_text}")
+                                self.logger.debug(f"✅ 쿼리 {query_idx + 1} 결과 수집 완료")
+                            else:
+                                self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 검색 결과 없음")
+                        
+                        except Exception as e:
+                            self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 결과 추출 오류: {e}")
+                            continue
+                    
+                    except Exception as e:
+                        self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 실행 오류: {e}")
                         continue
                 
-                if not search_box:
-                    message = "Google 검색창을 찾을 수 없음"
-                    self.logger.error(f"❌ {message}")
-                    return False, message, ""
+                # 모든 검색 결과 종합 분석
+                combined_search_result = " | ".join(all_search_results)
                 
-                # 검색어 입력 (속도 최적화된 타이핑)
-                self.logger.debug("⌨️ 검색어 입력 중...")
-                search_box.clear()
-                
-                # 속도 우선: 딜레이 단축
-                for char in search_query:
-                    search_box.send_keys(char)
-                    time.sleep(random.uniform(0.02, 0.05))
-                
-                # 검색 실행
-                search_box.send_keys(Keys.RETURN)
-                self.logger.debug("🔍 검색 실행됨")
-                
-                # 검색 결과 대기 (빠른 타임아웃)
-                try:
-                    quick_wait = WebDriverWait(driver, 3)
-                    quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#search')))
-                    self.logger.debug("✅ 검색 결과 로드 완료")
-                except TimeoutException:
-                    self.logger.warning("⚠️ 검색 결과 로드 타임아웃 (3초)")
-                
-                # 검색 결과 텍스트 추출
-                try:
-                    results = driver.find_elements(By.CSS_SELECTOR, 'h3')[:3]
-                    snippets = driver.find_elements(By.CSS_SELECTOR, '.VwiC3b')[:3]
-                    
-                    search_results = []
-                    for i, result in enumerate(results):
-                        title = result.text.strip()
-                        snippet = snippets[i].text.strip() if i < len(snippets) else ""
-                        search_results.append(f"{title}: {snippet}")
-                    
-                    search_result_text = " | ".join(search_results)
-                    
-                    if search_result_text:
-                        # 기관명이 검색 결과에 포함되어 있는지 확인
-                        if institution_name in search_result_text:
-                            message = f"Google 검색에서 기관명 확인됨: {institution_name}"
-                            self.logger.info(f"✅ 2차 검증 통과: {message}")
-                            return True, message, search_result_text
-                        else:
-                            message = f"Google 검색에서 기관명 불일치 (검색: {search_result_text[:100]}...)"
-                            self.logger.warning(f"⚠️ 2차 검증 실패: {message}")
-                            return False, message, search_result_text
+                if combined_search_result:
+                    # 기관명이 검색 결과에 포함되어 있는지 확인
+                    if institution_name in combined_search_result:
+                        message = f"다중 Google 검색에서 기관명 확인됨: {institution_name} (총 {len(all_search_results)}개 쿼리)"
+                        self.logger.info(f"✅ 2차 검증 통과: {message}")
+                        return True, message, combined_search_result
                     else:
-                        message = "Google 검색 결과 없음"
+                        message = f"다중 Google 검색에서 기관명 불일치 (총 {len(all_search_results)}개 쿼리 결과)"
                         self.logger.warning(f"⚠️ 2차 검증 실패: {message}")
-                        return False, message, ""
-                
-                except Exception as e:
-                    message = f"검색 결과 추출 오류: {e}"
-                    self.logger.error(f"❌ {message}")
+                        return False, message, combined_search_result
+                else:
+                    message = "모든 Google 검색 쿼리에서 결과 없음"
+                    self.logger.warning(f"⚠️ 2차 검증 실패: {message}")
                     return False, message, ""
                 
             finally:
@@ -623,9 +643,11 @@ class Valid3ValidationManager:
             return False, error_msg, ""
     
     def validate_stage3(self, fax_number: str, institution_name: str, google_search_result: str, worker_id: int = 0) -> Tuple[bool, str, List[str], List[Dict], float]:
-        """3차 검증: 검색결과 링크 크롤링 + 기관명 추출 (향상된 신뢰도 계산)"""
+        """3차 검증: 검색결과 링크 크롤링 + 기관명 추출 (드라이버 재사용 최적화)"""
         try:
-            self.logger.debug(f"🔗 3차 검증 시작: 팩스:{fax_number}, 기관:{institution_name}")
+            # 워커 ID를 MAX_WORKERS 범위로 제한
+            worker_id = worker_id % MAX_WORKERS
+            self.logger.debug(f"🔗 3차 검증 시작: 팩스:{fax_number}, 기관:{institution_name}, 워커:{worker_id}")
             
             # 2차 검증 결과가 없으면 건너뛰기
             if not google_search_result:
@@ -633,7 +655,7 @@ class Valid3ValidationManager:
                 self.logger.info(f"⏭️ {message}")
                 return False, message, [], [], 0.0
             
-            # WebDriverManager 획득
+            # WebDriverManager 획득 (재사용)
             web_manager = self.get_driver_for_worker(worker_id)
             
             # 드라이버 생성 및 링크 추출
@@ -657,58 +679,78 @@ class Valid3ValidationManager:
                 
                 self.logger.debug(f"✅ 워커 {worker_id} 3차 검증용 드라이버 생성 완료")
                 
-                # Google 검색 재실행하여 링크 추출
-                search_query = f'{fax_number} 팩스번호 어느기관'
-                self.logger.debug("🌐 Google 검색 페이지 재접속 (링크 추출용)...")
-                driver.get("https://www.google.com")
+                # 다중 Google 검색으로 링크 추출 (2차 검증과 동일한 쿼리 사용)
+                search_queries = [
+                    f'{fax_number} 팩스번호 어느기관',
+                    f'{fax_number} 어디 팩스번호'
+                ]
+                self.logger.debug(f"🔗 3차 검증용 다중 검색 쿼리들: {search_queries}")
                 
-                # 검색창 찾기 및 검색 실행 (간소화)
-                search_box = None
-                selectors = ['textarea[name="q"]', '#APjFqb', 'input[name="q"]']
-                
-                for selector in selectors:
+                # 각 쿼리별로 링크 추출
+                for query_idx, search_query in enumerate(search_queries):
+                    self.logger.debug(f"🔍 3차 검증 쿼리 {query_idx + 1}/{len(search_queries)}: {search_query}")
+                    
                     try:
-                        quick_wait = WebDriverWait(driver, 3)
-                        search_box = quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
-                        break
-                    except TimeoutException:
+                        # Google 검색 페이지 접속
+                        driver.get("https://www.google.com")
+                        
+                        # 검색창 찾기 및 검색 실행 (간소화)
+                        search_box = None
+                        selectors = ['textarea[name="q"]', '#APjFqb', 'input[name="q"]']
+                        
+                        for selector in selectors:
+                            try:
+                                quick_wait = WebDriverWait(driver, 3)
+                                search_box = quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
+                                break
+                            except TimeoutException:
+                                continue
+                        
+                        if not search_box:
+                            self.logger.warning(f"⚠️ 3차 검증 쿼리 {query_idx + 1}: 검색창을 찾을 수 없음")
+                            continue
+                        
+                        # 검색어 입력 및 실행
+                        search_box.clear()
+                        for char in search_query:
+                            search_box.send_keys(char)
+                            time.sleep(random.uniform(0.02, 0.05))
+                        
+                        search_box.send_keys(Keys.RETURN)
+                        self.logger.debug(f"🔍 3차 검증 쿼리 {query_idx + 1} 검색 실행됨")
+                        
+                        # 검색 결과 대기
+                        try:
+                            quick_wait = WebDriverWait(driver, 3)
+                            quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#search')))
+                        except TimeoutException:
+                            self.logger.warning(f"⚠️ 3차 검증 쿼리 {query_idx + 1}: 검색 결과 로드 타임아웃 (3초)")
+                            continue
+                        
+                        # 검색 결과 링크 추출 (SEARCH_RESULTS_LIMIT개까지)
+                        try:
+                            link_elements = driver.find_elements(By.CSS_SELECTOR, '#search a[href]')
+                            
+                            query_links = []
+                            for element in link_elements[:SEARCH_RESULTS_LIMIT]:
+                                href = element.get_attribute('href')
+                                if href and href.startswith('http') and 'google.com' not in href:
+                                    if href not in extracted_links:  # 중복 방지
+                                        extracted_links.append(href)
+                                        query_links.append(href)
+                                        self.logger.debug(f"🔗 쿼리 {query_idx + 1} 링크: {href}")
+                            
+                            self.logger.info(f"📎 쿼리 {query_idx + 1}에서 {len(query_links)}개 새 링크 추출")
+                            
+                        except Exception as e:
+                            self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 링크 추출 오류: {e}")
+                            continue
+                    
+                    except Exception as e:
+                        self.logger.debug(f"⚠️ 3차 검증 쿼리 {query_idx + 1} 실행 오류: {e}")
                         continue
                 
-                if not search_box:
-                    message = "3차 검증: Google 검색창을 찾을 수 없음"
-                    self.logger.error(f"❌ {message}")
-                    return False, message, [], [], 0.0
-                
-                # 검색어 입력 및 실행
-                search_box.clear()
-                for char in search_query:
-                    search_box.send_keys(char)
-                    time.sleep(random.uniform(0.02, 0.05))
-                
-                search_box.send_keys(Keys.RETURN)
-                self.logger.debug("🔍 3차 검증용 검색 실행됨")
-                
-                # 검색 결과 대기
-                try:
-                    quick_wait = WebDriverWait(driver, 3)
-                    quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#search')))
-                except TimeoutException:
-                    self.logger.warning("⚠️ 3차 검증: 검색 결과 로드 타임아웃 (3초)")
-                
-                # 검색 결과 링크 추출 (SEARCH_RESULTS_LIMIT개까지)
-                try:
-                    link_elements = driver.find_elements(By.CSS_SELECTOR, '#search a[href]')
-                    
-                    for element in link_elements[:SEARCH_RESULTS_LIMIT]:
-                        href = element.get_attribute('href')
-                        if href and href.startswith('http') and 'google.com' not in href:
-                            extracted_links.append(href)
-                            self.logger.debug(f"🔗 추출된 링크: {href}")
-                    
-                    self.logger.info(f"📎 총 {len(extracted_links)}개 링크 추출 완료")
-                    
-                except Exception as e:
-                    self.logger.error(f"❌ 링크 추출 오류: {e}")
+                self.logger.info(f"📎 다중 쿼리로 총 {len(extracted_links)}개 링크 추출 완료")
                 
                 # 추출된 링크들을 병렬로 크롤링
                 if extracted_links:
@@ -1446,20 +1488,23 @@ class Valid3ValidationManager:
                 all_results.extend(batch_results)
                 processed_count += len(batch_results)
                 
-                # 배치 완료 후 모든 워커의 드라이버 정리
-                self._cleanup_all_worker_drivers()
-                
                 # 진행률 출력
                 progress = (processed_count / total_rows) * 100
                 self.logger.info(f"📊 전체 진행률: {processed_count}/{total_rows} ({progress:.1f}%)")
+                
+                # 배치마다 드라이버 정리 (중요!)
+                self._cleanup_all_worker_drivers()
+                self.logger.info(f"🧹 배치 {batch_start//BATCH_SIZE + 1} 완료 후 드라이버 정리")
                 
                 # 중간 저장
                 if processed_count % SAVE_INTERVAL == 0:
                     self._save_intermediate_results(all_results, processed_count)
                 
-                # 메모리 정리
+                # 강화된 메모리 정리
                 if processed_count % MEMORY_CLEANUP_INTERVAL == 0:
                     self._cleanup_memory()
+                    # 추가 크롬 프로세스 체크
+                    self.force_kill_all_chrome_processes()
             
             # 최종 결과 저장
             self.validation_results = all_results
@@ -1484,11 +1529,10 @@ class Valid3ValidationManager:
             
             # ThreadPoolExecutor를 사용한 병렬 처리
             with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-                # 작업 제출
+                # 작업 제출 (워커 ID 최적화)
                 futures = []
                 for idx, (row_idx, row) in enumerate(batch_data.iterrows()):
                     actual_row_idx = batch_start + idx
-                    worker_id = actual_row_idx % MAX_WORKERS
                     
                     future = executor.submit(self.validate_single_row, (actual_row_idx, row))
                     futures.append((future, actual_row_idx))
@@ -1825,12 +1869,15 @@ class Valid3ValidationManager:
             return ""
     
     def validate_single_row(self, row_data: Tuple[int, pd.Series]) -> ValidationResult:
-        """개별 행 검증 (모든 개선사항 적용 + Valid2_fixed 기반)"""
+        """개별 행 검증 (워커 ID 최적화 + 드라이버 재사용)"""
         row_idx, row = row_data
         start_time = time.time()
         
+        # 워커 ID 계산 (MAX_WORKERS 범위로 제한)
+        worker_id = row_idx % MAX_WORKERS
+        
         try:
-            self.logger.info(f"🔄 행 {row_idx + 1} 검증 시작")
+            self.logger.info(f"🔄 행 {row_idx + 1} 검증 시작 (워커: {worker_id})")
             
             # 데이터 추출
             institution_name = str(row.iloc[4]).strip()  # E열 읍면동
@@ -1865,18 +1912,18 @@ class Valid3ValidationManager:
             result.stage1_message = stage1_message
             result.area_code_match = stage1_passed
             
-            # 2차 검증 실행
+            # 2차 검증 실행 (올바른 워커 ID 전달)
             stage2_passed, stage2_message, google_search_result = self.validate_stage2(
-                fax_number, institution_name, worker_id=0
+                fax_number, institution_name, worker_id=worker_id
             )
             
             result.stage2_passed = stage2_passed
             result.stage2_message = stage2_message
             result.google_search_result = google_search_result
             
-            # 3차 검증 실행
+            # 3차 검증 실행 (올바른 워커 ID 전달)
             stage3_passed, stage3_message, extracted_links, crawled_data, confidence_score = self.validate_stage3(
-                fax_number, institution_name, google_search_result, worker_id=0
+                fax_number, institution_name, google_search_result, worker_id=worker_id
             )
             
             result.stage3_passed = stage3_passed
@@ -1899,9 +1946,9 @@ class Valid3ValidationManager:
             else:
                 self.logger.debug("🔍 3차 검증에서 기관명 추출되지 않음")
             
-            # 4차 검증 실행
+            # 4차 검증 실행 (올바른 워커 ID 전달)
             stage4_passed, stage4_message, ai_extracted_institution = self.validate_stage4(
-                fax_number, institution_name, result.extracted_links, result.discovered_institutions, worker_id=0
+                fax_number, institution_name, result.extracted_links, result.discovered_institutions, worker_id=worker_id
             )
             
             result.stage4_passed = stage4_passed
