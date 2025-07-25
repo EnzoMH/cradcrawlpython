@@ -67,6 +67,335 @@ from utils.phone_validator import PhoneValidator
 load_dotenv()
 
 # ================================
+# 매크로 방지 시스템 (복구)
+# ================================
+
+class ProxyRotator:
+    """매크로봇 방지를 위한 프록시 로테이션 시스템 (복구)"""
+    
+    def __init__(self, logger):
+        """ProxyRotator 초기화"""
+        self.logger = logger
+        
+        # 대량 User-Agent 풀 (50+ 실제 브라우저 User-Agent)
+        self.user_agents = [
+            # Chrome 120-121 (Windows)
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+            
+            # Chrome (macOS)
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            
+            # Chrome (Linux)
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/121.0',
+            
+            # Edge (Windows)
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+            
+            # Safari (macOS)
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Safari/605.1.15',
+            
+            # Firefox (Windows)
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:119.0) Gecko/20100101 Firefox/119.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:118.0) Gecko/20100101 Firefox/118.0',
+            
+            # Firefox (macOS)
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:119.0) Gecko/20100101 Firefox/119.0',
+            
+            # 추가 Chrome 버전들 (다양한 OS)
+            'Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            
+            # 모바일 User-Agent들
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (Linux; Android 14; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            
+            # 다양한 해상도 및 플랫폼
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            
+            # 다양한 Chrome 마이너 버전들
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.129 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.130 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.85 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.139 Safari/537.36',
+            
+            # 기업용 브라우저들
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 OPR/106.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Vivaldi/6.5.3206.39',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Whale/3.25.232.19 Safari/537.36',
+            
+            # 국제 버전들
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36,gzip(gfe)',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 YaBrowser/24.1.0.0 Safari/537.36',
+            
+            # Linux 다양한 배포판
+            'Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (X11; openSUSE Leap 15.5; rv:121.0) Gecko/20100101 Firefox/121.0',
+            
+            # 추가 다양한 버전들
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+            
+            # 더 많은 현실적인 User-Agent들
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Config/93.2.2837.1',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 AtContent/94.4.4312.48'
+        ]
+        
+        # Google DNS 전용 (사용자 요구사항)
+        self.dns_servers = ["8.8.8.8", "8.8.4.4"]  # Google DNS만 사용
+        
+        # 현재 로테이션 상태
+        self.current_config = {}
+        self.rotation_count = 0
+        self.blocked_count = 0
+        
+        self.logger.info(f"🛡️ ProxyRotator 초기화: {len(self.user_agents)}개 User-Agent, Google DNS")
+    
+    def get_rotation_config(self, worker_id: int, port_manager=None) -> Dict:
+        """워커별 로테이션 설정 반환 (차단 감지 시 자동 변경)"""
+        try:
+            # 워커별 고유 인덱스 계산
+            ua_index = (worker_id + self.rotation_count) % len(self.user_agents)
+            dns_index = (worker_id + self.rotation_count) % len(self.dns_servers)
+            
+            config = {
+                'user_agent': self.user_agents[ua_index],
+                'dns_server': self.dns_servers[dns_index],
+                'worker_id': worker_id,
+                'rotation_count': self.rotation_count
+            }
+            
+            # 포트 매니저가 있으면 포트 할당
+            if port_manager:
+                try:
+                    assigned_port = port_manager.allocate_port(worker_id)
+                    config['port'] = assigned_port
+                    self.logger.debug(f"🔌 워커 {worker_id}: 포트 {assigned_port} 할당")
+                except Exception as e:
+                    self.logger.warning(f"⚠️ 워커 {worker_id} 포트 할당 실패: {e}")
+                    config['port'] = None
+            else:
+                config['port'] = None
+            
+            self.current_config[worker_id] = config
+            
+            self.logger.debug(f"🎭 워커 {worker_id} 로테이션 설정: UA#{ua_index}, DNS#{dns_index}")
+            return config
+            
+        except Exception as e:
+            self.logger.error(f"❌ 로테이션 설정 생성 실패: {e}")
+            # 기본 설정 반환
+            return {
+                'user_agent': self.user_agents[0],
+                'dns_server': self.dns_servers[0],
+                'worker_id': worker_id,
+                'rotation_count': 0,
+                'port': None
+            }
+    
+    def on_blocked_detected(self, worker_id: int):
+        """차단 감지 시 호출 - 자동 로테이션 실행"""
+        try:
+            self.blocked_count += 1
+            self.rotation_count += 1
+            
+            self.logger.warning(f"🚨 워커 {worker_id} 차단 감지 - 자동 로테이션 실행 (#{self.rotation_count})")
+            
+            # 해당 워커의 설정 즉시 변경
+            if hasattr(self, 'current_config') and worker_id in self.current_config:
+                del self.current_config[worker_id]
+            
+            # 새로운 설정 생성
+            new_config = self.get_rotation_config(worker_id)
+            
+            self.logger.info(f"🔄 워커 {worker_id} 새 설정: {new_config['user_agent'][:50]}... / DNS: {new_config['dns_server']}")
+            
+            return new_config
+            
+        except Exception as e:
+            self.logger.error(f"❌ 차단 감지 처리 실패: {e}")
+            return None
+    
+    def get_status(self) -> Dict:
+        """ProxyRotator 상태 정보 반환"""
+        return {
+            'total_user_agents': len(self.user_agents),
+            'total_dns_servers': len(self.dns_servers),
+            'rotation_count': self.rotation_count,
+            'blocked_count': self.blocked_count,
+            'active_workers': len(self.current_config) if hasattr(self, 'current_config') else 0
+        }
+
+class AdvancedPortManager:
+    """고급 포트 관리 시스템 (100개 포트 범위)"""
+    
+    def __init__(self, logger):
+        """AdvancedPortManager 초기화"""
+        self.logger = logger
+        
+        # 포트 범위 설정 (100개 포트)
+        self.port_range_start = 9222
+        self.port_range_end = 9322  # 9222-9321 (100개)
+        self.available_ports = set(range(self.port_range_start, self.port_range_end))
+        self.used_ports = set()
+        self.blacklisted_ports = set()  # 차단된 포트들
+        self.port_assignments = {}  # 워커별 포트 할당 기록
+        
+        # 포트 사용 통계
+        self.allocation_count = 0
+        self.release_count = 0
+        
+        self.logger.info(f"🔌 AdvancedPortManager 초기화: {len(self.available_ports)}개 포트 관리 ({self.port_range_start}-{self.port_range_end-1})")
+    
+    def allocate_port(self, worker_id: int) -> int:
+        """워커에게 포트 할당"""
+        try:
+            # 이미 할당된 포트가 있으면 재사용
+            if worker_id in self.port_assignments:
+                existing_port = self.port_assignments[worker_id]
+                if existing_port not in self.blacklisted_ports:
+                    self.logger.debug(f"🔌 워커 {worker_id}: 기존 포트 {existing_port} 재사용")
+                    return existing_port
+                else:
+                    # 블랙리스트에 있으면 해제하고 새로 할당
+                    self.logger.warning(f"⚠️ 워커 {worker_id}: 기존 포트 {existing_port} 블랙리스트됨, 새 포트 할당")
+                    del self.port_assignments[worker_id]
+                    self.used_ports.discard(existing_port)
+            
+            # 사용 가능한 포트 찾기
+            available_ports = self.available_ports - self.used_ports - self.blacklisted_ports
+            
+            if not available_ports:
+                # 사용 가능한 포트가 없으면 강제로 오래된 포트 해제
+                if self.used_ports:
+                    oldest_port = min(self.used_ports)
+                    self.logger.warning(f"⚠️ 사용 가능한 포트 없음, 강제 해제: {oldest_port}")
+                    self.release_port(oldest_port)
+                    available_ports = self.available_ports - self.used_ports - self.blacklisted_ports
+                
+                if not available_ports:
+                    # 그래도 없으면 블랙리스트 일부 해제
+                    if self.blacklisted_ports:
+                        released_port = self.blacklisted_ports.pop()
+                        self.logger.warning(f"⚠️ 블랙리스트 포트 해제: {released_port}")
+                        available_ports = {released_port}
+                    else:
+                        raise Exception("모든 포트가 고갈됨")
+            
+            # 포트 할당
+            allocated_port = min(available_ports)  # 가장 작은 번호부터 사용
+            self.used_ports.add(allocated_port)
+            self.port_assignments[worker_id] = allocated_port
+            self.allocation_count += 1
+            
+            self.logger.debug(f"🔌 워커 {worker_id}: 포트 {allocated_port} 새로 할당 (총 사용중: {len(self.used_ports)}개)")
+            return allocated_port
+            
+        except Exception as e:
+            self.logger.error(f"❌ 포트 할당 실패 (워커 {worker_id}): {e}")
+            # 긴급 포트 반환 (기본 포트)
+            emergency_port = self.port_range_start + (worker_id % 10)
+            self.logger.warning(f"🚨 긴급 포트 할당: {emergency_port}")
+            return emergency_port
+    
+    def release_port(self, port: int, worker_id: int = None):
+        """포트 즉시 해제"""
+        try:
+            if port in self.used_ports:
+                self.used_ports.remove(port)
+                self.release_count += 1
+                
+                # 워커 할당 기록에서 제거
+                if worker_id and worker_id in self.port_assignments:
+                    if self.port_assignments[worker_id] == port:
+                        del self.port_assignments[worker_id]
+                else:
+                    # worker_id가 없으면 전체 할당 기록에서 찾아서 제거
+                    for wid, assigned_port in list(self.port_assignments.items()):
+                        if assigned_port == port:
+                            del self.port_assignments[wid]
+                            break
+                
+                self.logger.debug(f"🔓 포트 {port} 즉시 해제 완료 (남은 사용중: {len(self.used_ports)}개)")
+            else:
+                self.logger.debug(f"⚠️ 포트 {port} 이미 해제됨")
+                
+        except Exception as e:
+            self.logger.error(f"❌ 포트 해제 실패 ({port}): {e}")
+    
+    def blacklist_port(self, port: int, reason: str = "차단됨"):
+        """포트를 블랙리스트에 추가 (차단된 포트)"""
+        try:
+            self.blacklisted_ports.add(port)
+            self.used_ports.discard(port)  # 사용중 목록에서 제거
+            
+            # 워커 할당에서도 제거
+            for worker_id, assigned_port in list(self.port_assignments.items()):
+                if assigned_port == port:
+                    del self.port_assignments[worker_id]
+                    break
+            
+            self.logger.warning(f"🚫 포트 {port} 블랙리스트 추가: {reason}")
+            
+        except Exception as e:
+            self.logger.error(f"❌ 포트 블랙리스트 실패 ({port}): {e}")
+    
+    def release_all_ports(self):
+        """모든 포트 해제"""
+        try:
+            released_count = len(self.used_ports)
+            self.used_ports.clear()
+            self.port_assignments.clear()
+            
+            self.logger.info(f"🧹 모든 포트 해제 완료: {released_count}개")
+            
+        except Exception as e:
+            self.logger.error(f"❌ 모든 포트 해제 실패: {e}")
+    
+    def get_port_status(self) -> Dict:
+        """포트 사용 현황 반환"""
+        total_ports = len(self.available_ports)
+        used_count = len(self.used_ports)
+        blacklisted_count = len(self.blacklisted_ports)
+        available_count = total_ports - used_count - blacklisted_count
+        
+        return {
+            'total_ports': total_ports,
+            'available_count': available_count,
+            'used_count': used_count,
+            'blacklisted_count': blacklisted_count,
+            'allocation_count': self.allocation_count,
+            'release_count': self.release_count,
+            'used_ports': list(self.used_ports),
+            'blacklisted_ports': list(self.blacklisted_ports),
+            'port_assignments': dict(self.port_assignments)
+        }
+
+# ================================
 # 전역 설정 (Valid2_fixed 기반 최적화)
 # ================================
 
@@ -142,152 +471,8 @@ def setup_detailed_logger(name: str = "Valid3") -> logging.Logger:
     return logger
 
 # ================================
-# 프록시 및 우회 시스템 (ppff2.py 기반)
+# Valid2 단순화 방식 (복잡한 우회 시스템 제거)
 # ================================
-
-# 포트 관리 설정
-PORT_RANGE_START = 1024
-PORT_RANGE_END = 65535
-
-class AdvancedPortManager:
-    """고급 포트 관리자 - 1024-65535 범위 공격적 접근"""
-    
-    def __init__(self, logger=None):
-        self.logger = logger or logging.getLogger(__name__)
-        self.used_ports = set()
-        self.available_ports = list(range(PORT_RANGE_START, PORT_RANGE_END + 1))
-        random.shuffle(self.available_ports)  # 랜덤화
-        self.port_index = 0
-        self.logger.info(f"🔌 포트 관리자 초기화: {PORT_RANGE_START}-{PORT_RANGE_END} 범위 ({len(self.available_ports)}개)")
-    
-    def get_random_port(self, worker_id: int) -> int:
-        """워커별 랜덤 포트 할당"""
-        max_attempts = 100
-        
-        for attempt in range(max_attempts):
-            # 순환 방식으로 포트 선택
-            port = self.available_ports[self.port_index % len(self.available_ports)]
-            self.port_index += 1
-            
-            if port not in self.used_ports and self._is_port_available(port):
-                self.used_ports.add(port)
-                self.logger.debug(f"🔌 워커 {worker_id}: 포트 {port} 할당")
-                return port
-        
-        # 모든 시도 실패시 백업 포트
-        backup_port = 9222 + (worker_id * 100) + random.randint(0, 99)
-        self.logger.warning(f"⚠️ 워커 {worker_id}: 백업 포트 {backup_port} 사용")
-        return backup_port
-    
-    def _is_port_available(self, port: int) -> bool:
-        """포트 사용 가능 여부 확인"""
-        try:
-            import socket
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.settimeout(1)
-                result = s.connect_ex(('localhost', port))
-                return result != 0  # 포트가 사용 중이 아님
-        except:
-            return False
-    
-    def release_port(self, port: int):
-        """포트 해제"""
-        self.used_ports.discard(port)
-        self.logger.debug(f"🔌 포트 {port} 해제")
-    
-    def get_port_status(self) -> Dict:
-        """포트 사용 현황 반환"""
-        return {
-            "total_available": len(self.available_ports),
-            "currently_used": len(self.used_ports),
-            "usage_percentage": (len(self.used_ports) / len(self.available_ports)) * 100
-        }
-
-class ProxyRotator:
-    """프록시 및 IP 변조 관리자 (매크로 방지 우회)"""
-    
-    def __init__(self, logger=None):
-        self.logger = logger or logging.getLogger(__name__)
-        self.proxy_list = []
-        self.user_agents = [
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15'
-        ]
-        self.dns_servers = [
-            '8.8.8.8',      # Google DNS
-            '1.1.1.1',      # Cloudflare DNS
-            '9.9.9.9',      # Quad9 DNS
-            '208.67.222.222' # OpenDNS
-        ]
-        self.current_proxy_index = 0
-        self.current_ua_index = 0
-        self.current_dns_index = 0
-        
-        # 무료 프록시 로드
-        self._load_free_proxies()
-        
-        self.logger.info(f"🌐 프록시 로테이터 초기화: {len(self.proxy_list)}개 프록시, {len(self.user_agents)}개 User-Agent")
-    
-    def _load_free_proxies(self):
-        """무료 프록시 목록 로드"""
-        try:
-            # 기본 프록시 목록 (예시)
-            basic_proxies = [
-                "185.199.108.153:8080",
-                "185.199.110.153:8080", 
-                "208.67.222.123:8080"
-            ]
-            self.proxy_list.extend(basic_proxies)
-            
-            # 실제 환경에서는 free-proxy-list.net API 등을 활용
-            self.logger.info(f"🌐 기본 프록시 {len(basic_proxies)}개 로드")
-            
-        except Exception as e:
-            self.logger.warning(f"⚠️ 프록시 로드 실패: {e}")
-    
-    def get_rotation_config(self, worker_id: int, port_manager=None) -> Dict:
-        """워커별 로테이션 설정 반환 (매크로 방지 우회 + 포트 관리)"""
-        config = {
-            "user_agent": self.user_agents[self.current_ua_index % len(self.user_agents)],
-            "dns_server": self.dns_servers[self.current_dns_index % len(self.dns_servers)],
-            "proxy": None,
-            "headers": self._generate_random_headers(),
-            "worker_id": worker_id,
-            "port": None
-        }
-        
-        # 고급 포트 할당 (차단 방지)
-        if port_manager:
-            config["port"] = port_manager.get_random_port(worker_id)
-        
-        # 프록시 사용 (30% 확률로 줄임 - 안정성 향상)
-        if self.proxy_list and random.random() < 0.3:
-            config["proxy"] = self.proxy_list[self.current_proxy_index % len(self.proxy_list)]
-            self.current_proxy_index += 1
-        
-        # 인덱스 증가 (워커별로 다르게)
-        self.current_ua_index += worker_id + 1
-        self.current_dns_index += worker_id + 1
-        
-        return config
-    
-    def _generate_random_headers(self) -> Dict:
-        """랜덤 헤더 생성 (매크로 방지)"""
-        return {
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-            "Accept-Language": random.choice(["ko-KR,ko;q=0.9,en-US;q=0.8", "en-US,en;q=0.9,ko;q=0.8"]),
-            "Accept-Encoding": "gzip, deflate, br",
-            "Connection": "keep-alive",
-            "Upgrade-Insecure-Requests": "1",
-            "Cache-Control": random.choice(["no-cache", "max-age=0"]),
-            "Sec-Fetch-Dest": "document",
-            "Sec-Fetch-Mode": "navigate",
-            "Sec-Fetch-Site": "none"
-        }
 
 # ================================
 # 데이터 클래스 (Valid2_fixed와 동일)
@@ -365,12 +550,11 @@ class Valid3ValidationManager:
             self.ai_manager = AIModelManager(self.logger)
             self.logger.debug("✅ AIModelManager 초기화 완료")
             
-            # 매크로 방지 우회 시스템 초기화
-            self.logger.debug("🌐 ProxyRotator 초기화 중...")
+            # 매크로 방지 시스템 복구
+            self.logger.debug("🛡️ ProxyRotator 초기화 중...")
             self.proxy_rotator = ProxyRotator(self.logger)
             self.logger.debug("✅ ProxyRotator 초기화 완료")
             
-            # 고급 포트 관리자 초기화
             self.logger.debug("🔌 AdvancedPortManager 초기화 중...")
             self.port_manager = AdvancedPortManager(self.logger)
             self.logger.debug("✅ AdvancedPortManager 초기화 완료")
@@ -586,14 +770,49 @@ class Valid3ValidationManager:
             return False, error_msg
     
     def get_driver_for_worker(self, worker_id: int):
-        """워커별 WebDriver 인스턴스 획득 (thread-safe)"""
+        """워커별 WebDriver 인스턴스 획득 (thread-safe, 차단감지 시 재생성)"""
         with self.driver_lock:
-            if worker_id not in self.web_driver_managers:
-                self.logger.debug(f"🔧 워커 {worker_id} WebDriverManager 생성 중...")
-                self.web_driver_managers[worker_id] = WebDriverManager(logger=self.logger)
-                self.logger.debug(f"✅ 워커 {worker_id} WebDriverManager 생성 완료")
+            # 차단된 워커 확인 (ProxyRotator에서 blocked_count 확인)
+            current_rotation = self.proxy_rotator.rotation_count if hasattr(self, 'proxy_rotator') else 0
             
-            return self.web_driver_managers[worker_id]
+            # 기존 WebDriverManager 확인
+            if worker_id in self.web_driver_managers:
+                web_manager = self.web_driver_managers[worker_id]
+                
+                # 차단 감지로 인해 로테이션이 발생했으면 WebDriverManager 재생성
+                last_rotation = getattr(web_manager, '_last_rotation_count', 0)
+                if current_rotation > last_rotation:
+                    self.logger.info(f"🔄 워커 {worker_id} 차단감지로 WebDriverManager 재생성 (로테이션: {last_rotation} → {current_rotation})")
+                    
+                    # 기존 매니저 정리
+                    try:
+                        if hasattr(web_manager, 'cleanup_all_drivers'):
+                            web_manager.cleanup_all_drivers()
+                        elif hasattr(web_manager, 'cleanup'):
+                            web_manager.cleanup()
+                    except Exception as e:
+                        self.logger.debug(f"⚠️ 워커 {worker_id} 기존 매니저 정리 실패: {e}")
+                    
+                    # 새로운 매니저 생성
+                    del self.web_driver_managers[worker_id]
+                    new_manager = WebDriverManager(logger=self.logger)
+                    new_manager._last_rotation_count = current_rotation
+                    self.web_driver_managers[worker_id] = new_manager
+                    
+                    self.logger.debug(f"✅ 워커 {worker_id} WebDriverManager 재생성 완료")
+                    return new_manager
+                else:
+                    # 기존 매니저 재사용
+                    return web_manager
+            else:
+                # 새로운 WebDriverManager 생성
+                self.logger.debug(f"🔧 워커 {worker_id} WebDriverManager 새로 생성 중...")
+                new_manager = WebDriverManager(logger=self.logger)
+                new_manager._last_rotation_count = current_rotation
+                self.web_driver_managers[worker_id] = new_manager
+                self.logger.debug(f"✅ 워커 {worker_id} WebDriverManager 생성 완료")
+                
+                return new_manager
     
     def cleanup_worker_driver(self, worker_id: int):
         """워커별 드라이버 완전 정리 (포트 해제 포함)"""
@@ -602,11 +821,14 @@ class Valid3ValidationManager:
                 if worker_id in self.web_driver_managers:
                     web_manager = self.web_driver_managers[worker_id]
                     
-                    # WebDriverManager의 사용된 포트들 해제
+                    # 워커가 사용중인 포트들 해제
                     if hasattr(web_manager, 'used_ports'):
                         for port in list(web_manager.used_ports):
-                            self.port_manager.release_port(port)
-                            self.logger.debug(f"🔌 워커 {worker_id} 포트 {port} 해제")
+                            try:
+                                self.port_manager.release_port(port, worker_id)
+                                self.logger.debug(f"🔓 워커 {worker_id} 포트 {port} 해제")
+                            except Exception as port_error:
+                                self.logger.debug(f"⚠️ 워커 {worker_id} 포트 {port} 해제 실패: {port_error}")
                     
                     # WebDriverManager의 정리 메서드 호출 (있는 경우)
                     if hasattr(web_manager, 'cleanup_all_drivers'):
@@ -645,37 +867,71 @@ class Valid3ValidationManager:
             self.logger.debug(f"⚠️ 크롬 프로세스 강제 종료 실패: {e}")
     
     def _apply_rotation_config(self, driver, rotation_config: Dict):
-        """드라이버에 매크로 방지 우회 설정 적용"""
+        """드라이버에 로테이션 설정 적용 (User-Agent, Google DNS, CDP명령)"""
         try:
-            # User-Agent 변경
+            if not driver or not rotation_config:
+                return False
+            
+            self.logger.debug(f"🎭 로테이션 설정 적용 시작: 워커 {rotation_config.get('worker_id', 'N/A')}")
+            
+            # 1. User-Agent 변경 (CDP 명령 사용)
             user_agent = rotation_config.get('user_agent')
             if user_agent:
-                driver.execute_cdp_cmd('Network.setUserAgentOverride', {
-                    "userAgent": user_agent
+                try:
+                    driver.execute_cdp_cmd('Network.setUserAgentOverride', {
+                        "userAgent": user_agent,
+                        "acceptLanguage": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+                        "platform": "Win32"
+                    })
+                    self.logger.debug(f"✅ User-Agent 변경: {user_agent[:50]}...")
+                except Exception as e:
+                    self.logger.debug(f"⚠️ User-Agent 변경 실패: {e}")
+            
+            # 2. navigator.webdriver 숨김 (봇 감지 방지)
+            try:
+                driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+                self.logger.debug("✅ navigator.webdriver 숨김 완료")
+            except Exception as e:
+                self.logger.debug(f"⚠️ navigator.webdriver 숨김 실패: {e}")
+            
+            # 3. 추가 CDP 명령들 (봇 감지 방지)
+            try:
+                # WebGL 벤더 정보 조작
+                driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
+                    'source': '''
+                        Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+                        Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]});
+                        Object.defineProperty(navigator, 'languages', {get: () => ['ko-KR', 'ko', 'en-US', 'en']});
+                        window.chrome = { runtime: {} };
+                        Object.defineProperty(navigator, 'permissions', {get: () => ({query: () => Promise.resolve({state: 'granted'})})});
+                    '''
                 })
-                self.logger.debug(f"🔧 User-Agent 변경 적용")
+                self.logger.debug("✅ 추가 봇 방지 스크립트 적용")
+            except Exception as e:
+                self.logger.debug(f"⚠️ 추가 봇 방지 스크립트 실패: {e}")
             
-            # 추가 헤더 설정
-            headers = rotation_config.get('headers', {})
-            if headers:
-                driver.execute_cdp_cmd('Network.setRequestInterception', {'patterns': [{'urlPattern': '*'}]})
-                self.logger.debug(f"🔧 헤더 설정 적용: {len(headers)}개")
+            # 4. Google DNS 설정 확인 (네트워크 레벨에서는 이미 설정됨)
+            dns_server = rotation_config.get('dns_server')
+            if dns_server:
+                self.logger.debug(f"🌐 DNS 서버: {dns_server}")
             
-            # 랜덤 지연 (매크로 방지)
-            delay = random.uniform(1.0, 3.0)
-            time.sleep(delay)
-            self.logger.debug(f"🕐 매크로 방지 지연: {delay:.2f}초")
+            # 5. 포트 정보 로깅
+            port = rotation_config.get('port')
+            if port:
+                self.logger.debug(f"🔌 할당된 포트: {port}")
+            
+            self.logger.debug(f"✅ 로테이션 설정 적용 완료: 워커 {rotation_config.get('worker_id', 'N/A')}")
+            return True
             
         except Exception as e:
-            # 설정 적용 실패는 크롤링에 치명적이지 않으므로 경고만
-            self.logger.warning(f"⚠️ 우회 설정 적용 실패 (계속 진행): {e}")
+            self.logger.error(f"❌ 로테이션 설정 적용 실패: {e}")
+            return False
     
+
     def validate_stage2(self, fax_number: str, institution_name: str, worker_id: int = 0) -> Tuple[bool, str, str]:
-        """2차 검증: Google 검색으로 팩스번호의 진짜 기관명 확인 (드라이버 재사용 최적화)"""
+        """2차 검증: Google 검색으로 팩스번호의 진짜 기관명 확인 (매크로방지 시스템 적용)"""
         try:
-            # 워커 ID를 MAX_WORKERS 범위로 제한
-            worker_id = worker_id % MAX_WORKERS
-            self.logger.debug(f"🔍 2차 검증 시작: 팩스:{fax_number}, 기관:{institution_name}, 워커:{worker_id}")
+            self.logger.debug(f"🔍 2차 검증 시작: 팩스:{fax_number}, 기관:{institution_name}")
             
             # 1차 검증을 통과한 경우만 진행
             if not fax_number or fax_number in ['nan', 'None', '', '#N/A']:
@@ -686,140 +942,99 @@ class Valid3ValidationManager:
             # WebDriverManager 획득
             web_manager = self.get_driver_for_worker(worker_id)
             
-            # 다중 Google 검색 쿼리 생성 (더 많은 결과 확보)
+            # 로테이션 설정 획득 (매크로 방지)
+            rotation_config = self.proxy_rotator.get_rotation_config(worker_id, self.port_manager)
+            assigned_port = rotation_config.get('port')
+            
+            # 복수 검색 쿼리 생성 (사용자 요구사항)
             search_queries = [
                 f'{fax_number} 팩스번호 어느기관',
-                f'{fax_number} 어디 팩스번호'
+                f'{fax_number} 팩스번호 어디',
+                f'{fax_number}는 어디 팩스번호'
             ]
-            self.logger.debug(f"🔍 검색 쿼리들: {search_queries}")
+            self.logger.debug(f"🔍 검색 쿼리 {len(search_queries)}개: {search_queries}")
             
-            # 드라이버 생성 및 다중 검색 실행
+            # 드라이버 생성 및 검색 실행
             driver = None
-            all_search_results = []
-            
             try:
-                self.logger.debug(f"🛡️ 워커 {worker_id} 드라이버 획득 중...")
+                self.logger.debug(f"🛡️ 워커 {worker_id} 매크로방지 드라이버 생성 중... (포트: {assigned_port})")
                 
-                # 매크로 방지 우회 설정 획득 (포트 관리 포함)
-                rotation_config = self.proxy_rotator.get_rotation_config(worker_id, self.port_manager)
-                assigned_port = rotation_config.get('port')
-                self.logger.debug(f"🌐 워커 {worker_id} 우회 설정: Port={assigned_port}, User-Agent={rotation_config['user_agent'][:50]}...")
-                
-                # 할당된 포트로 드라이버 생성
-                driver = web_manager.create_bot_evasion_driver(port=assigned_port)
+                # 포트를 지정하여 드라이버 생성
+                if assigned_port:
+                    driver = web_manager.create_bot_evasion_driver(worker_id=worker_id, port=assigned_port)
+                else:
+                    driver = web_manager.create_bot_evasion_driver(worker_id=worker_id)
                 
                 if not driver:
                     # 포트 해제
                     if assigned_port:
-                        self.port_manager.release_port(assigned_port)
+                        self.port_manager.release_port(assigned_port, worker_id)
                     message = "드라이버 생성 실패"
                     self.logger.error(f"❌ {message}")
                     return False, message, ""
                 
-                # 드라이버에 우회 설정 적용
-                self._apply_rotation_config(driver, rotation_config)
+                self.logger.debug(f"✅ 워커 {worker_id} 드라이버 생성 완료")
                 
-                self.logger.debug(f"✅ 워커 {worker_id} 드라이버 생성 완료 (포트: {assigned_port}, 우회 설정 적용)")
+                # 로테이션 설정 적용 (User-Agent, CDP 명령 등)
+                rotation_applied = self._apply_rotation_config(driver, rotation_config)
+                if rotation_applied:
+                    self.logger.debug(f"✅ 워커 {worker_id} 매크로방지 설정 적용 완료")
+                else:
+                    self.logger.warning(f"⚠️ 워커 {worker_id} 매크로방지 설정 적용 실패")
                 
-                # 각 검색 쿼리에 대해 검색 실행
+                # 인간적인 지연 (빠른 검색 우선)
+                time.sleep(random.uniform(0.5, 1.0))
+                
+                # 모든 검색 쿼리 시도
                 for query_idx, search_query in enumerate(search_queries):
-                    self.logger.debug(f"🔍 검색 쿼리 {query_idx + 1}/{len(search_queries)}: {search_query}")
-                    
                     try:
+                        self.logger.debug(f"🔍 검색 쿼리 {query_idx + 1}/{len(search_queries)}: {search_query}")
+                        
                         # Google 검색 페이지 접속
-                        self.logger.debug("🌐 Google 검색 페이지 접속 중...")
                         driver.get("https://www.google.com")
                         
-                        # 페이지 로드 대기
-                        wait = WebDriverWait(driver, GOOGLE_SEARCH_TIMEOUT)
-                        
-                        # 검색창 찾기 (강화된 선택자 및 대기시간)
+                        # 검색창 찾기 (최적화된 순서)
                         search_box = None
-                        selectors = [
-                            'textarea[name="q"]', 
-                            '#APjFqb', 
-                            'input[name="q"]',
-                            'input[type="text"][title*="검색"]',
-                            'textarea[title*="검색"]',
-                            '*[name="q"]',
-                            '#tsf input',
-                            '.gLFyf'
-                        ]
+                        selectors = ['textarea[name="q"]', '#APjFqb', 'input[name="q"]']
                         
                         for selector in selectors:
                             try:
-                                enhanced_wait = WebDriverWait(driver, 8)  # 3초 → 8초로 증가
-                                search_box = enhanced_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
+                                quick_wait = WebDriverWait(driver, 5)  # 안정성을 위해 5초로 복원
+                                search_box = quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
                                 self.logger.debug(f"✅ 검색창 발견: {selector}")
                                 break
                             except TimeoutException:
-                                self.logger.debug(f"⚠️ 검색창 선택자 실패: {selector}")
                                 continue
                         
                         if not search_box:
-                            self.logger.warning(f"⚠️ 쿼리 {query_idx + 1}: 검색창을 찾을 수 없음")
-                            # 디버깅: 현재 페이지 상태 로깅
-                            self.logger.debug(f"현재 URL: {driver.current_url}")
-                            self.logger.debug(f"현재 제목: {driver.title}")
-                            # 페이지에서 찾을 수 있는 입력 요소들 로깅
-                            try:
-                                input_elements = driver.find_elements(By.TAG_NAME, 'input')
-                                textarea_elements = driver.find_elements(By.TAG_NAME, 'textarea')
-                                self.logger.debug(f"페이지에서 발견된 input 요소: {len(input_elements)}개")
-                                self.logger.debug(f"페이지에서 발견된 textarea 요소: {len(textarea_elements)}개")
-                            except:
-                                pass
-                            continue
+                            continue  # 다음 쿼리 시도
                         
-                        # 검색어 입력 (속도 최적화된 타이핑)
-                        self.logger.debug("⌨️ 검색어 입력 중...")
+                        # 인간적인 타이핑 (문자별 지연)
                         search_box.clear()
+                        time.sleep(random.uniform(0.3, 0.7))
                         
-                        # 매크로 방지: 최적화된 타이핑 시뮬레이션
-                        # 빠른 입력 (타임아웃 문제 해결)
-                        search_box.send_keys(search_query)
-                        
-                        # 매크로 방지: 검색 전 짧은 지연
-                        time.sleep(random.uniform(0.3, 0.8))  # 기존 0.5-1.5초에서 단축
+                        for char in search_query:
+                            search_box.send_keys(char)
+                            time.sleep(random.uniform(0.05, 0.15))  # 인간적인 타이핑 속도 복원
                         
                         # 검색 실행
+                        time.sleep(random.uniform(0.5, 1.0))
                         search_box.send_keys(Keys.RETURN)
-                        self.logger.debug("🔍 검색 실행됨 (매크로 방지 지연 적용)")
+                        self.logger.debug(f"🔍 검색 실행됨: {search_query}")
                         
-                        # 검색 결과 대기 (강화된 대기시간 및 선택자)
+                        # 검색 결과 대기
                         try:
-                            result_wait = WebDriverWait(driver, 10)  # 3초 → 10초로 증가
-                            # 여러 선택자로 검색 결과 확인
-                            search_result_selectors = ['#search', '.g', '#rso', '.srg']
-                            
-                            result_found = False
-                            for result_selector in search_result_selectors:
-                                try:
-                                    result_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, result_selector)))
-                                    self.logger.debug(f"✅ 검색 결과 로드 완료: {result_selector}")
-                                    result_found = True
-                                    break
-                                except TimeoutException:
-                                    continue
-                            
-                            if not result_found:
-                                self.logger.warning("⚠️ 모든 검색 결과 선택자 실패")
-                                # 현재 URL과 제목 로깅 (디버깅용)
-                                self.logger.debug(f"현재 URL: {driver.current_url}")
-                                self.logger.debug(f"현재 제목: {driver.title}")
-                                continue
-                                
+                            result_wait = WebDriverWait(driver, 10)  # 안정성을 위해 10초로 복원
+                            result_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#search')))
+                            self.logger.debug("✅ 검색 결과 로드 완료")
                         except TimeoutException:
-                            self.logger.warning(f"⚠️ 검색 결과 로드 타임아웃 (10초) - 쿼리: {search_query}")
-                            # 추가 디버깅 정보
-                            self.logger.debug(f"현재 URL: {driver.current_url}")
-                            self.logger.debug(f"현재 제목: {driver.title}")
-                            continue
+                            self.logger.warning(f"⚠️ 검색 결과 로드 타임아웃: {search_query}")
+                            continue  # 다음 쿼리 시도
                         
                         # 검색 결과 텍스트 추출
                         try:
-                            results = driver.find_elements(By.CSS_SELECTOR, 'h3')[:3]
-                            snippets = driver.find_elements(By.CSS_SELECTOR, '.VwiC3b')[:3]
+                            results = driver.find_elements(By.CSS_SELECTOR, 'h3')[:5]  # 상위 5개 결과
+                            snippets = driver.find_elements(By.CSS_SELECTOR, '.VwiC3b')[:5]
                             
                             search_results = []
                             for i, result in enumerate(results):
@@ -830,75 +1045,60 @@ class Valid3ValidationManager:
                             search_result_text = " | ".join(search_results)
                             
                             if search_result_text:
-                                all_search_results.append(f"쿼리{query_idx + 1}: {search_result_text}")
-                                self.logger.debug(f"✅ 쿼리 {query_idx + 1} 결과 수집 완료")
-                            else:
-                                self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 검색 결과 없음")
+                                # 기관명이 검색 결과에 포함되어 있는지 확인
+                                if institution_name in search_result_text:
+                                    message = f"Google 검색에서 기관명 확인됨: {institution_name} (쿼리: {search_query})"
+                                    self.logger.info(f"✅ 2차 검증 통과: {message}")
+                                    return True, message, search_result_text
+                                else:
+                                    self.logger.debug(f"🔍 쿼리 {query_idx + 1} 결과에 기관명 불포함")
+                            
+                            # 다음 검색어 시도를 위한 지연
+                            if query_idx < len(search_queries) - 1:
+                                time.sleep(random.uniform(1.0, 2.0))
                         
                         except Exception as e:
                             self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 결과 추출 오류: {e}")
                             continue
                     
                     except Exception as e:
-                        self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 실행 오류: {e}")
+                        self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 검색 오류: {e}")
                         continue
                 
-                # 모든 검색 결과 종합 분석
-                combined_search_result = " | ".join(all_search_results)
-                
-                if combined_search_result:
-                    # 기관명이 검색 결과에 포함되어 있는지 확인
-                    if institution_name in combined_search_result:
-                        message = f"다중 Google 검색에서 기관명 확인됨: {institution_name} (총 {len(all_search_results)}개 쿼리)"
-                        self.logger.info(f"✅ 2차 검증 통과: {message}")
-                        return True, message, combined_search_result
-                    else:
-                        message = f"다중 Google 검색에서 기관명 불일치 (총 {len(all_search_results)}개 쿼리 결과)"
-                        self.logger.warning(f"⚠️ 2차 검증 실패: {message}")
-                        return False, message, combined_search_result
-                else:
-                    message = "모든 Google 검색 쿼리에서 결과 없음"
-                    self.logger.warning(f"⚠️ 2차 검증 실패: {message}")
-                    return False, message, ""
+                # 모든 쿼리 실패
+                message = f"Google 검색에서 기관명 불일치 (모든 쿼리 시도 완료)"
+                self.logger.warning(f"⚠️ 2차 검증 실패: {message}")
+                return False, message, ""
                 
             finally:
-                # 드라이버 정리 (강화된 방식 + 포트 해제)
+                # 포트 해제 (즉시)
+                if assigned_port:
+                    self.port_manager.release_port(assigned_port, worker_id)
+                    self.logger.debug(f"🔓 워커 {worker_id} 포트 {assigned_port} 즉시 해제")
+                
+                # 드라이버 정리
                 if driver:
                     try:
-                        # 모든 윈도우 닫기
-                        for handle in driver.window_handles:
-                            driver.switch_to.window(handle)
-                            driver.close()
+                        driver.quit()
+                        self.logger.debug(f"🧹 워커 {worker_id} 드라이버 정리 완료")
                     except:
                         pass
-                    
-                    try:
-                        # 드라이버 완전 종료
-                        driver.quit()
-                        self.logger.debug(f"🧹 워커 {worker_id} 2차 검증 드라이버 정리 완료")
-                    except Exception as e:
-                        self.logger.debug(f"⚠️ 워커 {worker_id} 2차 드라이버 정리 중 오류: {e}")
-                    
-                    finally:
-                        driver = None
-                
-                # 할당된 포트 해제
-                if 'assigned_port' in locals() and assigned_port:
-                    self.port_manager.release_port(assigned_port)
-                    self.logger.debug(f"🔌 워커 {worker_id} 포트 {assigned_port} 해제 완료")
                         
         except Exception as e:
             error_msg = f"2차 검증 오류: {e}"
             self.logger.error(f"❌ {error_msg}")
             self.logger.error(traceback.format_exc())
+            
+            # 차단 감지 시 로테이션 실행
+            if "Connection" in str(e) or "timeout" in str(e).lower():
+                self.proxy_rotator.on_blocked_detected(worker_id)
+            
             return False, error_msg, ""
     
     def validate_stage3(self, fax_number: str, institution_name: str, google_search_result: str, worker_id: int = 0) -> Tuple[bool, str, List[str], List[Dict], float]:
-        """3차 검증: 검색결과 링크 크롤링 + 기관명 추출 (드라이버 재사용 최적화)"""
+        """3차 검증: 검색결과 링크 크롤링 + 기관명 추출 (매크로방지 시스템 적용)"""
         try:
-            # 워커 ID를 MAX_WORKERS 범위로 제한
-            worker_id = worker_id % MAX_WORKERS
-            self.logger.debug(f"🔗 3차 검증 시작: 팩스:{fax_number}, 기관:{institution_name}, 워커:{worker_id}")
+            self.logger.debug(f"🔗 3차 검증 시작: 팩스:{fax_number}, 기관:{institution_name}")
             
             # 2차 검증 결과가 없으면 건너뛰기
             if not google_search_result:
@@ -906,8 +1106,19 @@ class Valid3ValidationManager:
                 self.logger.info(f"⏭️ {message}")
                 return False, message, [], [], 0.0
             
-            # WebDriverManager 획득 (재사용)
+            # WebDriverManager 획득
             web_manager = self.get_driver_for_worker(worker_id)
+            
+            # 로테이션 설정 획득 (매크로 방지)
+            rotation_config = self.proxy_rotator.get_rotation_config(worker_id, self.port_manager)
+            assigned_port_3rd = rotation_config.get('port')
+            
+            # 복수 검색 쿼리 생성 (사용자 요구사항)
+            search_queries = [
+                f'{fax_number} 팩스번호 어느기관',
+                f'{fax_number} 팩스번호 어디',
+                f'{fax_number}는 어디 팩스번호'
+            ]
             
             # 드라이버 생성 및 링크 추출
             driver = None
@@ -915,151 +1126,107 @@ class Valid3ValidationManager:
             crawled_data = []
             
             try:
-                self.logger.debug(f"🛡️ 워커 {worker_id} 3차 검증용 드라이버 생성 중...")
+                self.logger.debug(f"🛡️ 워커 {worker_id} 3차 검증용 매크로방지 드라이버 생성 중... (포트: {assigned_port_3rd})")
                 
-                # 매크로 방지 우회 설정 획득 (새로운 설정 + 포트)
-                rotation_config = self.proxy_rotator.get_rotation_config(worker_id + 100, self.port_manager)  # 다른 설정
-                assigned_port_3rd = rotation_config.get('port')
-                self.logger.debug(f"🌐 워커 {worker_id} 3차 검증 우회 설정: Port={assigned_port_3rd}")
-                
-                # 할당된 포트로 3차 검증용 드라이버 생성
-                driver = web_manager.create_bot_evasion_driver(port=assigned_port_3rd)
+                # 포트를 지정하여 드라이버 생성
+                if assigned_port_3rd:
+                    driver = web_manager.create_bot_evasion_driver(worker_id=worker_id, port=assigned_port_3rd)
+                else:
+                    driver = web_manager.create_bot_evasion_driver(worker_id=worker_id)
                 
                 if not driver:
                     # 포트 해제
                     if assigned_port_3rd:
-                        self.port_manager.release_port(assigned_port_3rd)
+                        self.port_manager.release_port(assigned_port_3rd, worker_id)
                     message = "3차 검증용 드라이버 생성 실패"
                     self.logger.error(f"❌ {message}")
                     return False, message, [], [], 0.0
                 
-                # 3차 검증용 우회 설정 적용
-                self._apply_rotation_config(driver, rotation_config)
+                self.logger.debug(f"✅ 워커 {worker_id} 3차 검증용 드라이버 생성 완료")
                 
-                self.logger.debug(f"✅ 워커 {worker_id} 3차 검증용 드라이버 생성 완료 (포트: {assigned_port_3rd}, 우회 설정 적용)")
+                # 로테이션 설정 적용 (User-Agent, CDP 명령 등)
+                rotation_applied = self._apply_rotation_config(driver, rotation_config)
+                if rotation_applied:
+                    self.logger.debug(f"✅ 워커 {worker_id} 3차 매크로방지 설정 적용 완료")
+                else:
+                    self.logger.warning(f"⚠️ 워커 {worker_id} 3차 매크로방지 설정 적용 실패")
                 
-                # 다중 Google 검색으로 링크 추출 (2차 검증과 동일한 쿼리 사용)
-                search_queries = [
-                    f'{fax_number} 팩스번호 어느기관',
-                    f'{fax_number} 어디 팩스번호'
-                ]
-                self.logger.debug(f"🔗 3차 검증용 다중 검색 쿼리들: {search_queries}")
+                # 인간적인 지연 (빠른 검색 우선)
+                time.sleep(random.uniform(0.5, 1.0))
                 
-                # 각 쿼리별로 링크 추출
+                # 모든 검색 쿼리로 링크 추출 시도
                 for query_idx, search_query in enumerate(search_queries):
-                    self.logger.debug(f"🔍 3차 검증 쿼리 {query_idx + 1}/{len(search_queries)}: {search_query}")
-                    
                     try:
+                        self.logger.debug(f"🔗 3차 검증 검색 쿼리 {query_idx + 1}/{len(search_queries)}: {search_query}")
+                        
                         # Google 검색 페이지 접속
                         driver.get("https://www.google.com")
                         
-                        # 검색창 찾기 및 검색 실행 (강화된 버전)
+                        # 검색창 찾기 및 검색 실행
                         search_box = None
-                        selectors = [
-                            'textarea[name="q"]', 
-                            '#APjFqb', 
-                            'input[name="q"]',
-                            'input[type="text"][title*="검색"]',
-                            'textarea[title*="검색"]',
-                            '*[name="q"]',
-                            '#tsf input',
-                            '.gLFyf'
-                        ]
+                        selectors = ['textarea[name="q"]', '#APjFqb', 'input[name="q"]']
                         
                         for selector in selectors:
                             try:
-                                enhanced_wait = WebDriverWait(driver, 8)  # 3초 → 8초로 증가
-                                search_box = enhanced_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
+                                quick_wait = WebDriverWait(driver, 5)  # 안정성을 위해 5초로 복원
+                                search_box = quick_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
                                 break
                             except TimeoutException:
                                 continue
                         
                         if not search_box:
-                            self.logger.warning(f"⚠️ 3차 검증 쿼리 {query_idx + 1}: 검색창을 찾을 수 없음")
-                            continue
+                            continue  # 다음 쿼리 시도
                         
-                        # 검색어 입력 및 실행 (최적화된 매크로 방지)
+                        # 인간적인 타이핑 (문자별 지연)
                         search_box.clear()
-                        search_box.send_keys(search_query)  # 빠른 입력으로 변경
+                        time.sleep(random.uniform(0.3, 0.7))
                         
-                        # 매크로 방지: 검색 전 짧은 지연
-                        time.sleep(random.uniform(0.3, 0.7))  # 기존 0.3-1.0초에서 단축
+                        for char in search_query:
+                            search_box.send_keys(char)
+                            time.sleep(random.uniform(0.05, 0.15))  # 인간적인 타이핑 속도 복원
                         
+                        # 검색 실행
+                        time.sleep(random.uniform(0.5, 1.0))
                         search_box.send_keys(Keys.RETURN)
-                        self.logger.debug(f"🔍 3차 검증 쿼리 {query_idx + 1} 검색 실행됨 (매크로 방지)")
+                        self.logger.debug(f"🔍 3차 검증 검색 실행됨: {search_query}")
                         
-                        # 검색 결과 대기 (강화된 버전)
+                        # 검색 결과 대기
                         try:
-                            result_wait = WebDriverWait(driver, 10)  # 3초 → 10초로 증가
-                            # 여러 선택자로 검색 결과 확인
-                            search_result_selectors = ['#search', '.g', '#rso', '.srg']
-                            
-                            result_found = False
-                            for result_selector in search_result_selectors:
-                                try:
-                                    result_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, result_selector)))
-                                    self.logger.debug(f"✅ 3차 검증 쿼리 {query_idx + 1} 검색 결과 로드: {result_selector}")
-                                    result_found = True
-                                    break
-                                except TimeoutException:
-                                    continue
-                            
-                            if not result_found:
-                                self.logger.warning(f"⚠️ 3차 검증 쿼리 {query_idx + 1}: 모든 검색 결과 선택자 실패")
-                                continue
-                                
+                            result_wait = WebDriverWait(driver, 10)  # 안정성을 위해 10초로 복원
+                            result_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#search')))
+                            self.logger.debug("✅ 3차 검증 검색 결과 로드 완료")
                         except TimeoutException:
-                            self.logger.warning(f"⚠️ 3차 검증 쿼리 {query_idx + 1}: 검색 결과 로드 타임아웃 (10초)")
-                            continue
+                            self.logger.warning(f"⚠️ 3차 검증 검색 결과 로드 타임아웃: {search_query}")
+                            continue  # 다음 쿼리 시도
                         
-                        # 검색 결과 링크 추출 (SEARCH_RESULTS_LIMIT개까지) - 강화된 버전
+                        # 검색 결과 링크 추출
                         try:
-                            # 여러 선택자로 링크 추출 시도
-                            link_selectors = [
-                                '#search a[href]',
-                                '.g a[href]', 
-                                '#rso a[href]',
-                                '.r a[href]',
-                                'a[href*="http"]:not([href*="google.com"])'
-                            ]
+                            link_elements = driver.find_elements(By.CSS_SELECTOR, '#search a[href]')
                             
                             query_links = []
-                            links_found = False
+                            for element in link_elements[:SEARCH_RESULTS_LIMIT]:
+                                href = element.get_attribute('href')
+                                if href and href.startswith('http') and 'google.com' not in href:
+                                    if href not in extracted_links:  # 중복 제거
+                                        extracted_links.append(href)
+                                        query_links.append(href)
+                                        self.logger.debug(f"🔗 링크 추출: {href[:60]}...")
                             
-                            for link_selector in link_selectors:
-                                try:
-                                    link_elements = driver.find_elements(By.CSS_SELECTOR, link_selector)
-                                    self.logger.debug(f"🔗 선택자 '{link_selector}'로 {len(link_elements)}개 링크 발견")
-                                    
-                                    if link_elements:
-                                        links_found = True
-                                        for element in link_elements[:SEARCH_RESULTS_LIMIT]:
-                                            href = element.get_attribute('href')
-                                            if href and href.startswith('http') and 'google.com' not in href:
-                                                if href not in extracted_links:  # 중복 방지
-                                                    extracted_links.append(href)
-                                                    query_links.append(href)
-                                                    self.logger.debug(f"🔗 쿼리 {query_idx + 1} 링크: {href[:60]}...")
-                                        break  # 링크를 찾았으면 중단
-                                        
-                                except Exception as selector_error:
-                                    self.logger.debug(f"⚠️ 선택자 '{link_selector}' 실패: {selector_error}")
-                                    continue
+                            self.logger.debug(f"📎 쿼리 {query_idx + 1}: {len(query_links)}개 링크 추출")
                             
-                            if links_found:
-                                self.logger.info(f"📎 쿼리 {query_idx + 1}에서 {len(query_links)}개 새 링크 추출 (총 {len(extracted_links)}개)")
-                            else:
-                                self.logger.warning(f"⚠️ 쿼리 {query_idx + 1}: 모든 링크 선택자에서 링크 추출 실패")
-                            
+                            # 다음 검색어 시도를 위한 지연
+                            if query_idx < len(search_queries) - 1:
+                                time.sleep(random.uniform(1.0, 2.0))
+                        
                         except Exception as e:
-                            self.logger.debug(f"⚠️ 쿼리 {query_idx + 1} 링크 추출 오류: {e}")
+                            self.logger.debug(f"⚠️ 3차 검증 쿼리 {query_idx + 1} 링크 추출 오류: {e}")
                             continue
                     
                     except Exception as e:
-                        self.logger.debug(f"⚠️ 3차 검증 쿼리 {query_idx + 1} 실행 오류: {e}")
+                        self.logger.debug(f"⚠️ 3차 검증 쿼리 {query_idx + 1} 검색 오류: {e}")
                         continue
                 
-                self.logger.info(f"📎 다중 쿼리로 총 {len(extracted_links)}개 링크 추출 완료")
+                self.logger.info(f"📎 3차 검증: 총 {len(extracted_links)}개 링크 추출 완료 (모든 쿼리)")
                 
                 # 추출된 링크들을 병렬로 크롤링
                 if extracted_links:
@@ -1079,35 +1246,28 @@ class Valid3ValidationManager:
                     return False, message, extracted_links, crawled_data, confidence_score
                 
             finally:
-                # 드라이버 정리 (강화된 방식)
+                # 포트 해제 (즉시)
+                if assigned_port_3rd:
+                    self.port_manager.release_port(assigned_port_3rd, worker_id)
+                    self.logger.debug(f"🔓 워커 {worker_id} 3차 포트 {assigned_port_3rd} 즉시 해제")
+                
+                # 드라이버 정리
                 if driver:
                     try:
-                        # 모든 윈도우 닫기
-                        for handle in driver.window_handles:
-                            driver.switch_to.window(handle)
-                            driver.close()
-                    except:
-                        pass
-                    
-                    try:
-                        # 드라이버 완전 종료
                         driver.quit()
                         self.logger.debug(f"🧹 워커 {worker_id} 3차 검증용 드라이버 정리 완료")
-                    except Exception as e:
-                        self.logger.debug(f"⚠️ 워커 {worker_id} 3차 드라이버 정리 중 오류: {e}")
-                    
-                    finally:
-                        driver = None
-                
-                # 할당된 포트 해제 (3차 검증)
-                if 'assigned_port_3rd' in locals() and assigned_port_3rd:
-                    self.port_manager.release_port(assigned_port_3rd)
-                    self.logger.debug(f"🔌 워커 {worker_id} 3차 검증 포트 {assigned_port_3rd} 해제 완료")
+                    except:
+                        pass
                         
         except Exception as e:
             error_msg = f"3차 검증 오류: {e}"
             self.logger.error(f"❌ {error_msg}")
             self.logger.error(traceback.format_exc())
+            
+            # 차단 감지 시 로테이션 실행
+            if "Connection" in str(e) or "timeout" in str(e).lower():
+                self.proxy_rotator.on_blocked_detected(worker_id)
+            
             return False, error_msg, [], [], 0.0
     
     def validate_stage4(self, fax_number: str, institution_name: str, extracted_links: List[str], 
@@ -1912,16 +2072,16 @@ class Valid3ValidationManager:
             for worker_id in worker_ids:
                 self.cleanup_worker_driver(worker_id)
             
-            self.logger.info(f"🧹 모든 워커 드라이버 정리 완료: {len(worker_ids)}개")
-            
-            # 모든 포트 해제 (전체 정리)
+            # 포트 매니저의 모든 포트 해제
             try:
-                all_used_ports = list(self.port_manager.used_ports)
-                for port in all_used_ports:
-                    self.port_manager.release_port(port)
-                self.logger.info(f"🔌 전체 포트 해제 완료: {len(all_used_ports)}개")
-            except Exception as pe:
-                self.logger.debug(f"⚠️ 전체 포트 해제 중 오류: {pe}")
+                if hasattr(self, 'port_manager'):
+                    for port in list(self.port_manager.used_ports):
+                        self.port_manager.release_port(port)
+                    self.logger.debug(f"🔓 PortManager 모든 포트 해제 완료")
+            except Exception as port_error:
+                self.logger.debug(f"⚠️ PortManager 포트 해제 실패: {port_error}")
+            
+            self.logger.info(f"🧹 모든 워커 드라이버 정리 완료: {len(worker_ids)}개 (포트 전체 해제 포함)")
             
             # 크롬 프로세스 강제 종료 (필요시)
             if len(worker_ids) > 0:
@@ -1936,10 +2096,13 @@ class Valid3ValidationManager:
             # 모든 워커 드라이버 강제 정리
             self._cleanup_all_worker_drivers()
             
-            # 포트 사용 현황 출력
-            port_status = self.port_manager.get_port_status()
-            self.logger.info(f"🔌 포트 현황: 사용 중 {port_status['currently_used']}개, "
-                           f"사용률 {port_status['usage_percentage']:.1f}%")
+            # 포트 사용 현황 로깅
+            try:
+                if hasattr(self, 'port_manager'):
+                    port_status = self.port_manager.get_port_status()
+                    self.logger.info(f"🔌 포트 현황: 사용중 {port_status['used_count']}개, 사용가능 {port_status['available_count']}개, 블랙리스트 {port_status['blacklisted_count']}개")
+            except Exception as port_error:
+                self.logger.debug(f"⚠️ 포트 현황 로깅 실패: {port_error}")
                         
             # Python 가비지 컬렉션
             import gc
