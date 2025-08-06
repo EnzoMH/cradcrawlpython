@@ -58,10 +58,11 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-# utils 모듈 활용 (검증된 안정성)
-from utils.web_driver_manager import WebDriverManager
+# utils 모듈 활용 (검증된 안정성) - 새로운 구조
+from utils.system.web_driver_manager import WebDriverManager
 from utils.ai_model_manager import AIModelManager
-from utils.phone_validator import PhoneValidator
+from utils.valid.phone_validator import PhoneValidator
+from utils.crawler.prt.user_agent_rotator import UserAgentRotator
 
 # 환경변수 로드
 load_dotenv()
@@ -70,185 +71,7 @@ load_dotenv()
 # 매크로 방지 시스템 (복구)
 # ================================
 
-class ProxyRotator:
-    """매크로봇 방지를 위한 프록시 로테이션 시스템 (복구)"""
-    
-    def __init__(self, logger):
-        """ProxyRotator 초기화"""
-        self.logger = logger
-        
-        # 대량 User-Agent 풀 (50+ 실제 브라우저 User-Agent)
-        self.user_agents = [
-            # Chrome 120-121 (Windows)
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
-            
-            # Chrome (macOS)
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-            
-            # Chrome (Linux)
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/121.0',
-            
-            # Edge (Windows)
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
-            
-            # Safari (macOS)
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Safari/605.1.15',
-            
-            # Firefox (Windows)
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:119.0) Gecko/20100101 Firefox/119.0',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:118.0) Gecko/20100101 Firefox/118.0',
-            
-            # Firefox (macOS)
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:119.0) Gecko/20100101 Firefox/119.0',
-            
-            # 추가 Chrome 버전들 (다양한 OS)
-            'Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            
-            # 모바일 User-Agent들
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (iPad; CPU OS 17_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (Linux; Android 14; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
-            
-            # 다양한 해상도 및 플랫폼
-            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            
-            # 다양한 Chrome 마이너 버전들
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.129 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.130 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.85 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.139 Safari/537.36',
-            
-            # 기업용 브라우저들
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 OPR/106.0.0.0',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Vivaldi/6.5.3206.39',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Whale/3.25.232.19 Safari/537.36',
-            
-            # 국제 버전들
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36,gzip(gfe)',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 YaBrowser/24.1.0.0 Safari/537.36',
-            
-            # Linux 다양한 배포판
-            'Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
-            'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
-            'Mozilla/5.0 (X11; openSUSE Leap 15.5; rv:121.0) Gecko/20100101 Firefox/121.0',
-            
-            # 추가 다양한 버전들
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
-            
-            # 더 많은 현실적인 User-Agent들
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Config/93.2.2837.1',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 AtContent/94.4.4312.48'
-        ]
-        
-        # Google DNS 전용 (사용자 요구사항)
-        self.dns_servers = ["8.8.8.8", "8.8.4.4"]  # Google DNS만 사용
-        
-        # 현재 로테이션 상태
-        self.current_config = {}
-        self.rotation_count = 0
-        self.blocked_count = 0
-        
-        self.logger.info(f"🛡️ ProxyRotator 초기화: {len(self.user_agents)}개 User-Agent, Google DNS")
-    
-    def get_rotation_config(self, worker_id: int, port_manager=None) -> Dict:
-        """워커별 로테이션 설정 반환 (차단 감지 시 자동 변경)"""
-        try:
-            # 워커별 고유 인덱스 계산
-            ua_index = (worker_id + self.rotation_count) % len(self.user_agents)
-            dns_index = (worker_id + self.rotation_count) % len(self.dns_servers)
-            
-            config = {
-                'user_agent': self.user_agents[ua_index],
-                'dns_server': self.dns_servers[dns_index],
-                'worker_id': worker_id,
-                'rotation_count': self.rotation_count
-            }
-            
-            # 포트 매니저가 있으면 포트 할당
-            if port_manager:
-                try:
-                    assigned_port = port_manager.allocate_port(worker_id)
-                    config['port'] = assigned_port
-                    self.logger.debug(f"🔌 워커 {worker_id}: 포트 {assigned_port} 할당")
-                except Exception as e:
-                    self.logger.warning(f"⚠️ 워커 {worker_id} 포트 할당 실패: {e}")
-                    config['port'] = None
-            else:
-                config['port'] = None
-            
-            self.current_config[worker_id] = config
-            
-            self.logger.debug(f"🎭 워커 {worker_id} 로테이션 설정: UA#{ua_index}, DNS#{dns_index}")
-            return config
-            
-        except Exception as e:
-            self.logger.error(f"❌ 로테이션 설정 생성 실패: {e}")
-            # 기본 설정 반환
-            return {
-                'user_agent': self.user_agents[0],
-                'dns_server': self.dns_servers[0],
-                'worker_id': worker_id,
-                'rotation_count': 0,
-                'port': None
-            }
-    
-    def on_blocked_detected(self, worker_id: int):
-        """차단 감지 시 호출 - 자동 로테이션 실행"""
-        try:
-            self.blocked_count += 1
-            self.rotation_count += 1
-            
-            self.logger.warning(f"🚨 워커 {worker_id} 차단 감지 - 자동 로테이션 실행 (#{self.rotation_count})")
-            
-            # 해당 워커의 설정 즉시 변경
-            if hasattr(self, 'current_config') and worker_id in self.current_config:
-                del self.current_config[worker_id]
-            
-            # 새로운 설정 생성
-            new_config = self.get_rotation_config(worker_id)
-            
-            self.logger.info(f"🔄 워커 {worker_id} 새 설정: {new_config['user_agent'][:50]}... / DNS: {new_config['dns_server']}")
-            
-            return new_config
-            
-        except Exception as e:
-            self.logger.error(f"❌ 차단 감지 처리 실패: {e}")
-            return None
-    
-    def get_status(self) -> Dict:
-        """ProxyRotator 상태 정보 반환"""
-        return {
-            'total_user_agents': len(self.user_agents),
-            'total_dns_servers': len(self.dns_servers),
-            'rotation_count': self.rotation_count,
-            'blocked_count': self.blocked_count,
-            'active_workers': len(self.current_config) if hasattr(self, 'current_config') else 0
-        }
+# ProxyRotator 클래스는 utils.crawler.prt.user_agent_rotator.UserAgentRotator로 이동됨
 
 class AdvancedPortManager:
     """고급 포트 관리 시스템 (100개 포트 범위)"""
@@ -550,10 +373,10 @@ class Valid3ValidationManager:
             self.ai_manager = AIModelManager(self.logger)
             self.logger.debug("✅ AIModelManager 초기화 완료")
             
-            # 매크로 방지 시스템 복구
-            self.logger.debug("🛡️ ProxyRotator 초기화 중...")
-            self.proxy_rotator = ProxyRotator(self.logger)
-            self.logger.debug("✅ ProxyRotator 초기화 완료")
+            # 매크로 방지 시스템 복구 (UserAgentRotator 사용)
+            self.logger.debug("🛡️ UserAgentRotator 초기화 중...")
+            self.user_agent_rotator = UserAgentRotator(self.logger)
+            self.logger.debug("✅ UserAgentRotator 초기화 완료")
             
             self.logger.debug("🔌 AdvancedPortManager 초기화 중...")
             self.port_manager = AdvancedPortManager(self.logger)
@@ -757,7 +580,7 @@ class Valid3ValidationManager:
                 return True, message
             else:
                 # 지역 불일치 상세 정보
-                from utils.phone_validator import KOREAN_AREA_CODES
+                from utils.valid.phone_validator import KOREAN_AREA_CODES
                 area_name = KOREAN_AREA_CODES.get(area_code, "알 수 없음")
                 message = f"팩스번호 지역번호 불일치: {area_code}({area_name}) ↔ {address} (기관: {institution_name})"
                 self.logger.warning(f"⚠️ 1차 검증 실패: {message}")
@@ -772,8 +595,8 @@ class Valid3ValidationManager:
     def get_driver_for_worker(self, worker_id: int):
         """워커별 WebDriver 인스턴스 획득 (thread-safe, 차단감지 시 재생성)"""
         with self.driver_lock:
-            # 차단된 워커 확인 (ProxyRotator에서 blocked_count 확인)
-            current_rotation = self.proxy_rotator.rotation_count if hasattr(self, 'proxy_rotator') else 0
+            # 차단된 워커 확인 (UserAgentRotator 사용)
+            current_rotation = 0  # UserAgentRotator는 단순한 로테이션만 지원
             
             # 기존 WebDriverManager 확인
             if worker_id in self.web_driver_managers:
@@ -866,26 +689,24 @@ class Valid3ValidationManager:
         except Exception as e:
             self.logger.debug(f"⚠️ 크롬 프로세스 강제 종료 실패: {e}")
     
-    def _apply_rotation_config(self, driver, rotation_config: Dict):
-        """드라이버에 로테이션 설정 적용 (User-Agent, Google DNS, CDP명령)"""
+    def _apply_user_agent_config(self, driver, user_agent: str, worker_id: int):
+        """드라이버에 User-Agent 설정 적용 (매크로 방지)"""
         try:
-            if not driver or not rotation_config:
+            if not driver or not user_agent:
                 return False
             
-            self.logger.debug(f"🎭 로테이션 설정 적용 시작: 워커 {rotation_config.get('worker_id', 'N/A')}")
+            self.logger.debug(f"🎭 User-Agent 설정 적용 시작: 워커 {worker_id}")
             
             # 1. User-Agent 변경 (CDP 명령 사용)
-            user_agent = rotation_config.get('user_agent')
-            if user_agent:
-                try:
-                    driver.execute_cdp_cmd('Network.setUserAgentOverride', {
-                        "userAgent": user_agent,
-                        "acceptLanguage": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
-                        "platform": "Win32"
-                    })
-                    self.logger.debug(f"✅ User-Agent 변경: {user_agent[:50]}...")
-                except Exception as e:
-                    self.logger.debug(f"⚠️ User-Agent 변경 실패: {e}")
+            try:
+                driver.execute_cdp_cmd('Network.setUserAgentOverride', {
+                    "userAgent": user_agent,
+                    "acceptLanguage": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+                    "platform": "Win32"
+                })
+                self.logger.debug(f"✅ User-Agent 변경: {user_agent[:50]}...")
+            except Exception as e:
+                self.logger.debug(f"⚠️ User-Agent 변경 실패: {e}")
             
             # 2. navigator.webdriver 숨김 (봇 감지 방지)
             try:
@@ -910,21 +731,11 @@ class Valid3ValidationManager:
             except Exception as e:
                 self.logger.debug(f"⚠️ 추가 봇 방지 스크립트 실패: {e}")
             
-            # 4. Google DNS 설정 확인 (네트워크 레벨에서는 이미 설정됨)
-            dns_server = rotation_config.get('dns_server')
-            if dns_server:
-                self.logger.debug(f"🌐 DNS 서버: {dns_server}")
-            
-            # 5. 포트 정보 로깅
-            port = rotation_config.get('port')
-            if port:
-                self.logger.debug(f"🔌 할당된 포트: {port}")
-            
-            self.logger.debug(f"✅ 로테이션 설정 적용 완료: 워커 {rotation_config.get('worker_id', 'N/A')}")
+            self.logger.debug(f"✅ User-Agent 설정 적용 완료: 워커 {worker_id}")
             return True
             
         except Exception as e:
-            self.logger.error(f"❌ 로테이션 설정 적용 실패: {e}")
+            self.logger.error(f"❌ User-Agent 설정 적용 실패: {e}")
             return False
     
 
@@ -942,9 +753,9 @@ class Valid3ValidationManager:
             # WebDriverManager 획득
             web_manager = self.get_driver_for_worker(worker_id)
             
-            # 로테이션 설정 획득 (매크로 방지)
-            rotation_config = self.proxy_rotator.get_rotation_config(worker_id, self.port_manager)
-            assigned_port = rotation_config.get('port')
+            # User-Agent 로테이션 설정 (매크로 방지)
+            user_agent = self.user_agent_rotator.get_random_user_agent()
+            assigned_port = self.port_manager.allocate_port(worker_id) if hasattr(self, 'port_manager') else None
             
             # 복수 검색 쿼리 생성 (사용자 요구사항)
             search_queries = [
@@ -975,12 +786,12 @@ class Valid3ValidationManager:
                 
                 self.logger.debug(f"✅ 워커 {worker_id} 드라이버 생성 완료")
                 
-                # 로테이션 설정 적용 (User-Agent, CDP 명령 등)
-                rotation_applied = self._apply_rotation_config(driver, rotation_config)
-                if rotation_applied:
-                    self.logger.debug(f"✅ 워커 {worker_id} 매크로방지 설정 적용 완료")
+                # User-Agent 설정 적용 (매크로 방지)
+                ua_applied = self._apply_user_agent_config(driver, user_agent, worker_id)
+                if ua_applied:
+                    self.logger.debug(f"✅ 워커 {worker_id} User-Agent 설정 적용 완료")
                 else:
-                    self.logger.warning(f"⚠️ 워커 {worker_id} 매크로방지 설정 적용 실패")
+                    self.logger.warning(f"⚠️ 워커 {worker_id} User-Agent 설정 적용 실패")
                 
                 # 인간적인 지연 (빠른 검색 우선)
                 time.sleep(random.uniform(0.5, 1.0))
@@ -1089,9 +900,9 @@ class Valid3ValidationManager:
             self.logger.error(f"❌ {error_msg}")
             self.logger.error(traceback.format_exc())
             
-            # 차단 감지 시 로테이션 실행
+            # 차단 감지 시 로그 기록
             if "Connection" in str(e) or "timeout" in str(e).lower():
-                self.proxy_rotator.on_blocked_detected(worker_id)
+                self.logger.warning(f"🚨 워커 {worker_id} 연결 문제 감지: {str(e)[:100]}...")
             
             return False, error_msg, ""
     
@@ -1109,9 +920,9 @@ class Valid3ValidationManager:
             # WebDriverManager 획득
             web_manager = self.get_driver_for_worker(worker_id)
             
-            # 로테이션 설정 획득 (매크로 방지)
-            rotation_config = self.proxy_rotator.get_rotation_config(worker_id, self.port_manager)
-            assigned_port_3rd = rotation_config.get('port')
+            # User-Agent 로테이션 설정 (매크로 방지)
+            user_agent_3rd = self.user_agent_rotator.get_random_user_agent()
+            assigned_port_3rd = self.port_manager.allocate_port(worker_id) if hasattr(self, 'port_manager') else None
             
             # 복수 검색 쿼리 생성 (사용자 요구사항)
             search_queries = [
@@ -1144,12 +955,12 @@ class Valid3ValidationManager:
                 
                 self.logger.debug(f"✅ 워커 {worker_id} 3차 검증용 드라이버 생성 완료")
                 
-                # 로테이션 설정 적용 (User-Agent, CDP 명령 등)
-                rotation_applied = self._apply_rotation_config(driver, rotation_config)
-                if rotation_applied:
-                    self.logger.debug(f"✅ 워커 {worker_id} 3차 매크로방지 설정 적용 완료")
+                # User-Agent 설정 적용 (매크로 방지)
+                ua_applied_3rd = self._apply_user_agent_config(driver, user_agent_3rd, worker_id)
+                if ua_applied_3rd:
+                    self.logger.debug(f"✅ 워커 {worker_id} 3차 User-Agent 설정 적용 완료")
                 else:
-                    self.logger.warning(f"⚠️ 워커 {worker_id} 3차 매크로방지 설정 적용 실패")
+                    self.logger.warning(f"⚠️ 워커 {worker_id} 3차 User-Agent 설정 적용 실패")
                 
                 # 인간적인 지연 (빠른 검색 우선)
                 time.sleep(random.uniform(0.5, 1.0))
@@ -1264,9 +1075,9 @@ class Valid3ValidationManager:
             self.logger.error(f"❌ {error_msg}")
             self.logger.error(traceback.format_exc())
             
-            # 차단 감지 시 로테이션 실행
+            # 차단 감지 시 로그 기록
             if "Connection" in str(e) or "timeout" in str(e).lower():
-                self.proxy_rotator.on_blocked_detected(worker_id)
+                self.logger.warning(f"🚨 워커 {worker_id} 연결 문제 감지: {str(e)[:100]}...")
             
             return False, error_msg, [], [], 0.0
     
