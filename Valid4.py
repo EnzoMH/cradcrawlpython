@@ -68,6 +68,50 @@ from utils.crawler.prt.user_agent_rotator import UserAgentRotator
 load_dotenv()
 
 # ================================
+# 유틸리티 함수들
+# ================================
+
+def load_csv_with_encoding(file_path: str, logger=None) -> pd.DataFrame:
+    """다양한 인코딩으로 CSV 파일 로드 시도"""
+    encodings = ['utf-8', 'cp949', 'euc-kr', 'utf-8-sig', 'latin-1']
+    
+    for encoding in encodings:
+        try:
+            df = pd.read_csv(file_path, encoding=encoding)
+            if logger:
+                logger.info(f"✅ CSV 로드 성공: {file_path} ({encoding} 인코딩)")
+            return df
+        except UnicodeDecodeError:
+            continue
+        except Exception as e:
+            if logger:
+                logger.warning(f"⚠️ {encoding} 인코딩 시도 실패: {e}")
+            continue
+    
+    raise Exception(f"❌ 모든 인코딩 시도 실패: {file_path}")
+
+def save_csv_with_encoding(df: pd.DataFrame, file_path: str, logger=None) -> bool:
+    """안전한 CSV 저장 (인코딩 오류 방지)"""
+    encodings = ['utf-8-sig', 'cp949', 'utf-8']
+    
+    for encoding in encodings:
+        try:
+            df.to_csv(file_path, index=False, encoding=encoding)
+            if logger:
+                logger.info(f"✅ CSV 저장 성공: {file_path} ({encoding} 인코딩)")
+            return True
+        except UnicodeEncodeError:
+            continue
+        except Exception as e:
+            if logger:
+                logger.warning(f"⚠️ {encoding} 인코딩으로 저장 실패: {e}")
+            continue
+    
+    if logger:
+        logger.error(f"❌ 모든 인코딩으로 저장 실패: {file_path}")
+    return False
+
+# ================================
 # 매크로 방지 시스템 (복구)
 # ================================
 
@@ -399,19 +443,29 @@ class CenterDataManager:
             self.center_data = pd.read_excel(self.crawling_file_path)
             self.logger.info(f"✅ 센터 데이터 로드 완료: {len(self.center_data)}개")
             
-            # 인덱싱: 전화번호 매핑
+            # 인덱싱: 전화번호 매핑 (sido, gugun, center_name 포함)
             for _, row in self.center_data.iterrows():
                 if pd.notna(row['phone']) and row['phone'].strip():
                     phone = str(row['phone']).strip()
-                    center_name = str(row['center_name']).strip()
-                    self.phone_to_center[phone] = (center_name, '전화')
+                    center_info = {
+                        'sido': str(row['sido']).strip(),
+                        'gugun': str(row['gugun']).strip(),
+                        'center_name': str(row['center_name']).strip(),
+                        'contact_type': '전화'
+                    }
+                    self.phone_to_center[phone] = center_info
             
-            # 인덱싱: 팩스번호 매핑
+            # 인덱싱: 팩스번호 매핑 (sido, gugun, center_name 포함)
             for _, row in self.center_data.iterrows():
                 if pd.notna(row['fax']) and row['fax'].strip():
                     fax = str(row['fax']).strip()
-                    center_name = str(row['center_name']).strip()
-                    self.fax_to_center[fax] = (center_name, '팩스')
+                    center_info = {
+                        'sido': str(row['sido']).strip(),
+                        'gugun': str(row['gugun']).strip(),
+                        'center_name': str(row['center_name']).strip(),
+                        'contact_type': '팩스'
+                    }
+                    self.fax_to_center[fax] = center_info
             
             self.logger.info(f"📞 전화번호 인덱스: {len(self.phone_to_center)}개")
             self.logger.info(f"📠 팩스번호 인덱스: {len(self.fax_to_center)}개")
@@ -430,22 +484,24 @@ class CenterDataManager:
         
         # Case 1: 전화번호가 실제 전화번호와 매칭
         if phone in self.phone_to_center:
-            center_name, contact_type = self.phone_to_center[phone]
+            center_info = self.phone_to_center[phone]
+            full_name = f"{center_info['sido']} {center_info['gugun']} {center_info['center_name']}"
             return {
                 "found": True,
-                "center_name": center_name,
+                "center_name": center_info['center_name'],
                 "match_type": "전화→전화",
-                "label": f"{phone}은 {center_name}의 전화번호입니다"
+                "label": f"{phone}은 {full_name}의 전화번호입니다"
             }
         
         # Case 2: 전화번호가 실제로는 팩스번호와 매칭
         if phone in self.fax_to_center:
-            center_name, contact_type = self.fax_to_center[phone]
+            center_info = self.fax_to_center[phone]
+            full_name = f"{center_info['sido']} {center_info['gugun']} {center_info['center_name']}"
             return {
                 "found": True,
-                "center_name": center_name,
+                "center_name": center_info['center_name'],
                 "match_type": "전화→팩스",
-                "label": f"{phone}은 {center_name}의 팩스번호입니다"
+                "label": f"{phone}은 {full_name}의 팩스번호입니다"
             }
         
         return {"found": False, "reason": "매칭 실패"}
@@ -459,22 +515,24 @@ class CenterDataManager:
         
         # Case 1: 팩스번호가 실제 팩스번호와 매칭
         if fax in self.fax_to_center:
-            center_name, contact_type = self.fax_to_center[fax]
+            center_info = self.fax_to_center[fax]
+            full_name = f"{center_info['sido']} {center_info['gugun']} {center_info['center_name']}"
             return {
                 "found": True,
-                "center_name": center_name,
+                "center_name": center_info['center_name'],
                 "match_type": "팩스→팩스",
-                "label": f"{fax}은 {center_name}의 팩스번호입니다"
+                "label": f"{fax}은 {full_name}의 팩스번호입니다"
             }
         
         # Case 2: 팩스번호가 실제로는 전화번호와 매칭
         if fax in self.phone_to_center:
-            center_name, contact_type = self.phone_to_center[fax]
+            center_info = self.phone_to_center[fax]
+            full_name = f"{center_info['sido']} {center_info['gugun']} {center_info['center_name']}"
             return {
                 "found": True,
-                "center_name": center_name,
+                "center_name": center_info['center_name'],
                 "match_type": "팩스→전화",
-                "label": f"{fax}은 {center_name}의 전화번호입니다"
+                "label": f"{fax}은 {full_name}의 전화번호입니다"
             }
         
         return {"found": False, "reason": "매칭 실패"}
@@ -540,8 +598,8 @@ class Valid4ValidationManager:
                 self.logger.error(f"❌ 입력 파일 없음: {file_path}")
                 return False
             
-            # CSV 파일 로드
-            all_data = pd.read_csv(file_path, encoding='utf-8')
+            # CSV 파일 로드 (인코딩 자동 감지)
+            all_data = load_csv_with_encoding(file_path, self.logger)
             self.logger.info(f"✅ 원본 데이터 로드 완료: {len(all_data)}개")
             
             # 우선순위 기반 필터링
@@ -3273,17 +3331,461 @@ def main():
         except:
             pass
 
+# ================================
+# Valid4 웹 검색 전용 관리자
+# ================================
+
+class Valid4WebSearchManager(Valid3ValidationManager):
+    """Valid4 전용 웹 검색 관리자 - Valid3 풀 기능 상속"""
+    
+    def __init__(self):
+        """Valid3 기반 초기화 + Valid4 웹 검색 전용 설정"""
+        super().__init__()
+        self.logger = setup_detailed_logger("Valid4WebSearchManager")
+        self.logger.info("🔍 Valid4WebSearchManager 초기화 완료 (Valid3 웹 검색 로직 상속)")
+        
+        # 웹 검색 결과 저장용
+        self.web_search_results = []
+        
+    def load_unmapped_data(self, csv_path: str = "mappingdata250809.csv", test_mode: bool = False, test_sample_size: int = 10) -> bool:
+        """G열 또는 J열이 빈 데이터 로딩 (웹 검색 대상)"""
+        try:
+            self.logger.info(f"📂 웹 검색 대상 데이터 로딩 시작: {csv_path}")
+            
+            # CSV 파일 로딩 (인코딩 자동 감지)
+            full_data = load_csv_with_encoding(csv_path, self.logger)
+            self.logger.info(f"📊 전체 데이터 로딩 완료: {len(full_data)}행")
+            
+            # G열(실제_기관명_전화_AI) 또는 J열(실제_기관명_팩스_AI)이 빈 데이터 필터링
+            empty_condition = (
+                (full_data['실제_기관명_전화_AI'].isna() | (full_data['실제_기관명_전화_AI'] == '')) |
+                (full_data['실제_기관명_팩스_AI'].isna() | (full_data['실제_기관명_팩스_AI'] == ''))
+            )
+            
+            # 팩스 전송 성공인 데이터만 우선 처리
+            success_condition = full_data['팩스전송_성공여부'] == True
+            
+            unmapped_data = full_data[empty_condition & success_condition].copy()
+            self.logger.info(f"🔍 웹 검색 대상 데이터 필터링 완료: {len(unmapped_data)}행")
+            
+            if len(unmapped_data) == 0:
+                self.logger.warning("⚠️ 웹 검색 대상 데이터가 없습니다")
+                return False
+            
+            # 테스트 모드
+            if test_mode:
+                unmapped_data = unmapped_data.sample(n=min(test_sample_size, len(unmapped_data)), random_state=42)
+                self.logger.info(f"🧪 테스트 모드: {len(unmapped_data)}개 샘플 선택")
+            
+            # Valid3 형식으로 데이터 변환
+            self.input_data = pd.DataFrame({
+                'E': unmapped_data['읍면동'].astype(str),
+                'F': unmapped_data['주    소'].astype(str), 
+                'G': unmapped_data['시도'].astype(str),
+                'H': unmapped_data['전화번호'].astype(str),
+                'I': unmapped_data['팩스번호'].astype(str),
+                # 원본 데이터 보존
+                'original_index': unmapped_data['연번'],
+                'sido': unmapped_data['시도'],
+                'gugun': unmapped_data['시군구'],
+                'institution': unmapped_data['읍면동'],
+                'current_phone_label': unmapped_data['실제_기관명_전화_AI'],
+                'current_fax_label': unmapped_data['실제_기관명_팩스_AI']
+            })
+            
+            self.logger.info(f"✅ Valid3 형식 변환 완료: {len(self.input_data)}행")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"❌ 데이터 로딩 실패: {e}")
+            traceback.print_exc()
+            return False
+    
+    def generate_enhanced_search_queries(self, fax_number: str, institution_name: str) -> List[str]:
+        """Valid3 기본 + Valid4 전용 검색 쿼리 생성"""
+        # Valid3 기본 쿼리
+        base_queries = [
+            f'{fax_number} 팩스번호 어느기관',
+            f'{fax_number} 팩스번호 어디',
+            f'{fax_number}는 어디 팩스번호',
+            f'팩스번호 {fax_number}',
+            f'fax {fax_number}'
+        ]
+        
+        # Valid4 전용 추가 쿼리 (팩스↔전화 구분, 기관명 포함)
+        enhanced_queries = [
+            f'{fax_number} 전화번호 어디',  # 팩스번호가 실제 전화번호인 경우
+            f'{institution_name} {fax_number}',  # 기관명 포함 검색
+            f'{institution_name} 팩스번호',  # 기관명 기반 팩스번호 검색
+            f'{institution_name} 전화번호',  # 기관명 기반 전화번호 검색
+            f'"{fax_number}" 주민센터',  # 따옴표로 정확 검색
+        ]
+        
+        return base_queries + enhanced_queries
+    
+    def extract_y_label_from_ai_result(self, ai_result: str, number: str, contact_type: str = "팩스번호") -> str:
+        """AI 결과에서 Y 라벨 형식으로 변환"""
+        try:
+            if not ai_result or ai_result.strip() == "":
+                return ""
+            
+            # AI 결과에서 기관명 추출 시도
+            # 패턴: "XX주민센터", "XX동주민센터", "XX구청" 등
+            patterns = [
+                r'([가-힣]+(?:주민센터|구청|시청|동사무소|읍사무소|면사무소))',
+                r'([가-힣]+(?:동|구|시)\s*(?:주민센터|구청|시청))',
+                r'([가-힣]{2,}(?:센터|청|소))'
+            ]
+            
+            extracted_institution = ""
+            for pattern in patterns:
+                matches = re.findall(pattern, ai_result)
+                if matches:
+                    extracted_institution = matches[0]
+                    break
+            
+            if extracted_institution:
+                # 기본 형식으로 Y 라벨 생성 (sido, gugun 정보 부족시)
+                return f"{number}은 {extracted_institution}의 {contact_type}입니다"
+            else:
+                # AI 결과를 그대로 활용하여 Y 라벨 생성
+                return f"{number}은 {ai_result.strip()}의 {contact_type}입니다"
+                
+        except Exception as e:
+            self.logger.error(f"❌ Y 라벨 생성 실패: {e}")
+            return ""
+    
+    def process_web_search_batch(self, start_idx: int = 0, batch_size: int = 50) -> List[Dict]:
+        """배치 단위 웹 검색 처리"""
+        results = []
+        
+        if self.input_data is None or len(self.input_data) == 0:
+            self.logger.error("❌ 입력 데이터가 없습니다")
+            return results
+        
+        end_idx = min(start_idx + batch_size, len(self.input_data))
+        batch_data = self.input_data.iloc[start_idx:end_idx]
+        
+        self.logger.info(f"🔄 배치 처리 시작: {start_idx+1}-{end_idx}/{len(self.input_data)}")
+        
+        # 병렬 처리 (4개 워커)
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            future_to_row = {}
+            
+            for idx, (_, row) in enumerate(batch_data.iterrows()):
+                actual_idx = start_idx + idx
+                future = executor.submit(self.process_single_web_search, actual_idx, row)
+                future_to_row[future] = actual_idx
+            
+            # 결과 수집
+            for future in as_completed(future_to_row):
+                row_idx = future_to_row[future]
+                try:
+                    result = future.result()
+                    results.append(result)
+                    
+                    # 진행률 표시
+                    completed = len(results)
+                    progress = (completed / len(batch_data)) * 100
+                    self.logger.info(f"✅ Row {row_idx+1} 완료 | 배치 진행률: {progress:.1f}%")
+                    
+                except Exception as e:
+                    self.logger.error(f"❌ Row {row_idx+1} 처리 실패: {e}")
+                    # 실패한 경우에도 기본 결과 추가
+                    results.append({
+                        'original_index': row_idx,
+                        'fax_number': '',
+                        'institution_name': '',
+                        'search_method': '처리 실패',
+                        'y_label': '',
+                        'confidence': 0.0,
+                        'error_message': str(e)
+                    })
+        
+        self.logger.info(f"✅ 배치 처리 완료: {len(results)}개 결과")
+        return results
+    
+    def process_single_web_search(self, row_idx: int, row: pd.Series) -> Dict:
+        """단일 행 웹 검색 처리 (전화번호 + 팩스번호)"""
+        start_time = time.time()
+        
+        try:
+            phone_number = str(row['H']).strip()
+            fax_number = str(row['I']).strip()
+            institution_name = str(row['E']).strip()
+            region = str(row['G']).strip()
+            address = str(row['F']).strip()
+            
+            # 현재 라벨 상태 확인
+            current_phone_label = str(row.get('current_phone_label', '')).strip()
+            current_fax_label = str(row.get('current_fax_label', '')).strip()
+            
+            phone_needs_search = current_phone_label == '' or current_phone_label == 'nan'
+            fax_needs_search = current_fax_label == '' or current_fax_label == 'nan'
+            
+            self.logger.debug(f"🔍 Row {row_idx+1} 웹 검색 시작: 전화={phone_number} 팩스={fax_number} ({institution_name})")
+            self.logger.debug(f"   검색 필요: 전화={phone_needs_search}, 팩스={fax_needs_search}")
+            
+            # 결과 초기화
+            phone_label = current_phone_label if not phone_needs_search else ""
+            fax_label = current_fax_label if not fax_needs_search else ""
+            phone_search_method = "기존 라벨 유지" if not phone_needs_search else "웹 검색 실패"
+            fax_search_method = "기존 라벨 유지" if not fax_needs_search else "웹 검색 실패"
+            confidence = 0.0
+            
+            # 웹 검색이 필요한 경우에만 Valid3 검증 실행
+            if phone_needs_search or fax_needs_search:
+                validation_result = self.validate_single_row((row_idx, row))
+                
+                # 전화번호 검색 결과 처리
+                if phone_needs_search:
+                    if validation_result.overall_result == "데이터 올바름" and validation_result.verified_institution_name:
+                        phone_label = f"{phone_number}은 {validation_result.verified_institution_name}의 전화번호입니다"
+                        phone_search_method = "Valid3 완전 검증 성공"
+                        confidence = max(confidence, validation_result.final_confidence)
+                    elif validation_result.stage4_passed and validation_result.ai_extracted_institution:
+                        phone_label = self.extract_y_label_from_ai_result(validation_result.ai_extracted_institution, phone_number, contact_type="전화번호")
+                        phone_search_method = "AI 기관명 추출 성공"
+                        confidence = max(confidence, 70.0)
+                    elif validation_result.stage2_passed and validation_result.google_search_result:
+                        phone_label = self.extract_y_label_from_ai_result(validation_result.google_search_result, phone_number, contact_type="전화번호")
+                        phone_search_method = "구글 검색 결과 활용"
+                        confidence = max(confidence, 50.0)
+                
+                # 팩스번호 검색 결과 처리
+                if fax_needs_search:
+                    if validation_result.overall_result == "데이터 올바름" and validation_result.verified_institution_name:
+                        fax_label = f"{fax_number}은 {validation_result.verified_institution_name}의 팩스번호입니다"
+                        fax_search_method = "Valid3 완전 검증 성공"
+                        confidence = max(confidence, validation_result.final_confidence)
+                    elif validation_result.stage4_passed and validation_result.ai_extracted_institution:
+                        fax_label = self.extract_y_label_from_ai_result(validation_result.ai_extracted_institution, fax_number, contact_type="팩스번호")
+                        fax_search_method = "AI 기관명 추출 성공"
+                        confidence = max(confidence, 70.0)
+                    elif validation_result.stage2_passed and validation_result.google_search_result:
+                        fax_label = self.extract_y_label_from_ai_result(validation_result.google_search_result, fax_number, contact_type="팩스번호")
+                        fax_search_method = "구글 검색 결과 활용"
+                        confidence = max(confidence, 50.0)
+            
+            processing_time = time.time() - start_time
+            
+            result = {
+                'original_index': int(row['original_index']),
+                'phone_number': phone_number,
+                'fax_number': fax_number,
+                'institution_name': institution_name,
+                'phone_label': phone_label,
+                'fax_label': fax_label,
+                'phone_search_method': phone_search_method,
+                'fax_search_method': fax_search_method,
+                'confidence': confidence,
+                'processing_time': processing_time,
+                'error_message': ""
+            }
+            
+            self.logger.debug(f"✅ Row {row_idx+1} 완료: 전화={phone_search_method}, 팩스={fax_search_method} ({confidence:.1f}%)")
+            return result
+            
+        except Exception as e:
+            self.logger.error(f"❌ Row {row_idx+1} 웹 검색 실패: {e}")
+            return {
+                'original_index': row_idx,
+                'phone_number': phone_number if 'phone_number' in locals() else '',
+                'fax_number': fax_number if 'fax_number' in locals() else '',
+                'institution_name': institution_name if 'institution_name' in locals() else '',
+                'phone_label': '',
+                'fax_label': '',
+                'phone_search_method': '예외 발생',
+                'fax_search_method': '예외 발생',
+                'confidence': 0.0,
+                'processing_time': time.time() - start_time,
+                'error_message': str(e)
+            }
+    
+    def save_web_search_results(self, results: List[Dict], original_csv_path: str = "mappingdata250809.csv") -> str:
+        """웹 검색 결과를 새로운 CSV 파일로 저장 (G열, J열, H열, K열 업데이트)"""
+        try:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_file = f"mappingdata_websearch_{timestamp}.csv"
+            
+            # 원본 CSV 로딩 (인코딩 자동 감지)
+            original_data = load_csv_with_encoding(original_csv_path, self.logger)
+            self.logger.info(f"📂 원본 데이터 로딩: {len(original_data)}행")
+            
+            # 웹 검색 결과를 딕셔너리로 변환 (original_index 기준)
+            results_dict = {r['original_index']: r for r in results}
+            
+            # 새로운 검색 정보 컬럼 추가
+            original_data['전화_검색방법'] = ''
+            original_data['팩스_검색방법'] = ''
+            original_data['웹검색_신뢰도'] = 0.0
+            original_data['처리_시간'] = 0.0
+            original_data['웹검색_오류'] = ''
+            
+            updated_count = 0
+            phone_updated = 0
+            fax_updated = 0
+            
+            for idx, row in original_data.iterrows():
+                original_index = row['연번']
+                if original_index in results_dict:
+                    result = results_dict[original_index]
+                    
+                    # G열(실제_기관명_전화_AI) 업데이트
+                    if result['phone_label']:
+                        original_data.at[idx, '실제_기관명_전화_AI'] = result['phone_label']
+                        original_data.at[idx, 'D열과의 매핑여부'] = 'O'  # H열 업데이트
+                        phone_updated += 1
+                    
+                    # J열(실제_기관명_팩스_AI) 업데이트  
+                    if result['fax_label']:
+                        original_data.at[idx, '실제_기관명_팩스_AI'] = result['fax_label']
+                        original_data.at[idx, 'I열과의 매핑여부'] = 'O'  # K열 업데이트
+                        fax_updated += 1
+                    
+                    # 추가 정보 업데이트
+                    original_data.at[idx, '전화_검색방법'] = result['phone_search_method']
+                    original_data.at[idx, '팩스_검색방법'] = result['fax_search_method']
+                    original_data.at[idx, '웹검색_신뢰도'] = result['confidence']
+                    original_data.at[idx, '처리_시간'] = round(result['processing_time'], 2)
+                    original_data.at[idx, '웹검색_오류'] = result['error_message']
+                    
+                    updated_count += 1
+            
+            # 파일 저장 (인코딩 자동 처리)
+            if not save_csv_with_encoding(original_data, output_file, self.logger):
+                raise Exception(f"CSV 저장 실패: {output_file}")
+            
+            self.logger.info(f"✅ 웹 검색 결과 저장 완료: {output_file}")
+            self.logger.info(f"📊 업데이트 통계:")
+            self.logger.info(f"   - 총 처리 행: {updated_count}/{len(results)}")
+            self.logger.info(f"   - G열(전화 라벨) 업데이트: {phone_updated}개")
+            self.logger.info(f"   - J열(팩스 라벨) 업데이트: {fax_updated}개")
+            
+            return output_file
+            
+        except Exception as e:
+            self.logger.error(f"❌ 결과 저장 실패: {e}")
+            traceback.print_exc()
+            return ""
+    
+    def calculate_estimated_time(self, total_count: int, workers: int = 4, avg_time_per_item: float = 15.0) -> Dict:
+        """예상 소요 시간 계산"""
+        # Valid3 웹 검색 평균 시간: 약 10-20초/건
+        total_time_seconds = (total_count * avg_time_per_item) / workers
+        
+        hours = int(total_time_seconds // 3600)
+        minutes = int((total_time_seconds % 3600) // 60)
+        seconds = int(total_time_seconds % 60)
+        
+        return {
+            'total_seconds': total_time_seconds,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds,
+            'formatted': f"{hours}시간 {minutes}분 {seconds}초",
+            'avg_per_item': avg_time_per_item,
+            'workers': workers
+        }
+
+def main_websearch():
+    """Valid4 웹 검색 메인 함수"""
+    try:
+        print("=" * 50)
+        print("🔍 Valid4 웹 검색 시스템 시작")
+        print("=" * 50)
+        
+        # 테스트 모드 선택
+        test_choice = input("테스트 모드 실행하시겠습니까? (y/n): ").strip().lower()
+        test_mode = test_choice == 'y'
+        test_sample_size = 10 if test_mode else 0
+        
+        # 관리자 초기화
+        manager = Valid4WebSearchManager()
+        
+        # 데이터 로딩
+        print("\n📂 매핑 실패 데이터 로딩 중...")
+        if not manager.load_unmapped_data(test_mode=test_mode, test_sample_size=test_sample_size):
+            print("❌ 데이터 로딩 실패")
+            return
+        
+        total_count = len(manager.input_data)
+        print(f"✅ 로딩 완료: {total_count}개 데이터")
+        
+        # 예상 시간 계산
+        time_estimate = manager.calculate_estimated_time(total_count)
+        print(f"\n⏱️ 예상 소요 시간: {time_estimate['formatted']}")
+        print(f"   - 워커 수: {time_estimate['workers']}개")
+        print(f"   - 평균 처리 시간: {time_estimate['avg_per_item']}초/건")
+        
+        if not test_mode:
+            proceed = input(f"\n{total_count}개 데이터 웹 검색을 시작하시겠습니까? (y/n): ").strip().lower()
+            if proceed != 'y':
+                print("❌ 사용자가 취소했습니다")
+                return
+        
+        # 웹 검색 실행
+        print(f"\n🚀 웹 검색 시작 (배치 크기: 50개)")
+        all_results = []
+        start_time = time.time()
+        
+        for start_idx in range(0, total_count, 50):
+            batch_num = (start_idx // 50) + 1
+            total_batches = (total_count + 49) // 50
+            
+            print(f"\n📦 배치 {batch_num}/{total_batches} 처리 중...")
+            batch_results = manager.process_web_search_batch(start_idx, 50)
+            all_results.extend(batch_results)
+            
+            # 중간 저장
+            if len(all_results) % 50 == 0 or start_idx + 50 >= total_count:
+                print(f"💾 중간 결과 저장 중... ({len(all_results)}/{total_count})")
+                manager.save_web_search_results(all_results)
+        
+        # 최종 결과 저장
+        print(f"\n💾 최종 결과 저장 중...")
+        output_file = manager.save_web_search_results(all_results)
+        
+        # 최종 통계
+        total_time = time.time() - start_time
+        phone_successes = len([r for r in all_results if r['phone_label']])
+        fax_successes = len([r for r in all_results if r['fax_label']])
+        
+        print("\n" + "=" * 50)
+        print("🎉 Valid4 웹 검색 완료!")
+        print("=" * 50)
+        print(f"📊 총 처리: {len(all_results)}개")
+        print(f"📞 전화번호 Y 라벨 생성: {phone_successes}개")
+        print(f"📠 팩스번호 Y 라벨 생성: {fax_successes}개")
+        print(f"✅ 전체 성공률: {(phone_successes + fax_successes)/(len(all_results)*2)*100:.1f}%")
+        print(f"⏱️ 총 소요 시간: {total_time/3600:.1f}시간")
+        print(f"📁 결과 파일: {output_file}")
+        
+    except Exception as e:
+        print(f"\n❌ 오류 발생: {e}")
+        traceback.print_exc()
+        # 드라이버 정리
+        try:
+            if 'manager' in locals():
+                manager._cleanup_all_worker_drivers()
+                print("🧹 크롬 드라이버 정리 완료")
+        except:
+            pass
+
 if __name__ == "__main__":
     print("Valid4.py 실행 옵션:")
     print("1. Valid4 (Phase 0 자동 라벨링)")
     print("2. Valid3 (기존 5단계 검증)")
+    print("3. Valid4 웹 검색 (매핑 실패 데이터 검색)")
     
-    choice = input("선택 (1/2): ").strip()
+    choice = input("선택 (1/2/3): ").strip()
     
     if choice == "1":
         main_valid4()
     elif choice == "2":
         main()
+    elif choice == "3":
+        main_websearch()
     else:
         print("잘못된 선택입니다. Valid4를 실행합니다.")
         main_valid4() 

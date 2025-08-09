@@ -1087,6 +1087,7 @@ class Valid3ValidationManager:
             
             return False, error_msg, [], [], 0.0
     
+    # 4차 검증 링크 직접 파싱, AI 기관명 도출
     def validate_stage4(self, fax_number: str, institution_name: str, extracted_links: List[str], 
                        discovered_institutions: List[str], worker_id: int = 0) -> Tuple[bool, str, str]:
         """4차 검증: 링크 직접 파싱 + AI 기관명 도출 + 백업 로직 (수정된 메서드)"""
@@ -1171,6 +1172,7 @@ class Valid3ValidationManager:
             self.logger.error(traceback.format_exc())
             return False, error_msg, ""
     
+    # 5차 검증 기관명 팩스번호 역검색, 2/3/4차 검증값과 완벽 AI 매칭, 최종 판정
     def validate_stage5(self, validation_result: ValidationResult) -> Tuple[bool, str, str]:
         """5차 검증: {기관명} 팩스번호 역검색 → 2/3/4차 검증값과 완벽 AI 매칭 → 최종 판정"""
         try:
