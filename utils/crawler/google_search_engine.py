@@ -59,6 +59,20 @@ class GoogleSearchEngine:
             '.yuRUbf a'
         ]
     
+    def search(self, query: str, driver, max_results: int = 5) -> List[Dict]:
+        """
+        구글 검색 실행 (comp.py 호환성 메서드)
+        
+        Args:
+            query: 검색 쿼리
+            driver: WebDriver 인스턴스
+            max_results: 최대 결과 수
+            
+        Returns:
+            List[Dict]: 검색 결과 목록
+        """
+        return self.search_google(driver, query, max_results)
+    
     def search_google(self, driver, query: str, max_results: int = 5) -> List[Dict]:
         """
         구글 검색 실행

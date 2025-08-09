@@ -15,6 +15,7 @@ import pandas as pd
 import numpy as np
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
+import socket
 # import keyboard  # 실시간 헤드리스 토글용 (선택적)
 
 from dotenv import load_dotenv
@@ -35,6 +36,153 @@ from utils.data.excel_processor import ExcelProcessor
 from config.performance_profiles import PerformanceManager
 from config.crawling_settings import CrawlingSettings
 from config.settings import get_optimal_config, CRAWLING_PARAMS
+
+
+class AdvancedPortManager:
+    """Valid3.py 방식: 고급 포트 관리 시스템 (4개 포트만 엄격 관리)"""
+    
+    def __init__(self, logger):
+        """AdvancedPortManager 초기화 (4개 포트 전용)"""
+        self.logger = logger
+        
+        # 포트 범위 설정 (4개만 엄격히 관리)
+        self.port_range_start = 9222
+        self.port_range_end = 9226  # 9222-9225 (4개만)
+        self.available_ports = set(range(self.port_range_start, self.port_range_end))
+        self.used_ports = set()
+        self.blacklisted_ports = set()  # 차단된 포트들
+        self.port_assignments = {}  # 워커별 포트 할당 기록
+        
+        # 포트 사용 통계
+        self.allocation_count = 0
+        self.release_count = 0
+        
+        self.logger.info(f"🔌 AdvancedPortManager 초기화: {len(self.available_ports)}개 포트 관리 ({self.port_range_start}-{self.port_range_end-1})")
+    
+    def allocate_port(self, worker_id: int) -> int:
+        """워커에게 포트 할당 (4개 제한)"""
+        try:
+            # 워커 ID를 0~3으로 제한
+            limited_worker_id = worker_id % 4
+            
+            # 이미 할당된 포트가 있으면 재사용
+            if limited_worker_id in self.port_assignments:
+                existing_port = self.port_assignments[limited_worker_id]
+                if existing_port not in self.blacklisted_ports and self._is_port_available(existing_port):
+                    self.logger.debug(f"🔌 워커 {worker_id} (제한:{limited_worker_id}): 기존 포트 {existing_port} 재사용")
+                    return existing_port
+                else:
+                    # 블랙리스트에 있거나 사용 불가하면 해제하고 새로 할당
+                    self.logger.warning(f"⚠️ 워커 {limited_worker_id}: 기존 포트 {existing_port} 문제됨, 새 포트 할당")
+                    self.release_port(existing_port, limited_worker_id)
+            
+            # 사용 가능한 포트 찾기
+            available_ports = self.available_ports - self.used_ports - self.blacklisted_ports
+            
+            if not available_ports:
+                # 사용 가능한 포트가 없으면 강제로 오래된 포트 해제
+                if self.used_ports:
+                    oldest_port = min(self.used_ports)
+                    self.logger.warning(f"⚠️ 사용 가능한 포트 없음, 강제 해제: {oldest_port}")
+                    self.release_port(oldest_port)
+                    available_ports = self.available_ports - self.used_ports - self.blacklisted_ports
+                
+                if not available_ports:
+                    # 그래도 없으면 블랙리스트 일부 해제
+                    if self.blacklisted_ports:
+                        released_port = self.blacklisted_ports.pop()
+                        self.logger.warning(f"⚠️ 블랙리스트 포트 해제: {released_port}")
+                        available_ports = {released_port}
+                    else:
+                        # 최후의 수단: 기본 포트 사용
+                        emergency_port = self.port_range_start + limited_worker_id
+                        self.logger.error(f"🚨 긴급 포트 할당: {emergency_port}")
+                        return emergency_port
+            
+            # 포트 할당
+            allocated_port = min(available_ports)  # 가장 작은 번호부터 사용
+            self.used_ports.add(allocated_port)
+            self.port_assignments[limited_worker_id] = allocated_port
+            self.allocation_count += 1
+            
+            self.logger.debug(f"🔌 워커 {worker_id} (제한:{limited_worker_id}): 포트 {allocated_port} 새로 할당 (총 사용중: {len(self.used_ports)}/4)")
+            return allocated_port
+            
+        except Exception as e:
+            self.logger.error(f"❌ 포트 할당 실패 (워커 {worker_id}): {e}")
+            # 긴급 포트 반환
+            emergency_port = self.port_range_start + (worker_id % 4)
+            self.logger.warning(f"🚨 긴급 포트 할당: {emergency_port}")
+            return emergency_port
+    
+    def release_port(self, port: int, worker_id: int = None):
+        """포트 즉시 해제"""
+        try:
+            if port in self.used_ports:
+                self.used_ports.remove(port)
+                self.release_count += 1
+                
+                # 워커 할당 기록에서 제거
+                if worker_id is not None and worker_id in self.port_assignments:
+                    if self.port_assignments[worker_id] == port:
+                        del self.port_assignments[worker_id]
+                else:
+                    # worker_id가 없으면 전체 할당 기록에서 찾아서 제거
+                    for wid, assigned_port in list(self.port_assignments.items()):
+                        if assigned_port == port:
+                            del self.port_assignments[wid]
+                            break
+                
+                self.logger.debug(f"🔓 포트 {port} 즉시 해제 완료 (남은 사용중: {len(self.used_ports)}/4)")
+            else:
+                self.logger.debug(f"⚠️ 포트 {port} 이미 해제됨")
+                
+        except Exception as e:
+            self.logger.error(f"❌ 포트 해제 실패 ({port}): {e}")
+    
+    def blacklist_port(self, port: int, reason: str = "차단됨"):
+        """포트를 블랙리스트에 추가"""
+        try:
+            self.blacklisted_ports.add(port)
+            if port in self.used_ports:
+                self.used_ports.remove(port)
+            
+            self.logger.warning(f"🚫 포트 {port} 블랙리스트 추가: {reason}")
+            
+        except Exception as e:
+            self.logger.error(f"❌ 포트 블랙리스트 실패 ({port}): {e}")
+    
+    def _is_port_available(self, port: int) -> bool:
+        """포트 사용 가능 여부 확인"""
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(1)
+                result = s.connect_ex(('localhost', port))
+                return result != 0  # 포트가 사용 중이 아님
+        except:
+            return False
+    
+    def release_all_ports(self):
+        """모든 포트 해제"""
+        try:
+            released_count = len(self.used_ports)
+            self.used_ports.clear()
+            self.port_assignments.clear()
+            self.logger.info(f"🔓 모든 포트 해제 완료: {released_count}개")
+        except Exception as e:
+            self.logger.error(f"❌ 모든 포트 해제 실패: {e}")
+    
+    def get_port_status(self) -> Dict:
+        """포트 상태 정보 반환"""
+        return {
+            'total_ports': len(self.available_ports),
+            'used_ports': len(self.used_ports),
+            'available_ports': len(self.available_ports) - len(self.used_ports) - len(self.blacklisted_ports),
+            'blacklisted_ports': len(self.blacklisted_ports),
+            'port_assignments': dict(self.port_assignments),
+            'allocation_count': self.allocation_count,
+            'release_count': self.release_count
+        }
 
 
 @dataclass
@@ -123,23 +271,32 @@ class CompCrawlingSystem:
     
     def initialize_components(self):
         """핵심 컴포넌트 초기화"""
-        # SystemAnalyzer로 동적 워커 관리
+        # SystemAnalyzer로 동적 워커 관리 (단일 초기화)
         self.system_analyzer = SystemAnalyzer(self.logger)
         self.system_analyzer.start_monitoring()
+        # 엄격한 제한: 최대 4개 워커로 고정
+        self.max_workers = 4
         
         # 성능 관리자
         self.performance_manager = PerformanceManager()
         self.crawling_settings = CrawlingSettings()
         
         # UA 로테이터
-        self.ua_rotator = UserAgentRotator(logger=self.logger)
+        self.ua_rotator = UserAgentRotator(self.logger)
         
         # 검증 엔진들
         self.phone_validator = PhoneValidator()
-        self.web_driver_manager = WebDriverManager()
         self.verification_engine = VerificationEngine()
         self.google_search_engine = GoogleSearchEngine()
         self.homepage_crawler = HomepageCrawler()
+        
+        # Valid3.py 방식의 드라이버 관리 (워커별 WebDriverManager + 포트 관리)
+        self.web_driver_managers = {}  # 워커별 WebDriverManager 딕셔너리
+        self.driver_lock = threading.Lock()  # 드라이버 생성/해제 시 동기화
+        self.max_pool_size = 4  # 엄격히 4개로 고정
+        
+        # 포트 관리자 추가
+        self.port_manager = AdvancedPortManager(self.logger)
         
         # AI 모델 관리자 (키 로테이션)
         self.ai_manager = AIModelManager()
@@ -151,11 +308,13 @@ class CompCrawlingSystem:
         
         # 상태 관리
         self.is_headless = False  # 기본값: 헤드리스 OFF
-        self.worker_drivers = {}  # 워커별 드라이버 캐시
         self.processed_count = 0
-        self.batch_size = 100
+        self.batch_size = 20  # 배치 크기도 줄여서 안정성 확보
         
         self.logger.info("⚙️ 모든 컴포넌트 초기화 완료")
+        self.logger.info(f"🔧 엄격한 제한: 최대 워커 {self.max_workers}개, 드라이버 풀 {self.max_pool_size}개 고정")
+        self.logger.info(f"📦 배치 크기: {self.batch_size}개 (안정성 우선)")
+        self.logger.info(f"🛡️ 드라이버 무한증식 방지: 생성 완료 후 재사용 모드")
     
     def setup_headless_toggle(self):
         """실시간 헤드리스 토글 설정"""
@@ -195,47 +354,138 @@ class CompCrawlingSystem:
             self.logger.info("⌨️ keyboard 라이브러리 없음 - 수동 토글만 지원 (system.toggle_headless() 호출)")
     
     def _restart_all_drivers(self):
-        """모든 워커 드라이버 재시작"""
-        old_drivers = self.worker_drivers.copy()
-        self.worker_drivers.clear()
-        
-        # 기존 드라이버 종료
-        for worker_id, driver in old_drivers.items():
-            try:
-                driver.quit()
-            except:
-                pass
-        
-        self.logger.info(f"🔄 {len(old_drivers)}개 드라이버 재시작 (헤드리스 모드 적용)")
+        """Valid3.py 방식: 모든 워커 드라이버 재시작"""
+        with self.driver_lock:
+            old_managers_count = len(self.web_driver_managers)
+            
+            # 모든 기존 WebDriverManager 정리
+            self.cleanup_all_drivers()
+            
+            self.logger.info(f"🔄 {old_managers_count}개 WebDriverManager 재시작 (헤드리스 모드 적용)")
+    
+
+    
+    def get_driver_for_worker(self, worker_id: int):
+        """Valid3.py 방식: 워커별 WebDriverManager 인스턴스 획득 (엄격히 4개 제한 + 드라이버 재사용)"""
+        with self.driver_lock:
+            # 워커 ID를 0~3으로 제한 (4개로 엄격히 고정)
+            limited_worker_id = worker_id % 4
+            
+            # 기존 WebDriverManager 확인 및 재사용
+            if limited_worker_id in self.web_driver_managers:
+                web_manager = self.web_driver_managers[limited_worker_id]
+                
+                # 기존 드라이버가 살아있는지 확인
+                if hasattr(web_manager, 'driver') and web_manager.driver:
+                    try:
+                        # 드라이버 상태 체크 (간단한 명령 실행)
+                        web_manager.driver.execute_script("return document.readyState;")
+                        self.logger.debug(f"🔄 워커 {worker_id} (제한:{limited_worker_id}): 기존 드라이버 재사용")
+                        return web_manager
+                    except:
+                        # 드라이버가 죽었으면 새로 생성할 예정
+                        self.logger.debug(f"⚠️ 워커 {limited_worker_id}: 기존 드라이버 비정상, 재생성 필요")
+                        pass
+                
+                # WebDriverManager는 있지만 드라이버가 없으면 재사용
+                self.logger.debug(f"🔄 워커 {worker_id} (제한:{limited_worker_id}): 기존 WebDriverManager 재사용")
+                return web_manager
+            else:
+                # 새로운 WebDriverManager 생성 (최대 4개까지만)
+                if len(self.web_driver_managers) >= 4:
+                    # 이미 4개가 있으면 기존 것 재사용 (Round-robin)
+                    existing_worker_id = list(self.web_driver_managers.keys())[limited_worker_id % len(self.web_driver_managers)]
+                    self.logger.debug(f"🔄 워커 {worker_id} -> 기존 워커 {existing_worker_id} 재사용 (4개 제한)")
+                    return self.web_driver_managers[existing_worker_id]
+                
+                self.logger.debug(f"🔧 워커 {limited_worker_id} WebDriverManager 새로 생성 중... ({len(self.web_driver_managers)+1}/4)")
+                new_manager = WebDriverManager(logger=self.logger)
+                self.web_driver_managers[limited_worker_id] = new_manager
+                self.logger.debug(f"✅ 워커 {limited_worker_id} WebDriverManager 생성 완료")
+                
+                return new_manager
     
     def get_worker_driver(self, worker_id: int):
-        """워커별 전용 드라이버 반환 (UA 로테이션 적용)"""
-        if worker_id not in self.worker_drivers:
-            # 새 UA 생성
-            user_agent = self.ua_rotator.get_random_user_agent()
+        """워커별 실제 드라이버 인스턴스 반환 (드라이버 재사용 + 포트 관리)"""
+        try:
+            # WebDriverManager 획득
+            web_manager = self.get_driver_for_worker(worker_id)
+            limited_worker_id = worker_id % 4  # 0~3으로 제한
             
-            # 헤드리스 설정 적용
+            # 기존 드라이버가 살아있으면 바로 반환 (무한증식 방지!)
+            if hasattr(web_manager, 'driver') and web_manager.driver:
+                try:
+                    # 드라이버 상태 체크
+                    web_manager.driver.execute_script("return document.readyState;")
+                    self.logger.debug(f"♻️ 워커 {worker_id} (제한:{limited_worker_id}): 기존 드라이버 재사용 (무한증식 방지)")
+                    return web_manager.driver
+                except:
+                    # 드라이버가 죽었으면 새로 생성
+                    self.logger.debug(f"💀 워커 {limited_worker_id}: 기존 드라이버 비정상, 새로 생성")
+                    web_manager.driver = None
+            
+            # 새 드라이버 생성이 필요한 경우에만 포트 할당
+            assigned_port = self.port_manager.allocate_port(limited_worker_id)
+            
+            # 헤드리스 설정에 따라 드라이버 생성
             with self.headless_lock:
                 headless = self.is_headless
             
-            # 드라이버 생성
-            if headless:
-                # 헤드리스 모드는 별도의 메서드로 생성
-                driver = self.web_driver_manager._try_headless_chrome(
-                    worker_id=worker_id, 
-                    assigned_port=9222 + worker_id  # 포트 분산
-                )
-            else:
-                # 기본 봇 우회 드라이버 생성
-                driver = self.web_driver_manager.create_bot_evasion_driver(
-                    worker_id=worker_id,
-                    port=9222 + worker_id  # 포트 분산
-                )
+            try:
+                if headless:
+                    # 헤드리스 드라이버 (포트 지정)
+                    driver = web_manager._try_headless_chrome(limited_worker_id, assigned_port)
+                else:
+                    # 일반 드라이버 (봇 감지 우회, 포트 지정)
+                    driver = web_manager.create_bot_evasion_driver(limited_worker_id, assigned_port)
+                
+                # WebDriverManager에 드라이버 저장 (재사용을 위해)
+                web_manager.driver = driver
+                
+                # User-Agent 설정
+                try:
+                    user_agent = self.ua_rotator.get_random_user_agent()
+                    driver.execute_cdp_cmd('Network.setUserAgentOverride', {
+                        "userAgent": user_agent
+                    })
+                except Exception as ua_error:
+                    self.logger.warning(f"UA 설정 실패 (무시): {ua_error}")
+                
+                self.logger.info(f"🆕 워커 {worker_id} (제한:{limited_worker_id}) 새 드라이버 생성 ({'헤드리스' if headless else '일반'}, 포트:{assigned_port})")
+                return driver
+                
+            except Exception as driver_error:
+                # 드라이버 생성 실패시 포트 해제
+                self.port_manager.release_port(assigned_port, limited_worker_id)
+                self.logger.error(f"❌ 워커 {worker_id} 드라이버 생성 실패, 포트 {assigned_port} 해제: {driver_error}")
+                
+                # 포트를 블랙리스트에 추가하고 재시도
+                self.port_manager.blacklist_port(assigned_port, f"드라이버 생성 실패: {driver_error}")
+                
+                # 다른 포트로 재시도 (1회만)
+                retry_port = self.port_manager.allocate_port(limited_worker_id)
+                if retry_port != assigned_port:
+                    self.logger.warning(f"🔄 워커 {worker_id} 다른 포트로 재시도: {retry_port}")
+                    try:
+                        if headless:
+                            driver = web_manager._try_headless_chrome(limited_worker_id, retry_port)
+                        else:
+                            driver = web_manager.create_bot_evasion_driver(limited_worker_id, retry_port)
+                        
+                        # 재시도 성공시 WebDriverManager에 저장
+                        web_manager.driver = driver
+                        self.logger.info(f"✅ 워커 {worker_id} 재시도 성공 (포트:{retry_port})")
+                        return driver
+                    except Exception as retry_error:
+                        self.port_manager.release_port(retry_port, limited_worker_id)
+                        self.port_manager.blacklist_port(retry_port, f"재시도 실패: {retry_error}")
+                        raise
+                else:
+                    raise
             
-            self.worker_drivers[worker_id] = driver
-            self.logger.info(f"🤖 워커 {worker_id} 드라이버 생성 (UA: {user_agent[:50]}..., 헤드리스: {headless})")
-        
-        return self.worker_drivers[worker_id]
+        except Exception as e:
+            self.logger.error(f"❌ 워커 {worker_id} 드라이버 획득 실패: {e}")
+            raise
     
     def load_csv_data(self, file_path: str) -> pd.DataFrame:
         """CSV 데이터 로드 및 전처리"""
@@ -463,8 +713,8 @@ class CompCrawlingSystem:
                 result.validation_4th = "크롤링할 링크 없음"
                 return
             
-            # SystemAnalyzer에서 현재 권장 워커 수 가져오기
-            max_workers = min(len(result.extracted_links), self.system_analyzer.current_workers or 3)
+            # 엄격히 4개로 제한된 워커 사용
+            max_workers = min(len(result.extracted_links), 4)
             
             # 병렬 크롤러 활성화: 각 워커가 링크로 들어감
             crawl_results = []
@@ -1101,27 +1351,138 @@ class CompCrawlingSystem:
             self.logger.error(f"❌ 과부하 처리 실패: {e}")
     
     def _cleanup_idle_drivers(self):
-        """유휴 드라이버 정리"""
+        """Valid3.py 방식: 유휴 드라이버 정리 (엄격히 4개 제한)"""
         try:
-            # 현재 필요한 워커 수보다 많은 드라이버가 있으면 정리
-            needed_workers = self.system_analyzer.current_workers or 3
-            current_driver_count = len(self.worker_drivers)
+            # 4개 초과 시에만 정리
+            current_manager_count = len(self.web_driver_managers)
             
-            if current_driver_count > needed_workers:
-                # 높은 번호의 워커부터 정리
-                workers_to_remove = sorted(self.worker_drivers.keys(), reverse=True)[:current_driver_count - needed_workers]
+            if current_manager_count > 4:
+                # 4개를 초과하는 매니저들 정리 (높은 번호부터)
+                workers_to_remove = sorted(self.web_driver_managers.keys(), reverse=True)[:current_manager_count - 4]
                 
                 for worker_id in workers_to_remove:
-                    driver = self.worker_drivers.pop(worker_id, None)
-                    if driver:
-                        try:
-                            driver.quit()
-                            self.logger.info(f"🧹 유휴 워커 {worker_id} 드라이버 정리")
-                        except:
-                            pass
+                    self.cleanup_worker_driver(worker_id)
+                    
+            self.logger.info(f"🧹 드라이버 정리 완료: {current_manager_count} -> {len(self.web_driver_managers)} (최대 4개 유지)")
                             
         except Exception as e:
             self.logger.warning(f"⚠️ 유휴 드라이버 정리 실패: {e}")
+    
+    def cleanup_worker_driver(self, worker_id: int):
+        """Valid3.py 방식: 워커별 드라이버 완전 정리 (포트 해제 포함)"""
+        try:
+            with self.driver_lock:
+                limited_worker_id = worker_id % 4  # 0~3으로 제한
+                
+                if limited_worker_id in self.web_driver_managers:
+                    web_manager = self.web_driver_managers[limited_worker_id]
+                    
+                    # 워커가 사용중인 포트 해제
+                    if limited_worker_id in self.port_manager.port_assignments:
+                        assigned_port = self.port_manager.port_assignments[limited_worker_id]
+                        self.port_manager.release_port(assigned_port, limited_worker_id)
+                        self.logger.debug(f"🔓 워커 {worker_id} (제한:{limited_worker_id}) 포트 {assigned_port} 해제")
+                    
+                    # 드라이버 참조 제거 (무한증식 방지)
+                    if hasattr(web_manager, 'driver'):
+                        web_manager.driver = None
+                    
+                    # WebDriverManager의 정리 메서드 호출
+                    if hasattr(web_manager, 'cleanup_all_drivers'):
+                        web_manager.cleanup_all_drivers()
+                    elif hasattr(web_manager, 'cleanup'):
+                        web_manager.cleanup()
+                    
+                    # 딕셔너리에서 제거
+                    del self.web_driver_managers[limited_worker_id]
+                    self.logger.debug(f"🧹 워커 {worker_id} (제한:{limited_worker_id}) WebDriverManager 완전 정리 (포트 해제 포함)")
+        except Exception as e:
+            self.logger.debug(f"⚠️ 워커 {worker_id} 정리 중 오류 (무시): {e}")
+    
+    def force_kill_all_chrome_processes(self):
+        """Valid3.py 방식: 크롬 프로세스 강제 종료 (비상용)"""
+        try:
+            import subprocess
+            import platform
+            
+            if platform.system() == "Windows":
+                # Windows에서 Chrome 프로세스 강제 종료
+                try:
+                    subprocess.run(['taskkill', '/f', '/im', 'chrome.exe'], 
+                                 capture_output=True, text=True, timeout=10)
+                    subprocess.run(['taskkill', '/f', '/im', 'chromedriver.exe'], 
+                                 capture_output=True, text=True, timeout=10)
+                    self.logger.info("🔨 Windows Chrome 프로세스 강제 종료 완료")
+                except Exception as e:
+                    self.logger.warning(f"⚠️ Windows Chrome 강제 종료 실패: {e}")
+            else:
+                # Linux/Mac에서 Chrome 프로세스 강제 종료
+                try:
+                    subprocess.run(['pkill', '-f', 'chrome'], 
+                                 capture_output=True, text=True, timeout=10)
+                    subprocess.run(['pkill', '-f', 'chromedriver'], 
+                                 capture_output=True, text=True, timeout=10)
+                    self.logger.info("🔨 Unix Chrome 프로세스 강제 종료 완료")
+                except Exception as e:
+                    self.logger.warning(f"⚠️ Unix Chrome 강제 종료 실패: {e}")
+                    
+        except Exception as e:
+            self.logger.error(f"❌ Chrome 프로세스 강제 종료 실패: {e}")
+    
+    def cleanup_all_drivers(self):
+        """Valid3.py 방식: 모든 드라이버 완전 정리 (포트 관리 포함)"""
+        try:
+            self.logger.info(f"🧹 전체 드라이버 정리 시작: {len(self.web_driver_managers)}개")
+            
+            # 모든 워커의 WebDriverManager 정리
+            worker_ids = list(self.web_driver_managers.keys())
+            for worker_id in worker_ids:
+                self.cleanup_worker_driver(worker_id)
+            
+            # 드라이버 딕셔너리 초기화
+            self.web_driver_managers.clear()
+            
+            # 모든 포트 해제
+            self.port_manager.release_all_ports()
+            
+            # 강제 Chrome 프로세스 종료 (비상용)
+            self.force_kill_all_chrome_processes()
+            
+            # 메모리 정리
+            import gc
+            gc.collect()
+            
+            self.logger.info("🧹 전체 드라이버 정리 완료 (포트 해제 포함)")
+            
+        except Exception as e:
+            self.logger.error(f"❌ 전체 드라이버 정리 실패: {e}")
+    
+    def cleanup(self):
+        """시스템 전체 정리"""
+        try:
+            self.logger.info("🧹 시스템 정리 시작")
+            
+            # 모든 드라이버 정리
+            self.cleanup_all_drivers()
+            
+            # SystemAnalyzer 정리
+            if hasattr(self, 'system_analyzer'):
+                self.system_analyzer.cleanup()
+            
+            # 체크포인트 파일 최종 정리 (선택적)
+            try:
+                self._cleanup_old_checkpoint_files("rawdatafile")
+                self.logger.info("🗑️ 체크포인트 파일 최종 정리 완료")
+            except:
+                pass  # 정리 실패해도 프로그램 종료에는 영향 없음
+            
+            # 메모리 정리
+            self._cleanup_memory()
+            
+            self.logger.info("🧹 시스템 정리 완료")
+            
+        except Exception as e:
+            self.logger.error(f"❌ 시스템 정리 실패: {e}")
     
     def _cleanup_memory(self):
         """메모리 정리"""
@@ -1147,8 +1508,8 @@ class CompCrawlingSystem:
             
             self.logger.info(f"📦 배치 처리: {batch_start+1}~{batch_end}/{total_rows}")
             
-            # SystemAnalyzer에서 현재 최적 워커 수 가져오기
-            optimal_workers = self.system_analyzer.current_workers or self.system_analyzer.max_workers
+            # 엄격히 4개로 제한된 워커 사용
+            optimal_workers = 4
             
             # 병렬 처리
             batch_results = []
@@ -1208,12 +1569,15 @@ class CompCrawlingSystem:
         return all_results
     
     def _save_checkpoint(self, batch_results: List[CompValidationResult], batch_start: int):
-        """중간 결과 JSON 저장"""
+        """중간 결과 JSON 저장 (최신 1개만 유지, 이전 파일 자동 삭제)"""
         try:
             # rawdatafile 디렉토리 확인
             checkpoint_dir = "rawdatafile"
             if not os.path.exists(checkpoint_dir):
                 os.makedirs(checkpoint_dir)
+            
+            # 이전 체크포인트 파일들 삭제
+            self._cleanup_old_checkpoint_files(checkpoint_dir)
             
             # 체크포인트 데이터 구성
             checkpoint_data = {
@@ -1224,9 +1588,11 @@ class CompCrawlingSystem:
                     'total_processed': self.processed_count
                 },
                 'system_status': {
-                    'current_workers': self.system_analyzer.current_workers,
+                    'current_workers': 4,  # 고정값
                     'memory_usage': self.system_analyzer.get_memory_usage_mb(),
-                    'is_healthy': self.system_analyzer.is_system_healthy()
+                    'is_healthy': self.system_analyzer.is_system_healthy(),
+                    'active_drivers': len(self.web_driver_managers),
+                    'port_status': self.port_manager.get_port_status()
                 },
                 'results': []
             }
@@ -1259,9 +1625,9 @@ class CompCrawlingSystem:
                 }
                 checkpoint_data['results'].append(result_data)
             
-            # 체크포인트 파일 저장
+            # 새로운 체크포인트 파일 저장 (최신 1개만)
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            checkpoint_path = f"{checkpoint_dir}/checkpoint_batch_{batch_start:04d}_{timestamp}.json"
+            checkpoint_path = f"{checkpoint_dir}/checkpoint_latest_{timestamp}.json"
             
             with open(checkpoint_path, 'w', encoding='utf-8') as f:
                 json.dump(checkpoint_data, f, ensure_ascii=False, indent=2)
@@ -1270,11 +1636,35 @@ class CompCrawlingSystem:
             success_count = sum(1 for r in batch_results if r.success)
             success_rate = (success_count / len(batch_results) * 100) if batch_results else 0
             
-            self.logger.info(f"💾 체크포인트 저장: {checkpoint_path}")
+            self.logger.info(f"💾 체크포인트 저장 (최신 1개만 유지): {os.path.basename(checkpoint_path)}")
             self.logger.info(f"📊 배치 성공률: {success_rate:.1f}% ({success_count}/{len(batch_results)})")
             
         except Exception as e:
             self.logger.error(f"❌ 체크포인트 저장 실패: {e}")
+    
+    def _cleanup_old_checkpoint_files(self, checkpoint_dir: str):
+        """이전 체크포인트 파일들 삭제"""
+        try:
+            import glob
+            
+            # checkpoint_*.json 패턴의 모든 파일 찾기
+            old_checkpoint_files = glob.glob(f"{checkpoint_dir}/checkpoint_*.json")
+            
+            # 이전 파일들 삭제
+            deleted_count = 0
+            for file_path in old_checkpoint_files:
+                try:
+                    os.remove(file_path)
+                    deleted_count += 1
+                    self.logger.debug(f"🗑️ 이전 체크포인트 삭제: {os.path.basename(file_path)}")
+                except Exception as e:
+                    self.logger.warning(f"⚠️ 파일 삭제 실패 {file_path}: {e}")
+            
+            if deleted_count > 0:
+                self.logger.info(f"🗑️ 이전 체크포인트 {deleted_count}개 파일 정리 완료")
+                
+        except Exception as e:
+            self.logger.warning(f"⚠️ 이전 체크포인트 정리 실패: {e}")
     
     def save_final_csv(self, results: List[CompValidationResult], original_df: pd.DataFrame) -> str:
         """최종 CSV 저장"""
@@ -1379,23 +1769,7 @@ class CompCrawlingSystem:
             self.logger.error(f"❌ CSV 저장 실패: {e}")
             raise
     
-    def cleanup(self):
-        """정리 작업"""
-        try:
-            # 모든 드라이버 종료
-            for worker_id, driver in self.worker_drivers.items():
-                try:
-                    driver.quit()
-                except:
-                    pass
-            
-            # SystemAnalyzer 정리
-            self.system_analyzer.cleanup()
-            
-            self.logger.info("🧹 정리 작업 완료")
-            
-        except Exception as e:
-            self.logger.error(f"❌ 정리 작업 실패: {e}")
+
     
     def run(self, csv_file_path: str):
         """메인 실행 함수"""
@@ -1404,6 +1778,9 @@ class CompCrawlingSystem:
         try:
             self.logger.info("🚀 CompCrawlingSystem 실행 시작")
             self.logger.info(f"📁 입력 파일: {csv_file_path}")
+            
+            # 0. 시작 시 이전 체크포인트 파일들 정리
+            self._cleanup_old_checkpoint_files("rawdatafile")
             
             # 1. CSV 로드 및 검증
             if not os.path.exists(csv_file_path):

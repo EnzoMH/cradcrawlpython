@@ -26,6 +26,7 @@ class SystemAnalyzer:
         self.config = get_optimal_config()
         self.current_workers = 0
         self.max_workers = self.get_optimal_workers()
+        self.optimal_workers = self.max_workers  # comp.py 호환성을 위한 별칭
         self.monitoring = False
         self.monitor_thread = None
         self.last_adjustment = time.time()
