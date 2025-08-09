@@ -14,15 +14,15 @@ from dotenv import load_dotenv
 
 # 새로 통합된 유틸리티 모듈들
 from utils.ai_model_manager import AIModelManager
-from utils.worker_manager import WorkerManager
-from utils.phone_validator import PhoneValidator
-from utils.google_search_engine import GoogleSearchEngine
-from utils.homepage_crawler import HomepageCrawler
-from utils.system_analyzer import SystemAnalyzer
-from utils.excel_processor import ExcelProcessor
-from utils.data_mapper import DataMapper
-from utils.crawling_engine import CrawlingEngine
-from utils.verification_engine import VerificationEngine
+from utils.system.worker_manager import WorkerManager
+from utils.valid.phone_validator import PhoneValidator
+from utils.crawler.google_search_engine import GoogleSearchEngine
+from utils.crawler.homepage_crawler import HomepageCrawler
+from utils.system.system_analyzer import SystemAnalyzer
+from utils.data.excel_processor import ExcelProcessor
+from utils.data.data_mapper import DataMapper
+from utils.crawler.crawling_engine import CrawlingEngine
+from utils.valid.verification_engine import VerificationEngine
 
 # 새로 통합된 설정 모듈들
 from config.settings import get_optimal_config, display_system_config

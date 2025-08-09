@@ -38,7 +38,7 @@ class AIModelManager:
         try:
             # API 키들 가져오기
             api_keys = {
-                'GEMINI_1': os.getenv('GEMINI_API_KEY'),
+                'GEMINI_1': os.getenv('GEMINI_API_KEY_1'),
                 'GEMINI_2': os.getenv('GEMINI_API_KEY_2'),
                 'GEMINI_3': os.getenv('GEMINI_API_KEY_3'),
                 'GEMINI_4': os.getenv('GEMINI_API_KEY_4')
@@ -47,7 +47,7 @@ class AIModelManager:
             # 최소 하나의 API 키는 있어야 함
             valid_keys = {k: v for k, v in api_keys.items() if v}
             if not valid_keys:
-                raise ValueError("GEMINI_API_KEY, GEMINI_API_KEY_2, GEMINI_API_KEY_3, 또는 GEMINI_API_KEY_4 환경 변수 중 최소 하나는 설정되어야 합니다.")
+                raise ValueError("GEMINI_API_KEY_1, GEMINI_API_KEY_2, GEMINI_API_KEY_3, 또는 GEMINI_API_KEY_4 환경 변수 중 최소 하나는 설정되어야 합니다.")
             
             # 각 API 키에 대해 모델 초기화
             for model_name, api_key in valid_keys.items():

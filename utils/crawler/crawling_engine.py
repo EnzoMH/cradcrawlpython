@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_compl
 from typing import Dict, List, Optional, Callable, Any
 from datetime import datetime
 import pandas as pd
-from utils.system_analyzer import SystemAnalyzer
+from utils.system.system_analyzer import SystemAnalyzer
 
 # ===== 독립적인 워커 함수들 =====
 

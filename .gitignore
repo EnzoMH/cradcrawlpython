@@ -7,6 +7,7 @@
 # 엑셀 파일들 (예외 제외)
 *.xlsx
 *.csv
+*.json
 
 # 예외: 특정 파일들은 추적
 !failed_data_250724.xlsx
@@ -18,4 +19,4 @@ __pycache__/
 # 임시 파일들
 ~$*
 
-!valid3_20250725_011442.log
+!failed_data_250809.csv

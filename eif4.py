@@ -52,9 +52,9 @@ from selenium.webdriver.common.keys import Keys
 import google.generativeai as genai
 
 # 기존 utils 모듈들 활용
-from utils.phone_validator import PhoneValidator
-from utils.excel_processor import ExcelProcessor
-from utils.data_processor import DataProcessor
+from utils.valid.phone_validator import PhoneValidator
+from utils.data.excel_processor import ExcelProcessor
+from utils.data.data_processor import DataProcessor
 from utils.ai_model_manager import AIModelManager
 from config.performance_profiles import PerformanceManager
 

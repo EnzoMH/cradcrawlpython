@@ -16,10 +16,10 @@ import multiprocessing
 from datetime import datetime
 from dotenv import load_dotenv
 
-from utils.web_driver_manager import WebDriverManager
-from utils.data_processor import DataProcessor
-from utils.info_extractor import InfoExtractor
-from utils.system_monitor import SystemMonitor
+from utils.system.web_driver_manager import WebDriverManager
+from utils.data.data_processor import DataProcessor
+from utils.crawler.info_extractor import InfoExtractor
+from utils.system.system_monitor import SystemMonitor
 from utils.constants import REGIONS
 
 def setup_logger(name):

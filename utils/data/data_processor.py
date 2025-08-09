@@ -6,7 +6,7 @@ import pandas as pd
 import logging
 from typing import Dict, List, Optional
 from datetime import datetime
-from .constants import (
+from utils.constants import (
     REGIONS, SEOUL_DISTRICTS, GYEONGGI_CITIES, INCHEON_DISTRICTS,
     REGION_SEOUL, REGION_GYEONGGI, REGION_INCHEON
 )
