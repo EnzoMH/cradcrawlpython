@@ -1039,9 +1039,17 @@ class Valid4ValidationManager:
                     result = self.validate_single_row((idx, row))
                     results.append(result)
                     
-                    # 진행상황 출력
+                    # 진행상황 출력 및 주기적 정리
                     if (idx + 1) % 10 == 0 or idx == 0:
                         self.logger.info(f"📈 진행상황: {idx+1}/{total_rows} ({(idx+1)/total_rows*100:.1f}%)")
+                        
+                        # 50건마다 강제 정리
+                        if (idx + 1) % 50 == 0:
+                            self.logger.info("🧹 주기적 드라이버 정리 실행")
+                            self._cleanup_all_worker_drivers()
+                            # 가비지 컬렉션
+                            import gc
+                            gc.collect()
                     
                 except Exception as e:
                     self.logger.error(f"❌ Row {idx} 처리 실패: {e}")
@@ -1059,7 +1067,22 @@ class Valid4ValidationManager:
                 
         except Exception as e:
             self.logger.error(f"❌ 전체 데이터 처리 실패: {e}")
+            # 예외 발생 시 강제 정리
+            try:
+                self._cleanup_all_worker_drivers()
+                self.force_kill_all_chrome_processes()
+            except:
+                pass
             return False
+        
+        finally:
+            # 항상 실행되는 최종 정리
+            try:
+                self._cleanup_all_worker_drivers()
+                self.force_kill_all_chrome_processes()
+                self.logger.info("🧹 Valid4 최종 드라이버 정리 완료")
+            except Exception as cleanup_e:
+                self.logger.debug(f"⚠️ 최종 정리 실패: {cleanup_e}")
 
 class Valid3ValidationManager:
     """Valid2_fixed 기반 최신 5단계 검증 관리자 (기존 클래스 유지)"""
@@ -3203,6 +3226,24 @@ def main_valid4():
         print(f"❌ 실행 중 오류 발생: {e}")
         import traceback
         traceback.print_exc()
+        # 강화된 드라이버 정리
+        try:
+            if 'manager' in locals():
+                print("🧹 강화된 크롬 드라이버 정리 시작...")
+                manager._cleanup_all_worker_drivers()
+                manager.force_kill_all_chrome_processes()
+                print("🧹 크롬 드라이버 정리 완료")
+        except Exception as cleanup_error:
+            print(f"⚠️ 드라이버 정리 중 오류: {cleanup_error}")
+    
+    finally:
+        # 항상 실행되는 최종 정리
+        try:
+            if 'manager' in locals():
+                manager._cleanup_all_worker_drivers()
+                manager.force_kill_all_chrome_processes()
+        except:
+            pass
 
 def main():
     """메인 실행 함수 (Valid3 유지)"""
@@ -3336,16 +3377,39 @@ def main():
 # ================================
 
 class Valid4WebSearchManager(Valid3ValidationManager):
-    """Valid4 전용 웹 검색 관리자 - Valid3 풀 기능 상속"""
+    """Valid4 전용 웹 검색 관리자 - Valid3 풀 기능 상속 + 강화된 안정성"""
     
     def __init__(self):
-        """Valid3 기반 초기화 + Valid4 웹 검색 전용 설정"""
+        """Valid3 기반 초기화 + Valid4 웹 검색 전용 설정 + 안정성 강화"""
         super().__init__()
         self.logger = setup_detailed_logger("Valid4WebSearchManager")
         self.logger.info("🔍 Valid4WebSearchManager 초기화 완료 (Valid3 웹 검색 로직 상속)")
         
         # 웹 검색 결과 저장용
         self.web_search_results = []
+        
+        # 드라이버 정리를 위한 추가 추적
+        self.active_drivers = {}  # worker_id: driver 매핑
+        self._cleanup_interval_counter = 0
+        
+        # 안정성 강화 설정
+        self.driver_failure_count = {}  # worker_id별 실패 횟수
+        self.max_driver_failures = 3     # 최대 연속 실패 허용 횟수
+        self.driver_restart_delay = 5.0  # 드라이버 재시작 지연 시간
+        
+        # Chrome 프로세스 관리 강화
+        self._chrome_process_cleanup_interval = 0
+        self._last_port_cleanup = time.time()
+        
+        # 성능 프로필 적용 (config 사용)
+        try:
+            from config.performance_profiles import PerformanceManager
+            self.performance_manager = PerformanceManager(self.logger)
+            current_profile = self.performance_manager.get_current_profile()
+            self.logger.info(f"🎯 성능 프로필 적용: {current_profile.name}")
+        except Exception as e:
+            self.logger.warning(f"⚠️ 성능 프로필 로드 실패, 기본값 사용: {e}")
+            self.performance_manager = None
         
     def load_unmapped_data(self, csv_path: str = "mappingdata250809.csv", test_mode: bool = False, test_sample_size: int = 10) -> bool:
         """G열 또는 J열이 빈 데이터 로딩 (웹 검색 대상)"""
@@ -3456,51 +3520,79 @@ class Valid4WebSearchManager(Valid3ValidationManager):
             return ""
     
     def process_web_search_batch(self, start_idx: int = 0, batch_size: int = 50) -> List[Dict]:
-        """배치 단위 웹 검색 처리"""
+        """배치 단위 웹 검색 처리 (강화된 드라이버 관리)"""
         results = []
         
         if self.input_data is None or len(self.input_data) == 0:
             self.logger.error("❌ 입력 데이터가 없습니다")
             return results
         
+        # 배치 시작 전 주기적 정리 체크
+        self._periodic_cleanup_check()
+        
         end_idx = min(start_idx + batch_size, len(self.input_data))
         batch_data = self.input_data.iloc[start_idx:end_idx]
         
         self.logger.info(f"🔄 배치 처리 시작: {start_idx+1}-{end_idx}/{len(self.input_data)}")
         
-        # 병렬 처리 (4개 워커)
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            future_to_row = {}
-            
-            for idx, (_, row) in enumerate(batch_data.iterrows()):
-                actual_idx = start_idx + idx
-                future = executor.submit(self.process_single_web_search, actual_idx, row)
-                future_to_row[future] = actual_idx
-            
-            # 결과 수집
-            for future in as_completed(future_to_row):
-                row_idx = future_to_row[future]
-                try:
-                    result = future.result()
-                    results.append(result)
-                    
-                    # 진행률 표시
-                    completed = len(results)
-                    progress = (completed / len(batch_data)) * 100
-                    self.logger.info(f"✅ Row {row_idx+1} 완료 | 배치 진행률: {progress:.1f}%")
-                    
-                except Exception as e:
-                    self.logger.error(f"❌ Row {row_idx+1} 처리 실패: {e}")
-                    # 실패한 경우에도 기본 결과 추가
-                    results.append({
-                        'original_index': row_idx,
-                        'fax_number': '',
-                        'institution_name': '',
-                        'search_method': '처리 실패',
-                        'y_label': '',
-                        'confidence': 0.0,
-                        'error_message': str(e)
-                    })
+        try:
+            # 병렬 처리 (4개 워커)
+            with ThreadPoolExecutor(max_workers=4) as executor:
+                future_to_row = {}
+                
+                for idx, (_, row) in enumerate(batch_data.iterrows()):
+                    actual_idx = start_idx + idx
+                    future = executor.submit(self.process_single_web_search, actual_idx, row)
+                    future_to_row[future] = actual_idx
+                
+                # 결과 수집
+                for future in as_completed(future_to_row):
+                    row_idx = future_to_row[future]
+                    try:
+                        result = future.result()
+                        results.append(result)
+                        
+                        # 진행률 표시
+                        completed = len(results)
+                        progress = (completed / len(batch_data)) * 100
+                        self.logger.info(f"✅ Row {row_idx+1} 완료 | 배치 진행률: {progress:.1f}%")
+                        
+                    except Exception as e:
+                        self.logger.error(f"❌ Row {row_idx+1} 처리 실패: {e}")
+                        # 실패한 경우에도 기본 결과 추가
+                        results.append({
+                            'original_index': row_idx,
+                            'fax_number': '',
+                            'institution_name': '',
+                            'search_method': '처리 실패',
+                            'y_label': '',
+                            'confidence': 0.0,
+                            'error_message': str(e)
+                        })
+        
+        except Exception as e:
+            self.logger.error(f"❌ 배치 처리 전체 실패: {e}")
+            # 비상 정리
+            self._emergency_chrome_cleanup()
+        
+        finally:
+            # 배치 완료 후 정리
+            try:
+                # 임시 드라이버들 정리
+                for worker_id in range(4):  # 4개 워커
+                    if worker_id in self.active_drivers:
+                        try:
+                            self.active_drivers[worker_id].quit()
+                            del self.active_drivers[worker_id]
+                        except:
+                            pass
+                            
+                # 가벼운 메모리 정리
+                import gc
+                gc.collect()
+                
+            except Exception as cleanup_e:
+                self.logger.debug(f"⚠️ 배치 후 정리 실패: {cleanup_e}")
         
         self.logger.info(f"✅ 배치 처리 완료: {len(results)}개 결과")
         return results
@@ -3533,12 +3625,27 @@ class Valid4WebSearchManager(Valid3ValidationManager):
             fax_search_method = "기존 라벨 유지" if not fax_needs_search else "웹 검색 실패"
             confidence = 0.0
             
-            # 웹 검색이 필요한 경우에만 Valid3 검증 실행
+            # 안정성 강화된 웹 검색 실행
             if phone_needs_search or fax_needs_search:
-                validation_result = self.validate_single_row((row_idx, row))
+                # 워커 ID 할당
+                worker_id = row_idx % 4
                 
-                # 전화번호 검색 결과 처리
-                if phone_needs_search:
+                self.logger.debug(f"🔍 Row {row_idx+1} 안정성 강화 검증 실행 (워커 {worker_id})")
+                
+                # 안전한 작업 실행 함수 정의
+                def safe_validation_operation(driver_unused):
+                    return self.validate_single_row((row_idx, row))
+                
+                # 안전한 드라이버 작업으로 검증 실행
+                validation_result = self._safe_driver_operation(worker_id, safe_validation_operation)
+                
+                if not validation_result:
+                    self.logger.warning(f"⚠️ Row {row_idx+1} 검증 완전 실패 (워커 {worker_id})")
+                    phone_search_method = "드라이버 실패" if phone_needs_search else phone_search_method
+                    fax_search_method = "드라이버 실패" if fax_needs_search else fax_search_method
+                
+                # 전화번호 검색 결과 처리 (validation_result가 있을 때만)
+                if phone_needs_search and validation_result:
                     if validation_result.overall_result == "데이터 올바름" and validation_result.verified_institution_name:
                         phone_label = f"{phone_number}은 {validation_result.verified_institution_name}의 전화번호입니다"
                         phone_search_method = "Valid3 완전 검증 성공"
@@ -3552,8 +3659,8 @@ class Valid4WebSearchManager(Valid3ValidationManager):
                         phone_search_method = "구글 검색 결과 활용"
                         confidence = max(confidence, 50.0)
                 
-                # 팩스번호 검색 결과 처리
-                if fax_needs_search:
+                # 팩스번호 검색 결과 처리 (validation_result가 있을 때만)
+                if fax_needs_search and validation_result:
                     if validation_result.overall_result == "데이터 올바름" and validation_result.verified_institution_name:
                         fax_label = f"{fax_number}은 {validation_result.verified_institution_name}의 팩스번호입니다"
                         fax_search_method = "Valid3 완전 검증 성공"
@@ -3580,10 +3687,12 @@ class Valid4WebSearchManager(Valid3ValidationManager):
                 'fax_search_method': fax_search_method,
                 'confidence': confidence,
                 'processing_time': processing_time,
+                'worker_id': worker_id if 'worker_id' in locals() else -1,
                 'error_message': ""
             }
             
-            self.logger.debug(f"✅ Row {row_idx+1} 완료: 전화={phone_search_method}, 팩스={fax_search_method} ({confidence:.1f}%)")
+            worker_info = f" (워커 {worker_id})" if 'worker_id' in locals() else ""
+            self.logger.debug(f"✅ Row {row_idx+1} 완료{worker_info}: 전화={phone_search_method}, 팩스={fax_search_method} ({confidence:.1f}%)")
             return result
             
         except Exception as e:
@@ -3687,6 +3796,406 @@ class Valid4WebSearchManager(Valid3ValidationManager):
             'avg_per_item': avg_time_per_item,
             'workers': workers
         }
+    
+    def _enhanced_driver_cleanup(self):
+        """강화된 드라이버 정리 (Valid4 전용 - 표준 ChromeDriver 지원)"""
+        try:
+            self.logger.info("🧹 Valid4 강화된 드라이버 정리 시작")
+            
+            # 1. 활성 드라이버 정리 (표준 ChromeDriver 포함)
+            for worker_id, driver in list(self.active_drivers.items()):
+                try:
+                    if driver:
+                        # 표준 ChromeDriver는 안전하게 종료
+                        driver.quit()
+                        self.logger.debug(f"✅ 워커 {worker_id} 활성 드라이버 정리")
+                except Exception as e:
+                    self.logger.warning(f"⚠️ 워커 {worker_id} 활성 드라이버 정리 실패: {e}")
+            
+            self.active_drivers.clear()
+            
+            # 2. 상속받은 정리 메서드 호출
+            self._cleanup_all_worker_drivers()
+            
+            # 3. 메모리 정리
+            self._cleanup_memory()
+            
+            # 4. 강제 Chrome 프로세스 종료 (여전히 필요할 수 있음)
+            self.force_kill_all_chrome_processes()
+            
+            # 5. 임시 프로필 디렉토리 정리
+            try:
+                import tempfile
+                import shutil
+                temp_dir = tempfile.gettempdir()
+                
+                # chrome_std_, chrome_fallback_ 프로필 정리
+                for item in os.listdir(temp_dir):
+                    if item.startswith(('chrome_std_', 'chrome_fallback_')):
+                        item_path = os.path.join(temp_dir, item)
+                        try:
+                            if os.path.isdir(item_path):
+                                shutil.rmtree(item_path, ignore_errors=True)
+                                self.logger.debug(f"🧹 임시 프로필 디렉토리 정리: {item}")
+                        except Exception as dir_error:
+                            self.logger.debug(f"임시 디렉토리 정리 실패 (무시): {dir_error}")
+            except Exception as temp_error:
+                self.logger.debug(f"임시 디렉토리 정리 과정 오류 (무시): {temp_error}")
+            
+            # 6. 가비지 컬렉션
+            import gc
+            collected = gc.collect()
+            self.logger.info(f"🧹 Valid4 강화된 드라이버 정리 완료 (GC: {collected}개 객체)")
+            
+        except Exception as e:
+            self.logger.error(f"❌ Valid4 드라이버 정리 실패: {e}")
+    
+    def _periodic_cleanup_check(self):
+        """주기적 정리 체크 (10건마다)"""
+        self._cleanup_interval_counter += 1
+        if self._cleanup_interval_counter % 10 == 0:
+            self.logger.info("🔄 주기적 드라이버 정리 실행")
+            self._enhanced_driver_cleanup()
+    
+    def _emergency_chrome_cleanup(self):
+        """비상 Chrome 프로세스 정리"""
+        try:
+            import subprocess
+            import platform
+            
+            if platform.system() == "Windows":
+                # 모든 Chrome과 ChromeDriver 프로세스 강제 종료
+                subprocess.run(['taskkill', '/f', '/im', 'chrome.exe'], capture_output=True)
+                subprocess.run(['taskkill', '/f', '/im', 'chromedriver.exe'], capture_output=True)
+                subprocess.run(['taskkill', '/f', '/t', '/im', 'chrome.exe'], capture_output=True)  # 트리 종료
+                self.logger.info("🚨 비상 Chrome 프로세스 정리 완료 (Windows)")
+            else:
+                subprocess.run(['pkill', '-9', '-f', 'chrome'], capture_output=True)
+                subprocess.run(['pkill', '-9', '-f', 'chromedriver'], capture_output=True)
+                self.logger.info("🚨 비상 Chrome 프로세스 정리 완료 (Linux/Mac)")
+                
+        except Exception as e:
+            self.logger.warning(f"⚠️ 비상 Chrome 정리 실패: {e}")
+    
+    def _smart_driver_manager(self, worker_id: int):
+        """지능형 드라이버 관리 (실패 추적 및 자동 복구)"""
+        try:
+            # 실패 횟수 초기화
+            if worker_id not in self.driver_failure_count:
+                self.driver_failure_count[worker_id] = 0
+            
+            # 연속 실패가 많으면 더 긴 지연
+            failure_count = self.driver_failure_count[worker_id]
+            if failure_count > 0:
+                delay = min(self.driver_restart_delay * (2 ** failure_count), 30.0)  # 최대 30초
+                self.logger.info(f"🔄 워커 {worker_id} 재시작 지연: {delay:.1f}초 (실패 {failure_count}회)")
+                time.sleep(delay)
+            
+            # 기존 드라이버 안전하게 정리
+            if worker_id in self.active_drivers:
+                try:
+                    old_driver = self.active_drivers[worker_id]
+                    if old_driver:
+                        old_driver.quit()
+                    del self.active_drivers[worker_id]
+                    self.logger.debug(f"🧹 워커 {worker_id} 기존 드라이버 정리 완료")
+                except Exception as e:
+                    self.logger.debug(f"⚠️ 워커 {worker_id} 기존 드라이버 정리 실패: {e}")
+            
+            # Chrome 캐시 정리 (주기적)
+            if worker_id % 3 == 0:  # 3개 워커마다 1번
+                self._cleanup_chrome_cache(worker_id)
+            
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"❌ 워커 {worker_id} 지능형 드라이버 관리 실패: {e}")
+            return False
+    
+    def _cleanup_chrome_cache(self, worker_id: int):
+        """Chrome 캐시 및 임시 파일 정리"""
+        try:
+            import shutil
+            import tempfile
+            
+            # undetected_chromedriver 캐시 정리
+            uc_cache_paths = [
+                os.path.expanduser("~/.undetected_chromedriver"),
+                os.path.join(os.path.expanduser("~"), "AppData", "Roaming", "undetected_chromedriver"),
+                os.path.join(tempfile.gettempdir(), "undetected_chromedriver")
+            ]
+            
+            for cache_path in uc_cache_paths:
+                if os.path.exists(cache_path):
+                    try:
+                        # 특정 파일만 정리 (전체 삭제는 위험)
+                        for item in os.listdir(cache_path):
+                            if item.endswith(('.tmp', '.lock')):
+                                item_path = os.path.join(cache_path, item)
+                                if os.path.isfile(item_path):
+                                    os.remove(item_path)
+                        self.logger.debug(f"🧹 워커 {worker_id} Chrome 캐시 정리: {cache_path}")
+                    except Exception as e:
+                        self.logger.debug(f"Chrome 캐시 정리 실패 (무시): {e}")
+                        
+        except Exception as e:
+            self.logger.debug(f"Chrome 캐시 정리 오류 (무시): {e}")
+    
+    def _intelligent_port_management(self):
+        """지능형 포트 관리 (충돌 방지)"""
+        try:
+            current_time = time.time()
+            
+            # 10분마다 포트 정리
+            if current_time - self._last_port_cleanup > 600:
+                self.logger.info("🔌 주기적 포트 정리 실행")
+                
+                # 사용하지 않는 포트 정리
+                if hasattr(self, 'port_manager'):
+                    # 모든 워커의 활성 상태 확인
+                    active_worker_ids = set(self.active_drivers.keys())
+                    
+                    # 사용하지 않는 포트 해제
+                    for port in list(self.port_manager.used_ports):
+                        # 포트를 사용하는 워커가 비활성 상태면 해제
+                        port_worker_id = (port - 9222) % 1000  # 포트에서 워커 ID 추정
+                        if port_worker_id not in active_worker_ids:
+                            try:
+                                self.port_manager.release_port(port)
+                                self.logger.debug(f"🔓 미사용 포트 해제: {port}")
+                            except:
+                                pass
+                
+                self._last_port_cleanup = current_time
+                
+        except Exception as e:
+            self.logger.debug(f"포트 관리 오류: {e}")
+    
+    def _enhanced_user_agent_rotation(self, worker_id: int) -> str:
+        """강화된 User-Agent 로테이션 (config 기반)"""
+        try:
+            # config의 User-Agent 사용
+            from config.crawling_settings import get_user_agents
+            user_agents = get_user_agents()
+            
+            # 워커별로 다른 User-Agent 선택 (패턴 회피)
+            agent_index = (worker_id + int(time.time()) // 3600) % len(user_agents)
+            selected_agent = user_agents[agent_index]
+            
+            self.logger.debug(f"🎭 워커 {worker_id} User-Agent: {selected_agent[:50]}...")
+            return selected_agent
+            
+        except Exception as e:
+            self.logger.warning(f"⚠️ User-Agent 로테이션 실패: {e}")
+            # 기본 UserAgentRotator 사용
+            return self.user_agent_rotator.get_random_user_agent()
+    
+    def _safe_driver_operation(self, worker_id: int, operation_func, *args, **kwargs):
+        """안전한 드라이버 작업 실행 (자동 복구 포함)"""
+        max_retries = 3
+        
+        for attempt in range(max_retries):
+            try:
+                # 드라이버 상태 확인
+                if worker_id not in self.active_drivers or not self.active_drivers[worker_id]:
+                    # 드라이버 재생성
+                    success = self._create_stable_driver(worker_id)
+                    if not success:
+                        continue
+                
+                # 작업 실행
+                result = operation_func(self.active_drivers[worker_id], *args, **kwargs)
+                
+                # 성공 시 실패 횟수 리셋
+                self.driver_failure_count[worker_id] = 0
+                return result
+                
+            except Exception as e:
+                self.logger.warning(f"⚠️ 워커 {worker_id} 작업 실패 (시도 {attempt + 1}/{max_retries}): {e}")
+                
+                # 실패 횟수 증가
+                self.driver_failure_count[worker_id] = self.driver_failure_count.get(worker_id, 0) + 1
+                
+                # 드라이버 정리 후 재시도
+                if worker_id in self.active_drivers:
+                    try:
+                        self.active_drivers[worker_id].quit()
+                        del self.active_drivers[worker_id]
+                    except:
+                        pass
+                
+                if attempt < max_retries - 1:
+                    delay = 2.0 * (attempt + 1)
+                    time.sleep(delay)
+        
+        self.logger.error(f"❌ 워커 {worker_id} 모든 재시도 실패")
+        return None
+    
+    def _create_stable_driver(self, worker_id: int) -> bool:
+        """표준 ChromeDriver 기반 안정성 강화된 드라이버 생성"""
+        try:
+            # 지능형 관리자 실행
+            if not self._smart_driver_manager(worker_id):
+                return False
+            
+            # 포트 관리
+            self._intelligent_port_management()
+            
+            # 🔧 표준 Selenium ChromeDriver 직접 생성 (undetected 완전 제거)
+            self.logger.debug(f"🛡️ 워커 {worker_id} 표준 ChromeDriver 생성 중...")
+            
+            # 포트 할당
+            assigned_port = None
+            if hasattr(self, 'port_manager'):
+                try:
+                    assigned_port = self.port_manager.allocate_port(worker_id)
+                    self.logger.debug(f"🔌 워커 {worker_id} 포트 할당: {assigned_port}")
+                except Exception as e:
+                    self.logger.warning(f"⚠️ 워커 {worker_id} 포트 할당 실패: {e}")
+            
+            # Chrome 옵션 설정
+            from selenium import webdriver
+            from selenium.webdriver.chrome.service import Service
+            from selenium.webdriver.chrome.options import Options
+            from webdriver_manager.chrome import ChromeDriverManager
+            
+            chrome_options = Options()
+            
+            # 기본 안정성 옵션
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--window-size=1366,768')
+            chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+            chrome_options.add_argument('--disable-extensions')
+            chrome_options.add_argument('--disable-infobars')
+            chrome_options.add_argument('--disable-notifications')
+            chrome_options.add_argument('--disable-logging')
+            chrome_options.add_argument('--log-level=3')
+            chrome_options.add_argument('--disable-web-security')
+            
+            # User-Agent 로테이션
+            user_agent = self._enhanced_user_agent_rotation(worker_id)
+            chrome_options.add_argument(f'--user-agent={user_agent}')
+            
+            # 매크로 감지 회피
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option('useAutomationExtension', False)
+            
+            # 포트 설정
+            if assigned_port:
+                chrome_options.add_argument(f'--remote-debugging-port={assigned_port}')
+            
+            # 임시 프로필 디렉토리
+            import tempfile
+            profile_dir = tempfile.mkdtemp(prefix=f'chrome_v4_{worker_id}_')
+            chrome_options.add_argument(f'--user-data-dir={profile_dir}')
+            
+            # 🚀 호환 가능한 ChromeDriver 자동 설치 및 생성
+            try:
+                service = Service(ChromeDriverManager().install())
+                driver = webdriver.Chrome(service=service, options=chrome_options)
+                self.logger.debug(f"✅ 워커 {worker_id} webdriver-manager로 ChromeDriver 생성 성공")
+            except Exception as wdm_error:
+                self.logger.warning(f"⚠️ 워커 {worker_id} webdriver-manager 실패: {wdm_error}")
+                # Fallback: 시스템 PATH에서 chromedriver 찾기
+                try:
+                    driver = webdriver.Chrome(options=chrome_options)
+                    self.logger.debug(f"✅ 워커 {worker_id} 시스템 PATH ChromeDriver 생성 성공")
+                except Exception as system_error:
+                    self.logger.error(f"❌ 워커 {worker_id} 모든 ChromeDriver 생성 실패: {system_error}")
+                    return False
+            
+            # 드라이버 추가 설정
+            driver.implicitly_wait(10)
+            driver.set_page_load_timeout(30)
+            
+            # 웹드라이버 감지 방지 스크립트
+            try:
+                driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+                driver.execute_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]})")
+                driver.execute_script("Object.defineProperty(navigator, 'languages', {get: () => ['ko-KR', 'ko']})")
+            except Exception as e:
+                self.logger.debug(f"⚠️ 워커 {worker_id} 웹드라이버 감지 방지 스크립트 실패: {e}")
+            
+            self.active_drivers[worker_id] = driver
+            self.logger.info(f"✅ 워커 {worker_id} 표준 ChromeDriver 생성 완료")
+            
+            # 🔍 Google 접근 및 검색창 테스트 (중요!)
+            try:
+                self.logger.debug(f"🔍 워커 {worker_id} Google 접근 및 검색창 테스트")
+                
+                # Google 페이지 로드
+                driver.get("https://www.google.com")
+                time.sleep(random.uniform(2.0, 3.0))  # 충분한 로딩 시간
+                
+                # 검색창 찾기 (여러 셀렉터 시도)
+                from selenium.webdriver.common.by import By
+                from selenium.webdriver.support.ui import WebDriverWait
+                from selenium.webdriver.support import expected_conditions as EC
+                from selenium.common.exceptions import TimeoutException
+                
+                search_selectors = [
+                    'textarea[name="q"]',      # 최신 Google
+                    '#APjFqb',                 # Google 메인 검색창
+                    'input[name="q"]',         # 이전 Google
+                    '[title="검색"]',           # 한국어 Google
+                    '[title="Search"]'         # 영어 Google
+                ]
+                
+                search_box = None
+                for selector in search_selectors:
+                    try:
+                        wait = WebDriverWait(driver, 5)
+                        search_box = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
+                        self.logger.debug(f"✅ 워커 {worker_id} 검색창 발견: {selector}")
+                        break
+                    except TimeoutException:
+                        continue
+                
+                if search_box:
+                    # 검색창 실제 입력 테스트
+                    test_query = "test"
+                    search_box.clear()
+                    time.sleep(0.5)
+                    search_box.send_keys(test_query)
+                    time.sleep(0.5)
+                    search_box.clear()  # 테스트 후 정리
+                    
+                    self.logger.info(f"✅ 워커 {worker_id} 검색창 입력 테스트 성공")
+                    return True
+                else:
+                    self.logger.warning(f"⚠️ 워커 {worker_id} 모든 검색창 셀렉터 실패")
+                    # 페이지 소스 일부 확인
+                    page_source = driver.page_source[:500]
+                    self.logger.debug(f"페이지 소스 일부: {page_source}")
+                    return True  # 그래도 드라이버는 유지
+                    
+            except Exception as search_test_error:
+                self.logger.error(f"❌ 워커 {worker_id} Google 접근 테스트 실패: {search_test_error}")
+                # 드라이버 정리 후 실패 반환
+                try:
+                    driver.quit()
+                    del self.active_drivers[worker_id]
+                except:
+                    pass
+                return False
+            
+            return True
+        
+        except Exception as e:
+            self.logger.error(f"❌ 워커 {worker_id} 표준 ChromeDriver 생성 실패: {e}")
+            # 포트 해제
+            if assigned_port and hasattr(self, 'port_manager'):
+                self.port_manager.release_port(assigned_port, worker_id)
+            return False
+    
+    def __del__(self):
+        """소멸자 - 객체 삭제 시 드라이버 정리"""
+        try:
+            self._enhanced_driver_cleanup()
+        except:
+            pass
 
 def main_websearch():
     """Valid4 웹 검색 메인 함수"""
@@ -3764,11 +4273,29 @@ def main_websearch():
     except Exception as e:
         print(f"\n❌ 오류 발생: {e}")
         traceback.print_exc()
-        # 드라이버 정리
+        # 강화된 드라이버 정리
         try:
             if 'manager' in locals():
-                manager._cleanup_all_worker_drivers()
+                print("🧹 강화된 크롬 드라이버 정리 시작...")
+                manager._enhanced_driver_cleanup()
+                manager._emergency_chrome_cleanup()
                 print("🧹 크롬 드라이버 정리 완료")
+        except Exception as cleanup_error:
+            print(f"⚠️ 드라이버 정리 중 오류: {cleanup_error}")
+            # 최후의 수단
+            try:
+                import subprocess
+                subprocess.run(['taskkill', '/f', '/im', 'chrome.exe'], capture_output=True)
+                subprocess.run(['taskkill', '/f', '/im', 'chromedriver.exe'], capture_output=True)
+                print("🚨 비상 Chrome 프로세스 강제 종료 완료")
+            except:
+                pass
+    
+    finally:
+        # 항상 실행되는 최종 정리
+        try:
+            if 'manager' in locals():
+                manager._enhanced_driver_cleanup()
         except:
             pass
 

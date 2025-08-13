@@ -8,6 +8,8 @@
 *.xlsx
 *.csv
 *.json
+*.txt
+
 
 # 예외: 특정 파일들은 추적
 !failed_data_250724.xlsx
@@ -22,3 +24,5 @@ __pycache__/
 !failed_data_250809.csv
 !center_crawling_result_20250809_190826.xlsx
 !mappingdata250809.csv
+!requirements.txt
+!mappingdata_websearch_20250810_071441.csv

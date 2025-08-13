@@ -4,11 +4,253 @@
 import os
 import gc
 import logging
-import undetected_chromedriver as uc
+import random
+import time
+import tempfile
+import socket
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.proxy import Proxy, ProxyType
+from webdriver_manager.chrome import ChromeDriverManager
+import undetected_chromedriver as uc
 
-# WebDriver 관리 클래스 - 봇 우회 강화
+# 표준 ChromeDriver 관리 클래스 (undetected 문제 해결)
+class StandardWebDriverManager:
+    """표준 Selenium ChromeDriver 관리 클래스 - Proxy & User-Agent 로테이션"""
+    
+    def __init__(self, logger=None):
+        """StandardWebDriverManager 초기화"""
+        self.driver = None
+        self.logger = logger or logging.getLogger(__name__)
+        
+        # 저사양 환경 설정
+        self.request_delay_min = 2.0
+        self.request_delay_max = 4.0
+        
+        # 포트 관리
+        self.used_ports = set()
+        self.base_port = 9222
+        
+        # 무료 프록시 리스트 (선택사항)
+        self.free_proxies = [
+            # 필요시 추가, 현재는 프록시 없이 User-Agent만 로테이션
+        ]
+        
+        # User-Agent 풀
+        self.user_agents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0'
+        ]
+    
+    def get_available_port(self, worker_id: int = 0) -> int:
+        """사용 가능한 포트 번호 생성"""
+        base_attempt = self.base_port + (worker_id * 10)
+        
+        for offset in range(50):
+            port = base_attempt + offset
+            
+            if port in self.used_ports:
+                continue
+                
+            try:
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.settimeout(1)
+                    result = s.connect_ex(('localhost', port))
+                    if result != 0:
+                        self.used_ports.add(port)
+                        return port
+            except:
+                continue
+        
+        fallback_port = self.base_port + worker_id + 1000
+        self.used_ports.add(fallback_port)
+        return fallback_port
+    
+    def create_standard_driver(self, worker_id: int = 0, port: int = None, timeout_minutes: int = 5) -> object:
+        """표준 ChromeDriver 생성 (안정성 우선)"""
+        try:
+            # 워커 간 시차
+            startup_delay = random.uniform(0.5, 2.0) * (worker_id + 1)
+            time.sleep(startup_delay)
+            
+            # Chrome 옵션 설정
+            chrome_options = Options()
+            
+            # 🔧 기본 안정성 옵션
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--window-size=1366,768')
+            chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+            chrome_options.add_argument('--disable-extensions')
+            chrome_options.add_argument('--disable-infobars')
+            chrome_options.add_argument('--disable-notifications')
+            chrome_options.add_argument('--disable-web-security')
+            chrome_options.add_argument('--disable-features=VizDisplayCompositor')
+            chrome_options.add_argument('--disable-logging')
+            chrome_options.add_argument('--log-level=3')
+            chrome_options.add_argument('--disable-background-timer-throttling')
+            chrome_options.add_argument('--disable-renderer-backgrounding')
+            chrome_options.add_argument('--disable-backgrounding-occluded-windows')
+            
+            # 🎭 User-Agent 로테이션
+            user_agent = random.choice(self.user_agents)
+            chrome_options.add_argument(f'--user-agent={user_agent}')
+            self.logger.debug(f"🎭 워커 {worker_id} User-Agent: {user_agent[:50]}...")
+            
+            # 🔌 포트 설정
+            if port:
+                debug_port = port
+            else:
+                debug_port = self.get_available_port(worker_id)
+            chrome_options.add_argument(f'--remote-debugging-port={debug_port}')
+            
+            # 📁 워커별 프로필 디렉토리
+            profile_dir = tempfile.mkdtemp(prefix=f'chrome_std_{worker_id}_')
+            chrome_options.add_argument(f'--user-data-dir={profile_dir}')
+            
+            # 🛡️ 매크로 감지 회피
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option('useAutomationExtension', False)
+            
+            # 💾 메모리 최적화
+            chrome_options.add_argument('--memory-pressure-off')
+            chrome_options.add_argument('--max_old_space_size=256')
+            chrome_options.add_argument('--disable-background-mode')
+            
+            # 🚀 ChromeDriver 서비스 설정 (자동 관리)
+            service = Service(ChromeDriverManager().install())
+            
+            # 드라이버 생성
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
+            
+            # ⏱️ 타임아웃 설정 (user 요구사항 반영)
+            self.driver.implicitly_wait(10)
+            self.driver.set_page_load_timeout(30)
+            
+            # 타임아웃 자동 삭제 설정
+            self._setup_timeout_cleanup(timeout_minutes)
+            
+            # 🛡️ 웹드라이버 감지 방지 스크립트
+            try:
+                self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+                self.driver.execute_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]})")
+                self.driver.execute_script("Object.defineProperty(navigator, 'languages', {get: () => ['ko-KR', 'ko']})")
+            except Exception as e:
+                self.logger.debug(f"⚠️ 웹드라이버 감지 방지 스크립트 실패: {e}")
+            
+            gc.collect()
+            
+            self.logger.info(f"✅ 표준 ChromeDriver 생성 완료 (워커 {worker_id}, 포트: {debug_port})")
+            return self.driver
+            
+        except Exception as e:
+            self.logger.error(f"❌ 표준 ChromeDriver 생성 실패 (워커 {worker_id}): {e}")
+            
+            # 포트 해제
+            if port and port in self.used_ports:
+                self.used_ports.remove(port)
+            elif 'debug_port' in locals() and debug_port in self.used_ports:
+                self.used_ports.remove(debug_port)
+            
+            return self._create_minimal_fallback_driver(worker_id)
+    
+    def _setup_timeout_cleanup(self, timeout_minutes: int):
+        """타임아웃 후 자동 정리 설정"""
+        import threading
+        
+        def timeout_cleanup():
+            time.sleep(timeout_minutes * 60)  # 분을 초로 변환
+            try:
+                if self.driver:
+                    self.logger.info(f"⏰ {timeout_minutes}분 타임아웃 - 드라이버 자동 정리")
+                    self.cleanup()
+            except Exception as e:
+                self.logger.debug(f"타임아웃 정리 실패: {e}")
+        
+        cleanup_thread = threading.Thread(target=timeout_cleanup, daemon=True)
+        cleanup_thread.start()
+    
+    def _create_minimal_fallback_driver(self, worker_id: int):
+        """최소 기능 fallback 드라이버"""
+        try:
+            self.logger.warning(f"🔄 워커 {worker_id} minimal fallback 드라이버 생성")
+            
+            chrome_options = Options()
+            
+            # 최소 옵션만
+            minimal_options = [
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--headless',  # headless로 안정성 확보
+                '--window-size=800,600',
+                '--disable-logging',
+                '--log-level=3'
+            ]
+            
+            for option in minimal_options:
+                chrome_options.add_argument(option)
+            
+            # 기본 User-Agent
+            chrome_options.add_argument(f'--user-agent={self.user_agents[0]}')
+            
+            # 프로필 디렉토리
+            profile_dir = tempfile.mkdtemp(prefix=f'chrome_fallback_{worker_id}_')
+            chrome_options.add_argument(f'--user-data-dir={profile_dir}')
+            
+            service = Service(ChromeDriverManager().install())
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
+            
+            self.driver.implicitly_wait(15)
+            self.driver.set_page_load_timeout(45)
+            
+            self.logger.info(f"✅ 워커 {worker_id} minimal fallback 드라이버 생성 완료")
+            return self.driver
+            
+        except Exception as e:
+            self.logger.error(f"❌ 워커 {worker_id} minimal fallback 드라이버 생성 실패: {e}")
+            return None
+    
+    def cleanup(self):
+        """드라이버 정리"""
+        try:
+            if self.driver:
+                # 브라우저 캐시 정리
+                try:
+                    self.driver.execute_script("window.localStorage.clear();")
+                    self.driver.execute_script("window.sessionStorage.clear();")
+                except:
+                    pass
+                
+                # 브라우저 종료
+                self.driver.quit()
+                self.driver = None
+                
+                # 메모리 정리
+                gc.collect()
+                
+                self.logger.info("🧹 표준 WebDriver 정리 완료")
+                
+        except Exception as e:
+            self.logger.error(f"❌ 표준 WebDriver 정리 실패: {e}")
+    
+    def get_driver(self):
+        """드라이버 반환 (없으면 자동 생성)"""
+        if not self.driver:
+            self.driver = self.create_standard_driver(0)
+        return self.driver
+
+# 기존 WebDriver 관리 클래스 - 봇 우회 강화 (UndetectedChrome)
 class WebDriverManager:
     """WebDriver 관리 클래스 - 봇 우회 강화"""
     
